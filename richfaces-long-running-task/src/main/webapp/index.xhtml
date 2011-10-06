@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<f:view>
+	<h:head>
+		<title>My LRT Example</title>
+	</h:head>
+
+	<h:body>
+		<h:form prependid="false">
+
+			<h:panelGroup>
+				<h:outputText value="Start LRT" />
+				<a4j:commandButton value="Start LRT"
+					action="#{controller.startLongRunningTask}" render="panel" />
+			</h:panelGroup>
+			<a4j:poll interval="1000" render="panel" />
+			<br />
+			<br />
+			<a4j:outputPanel id="panel">
+
+				<h:panelGrid columns="2">
+					<h:outputText value="Running" />
+					<h:outputText value="#{controller.model.running}" />
+
+					<h:outputText value="Success" />
+					<h:outputText value="#{controller.model.success}" />
+
+					<h:outputText value="Last Message" />
+					<h:outputText value="#{controller.model.lastMessage}" />
+				</h:panelGrid>
+
+				<br />
+				<br />
+				<rich:dataTable var="var" value="#{controller.model.messages}">
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="All messages" />
+						</f:facet>
+						<h:outputText value="#{var}" />
+					</rich:column>
+				</rich:dataTable>
+
+				<a4j:commandButton value="Refresh" render="panel" />
+			</a4j:outputPanel>
+		</h:form>
+	</h:body>
+</f:view>
+</html>
