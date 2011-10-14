@@ -3,121 +3,150 @@ package safetyfacade;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-
 /**
  * @author <a href="mailto:mark.paluch@1und1.de">Mark Paluch</a>
  */
-public class SafetyFacadeTest {
+public class SafetyFacadeTest
+{
 
-    @Test
-    public void execute() {
+	@Test
+	public void execute()
+	{
 
-        final String input = "1234";
+		final String input = "1234";
 
-        String result = SafetyFacade.execute(new IUnsafe<String>() {
+		String result = SafetyFacade.execute(new IUnsafe<String>()
+		{
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public String run() throws Exception {
-                return input;
+			/**
+			 * {@inheritDoc}
+			 */
+			@Override
+			public String run() throws Exception
+			{
 
-            }
-        });
+				return input;
 
-       assertSame(input, result);
+			}
+		});
 
-    }
+		assertSame(input, result);
 
-    @Test
-    public void executeWithException() {
+	}
 
-        try {
-            String result = SafetyFacade.execute(new IUnsafe<String>() {
+	@Test
+	public void executeWithException()
+	{
 
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public String run() throws Exception {
-                    throw new IllegalStateException("blubb");
+		try
+		{
+			String result = SafetyFacade.execute(new IUnsafe<String>()
+			{
 
-                }
-            }, TechnicalException.class);
+				/**
+				 * {@inheritDoc}
+				 */
+				@Override
+				public String run() throws Exception
+				{
 
-            fail("no Exception.");
-        } catch (TechnicalException e) {
-            assertNotNull("java.lang.IllegalStateException: blubb", e.getMessage());
+					throw new IllegalStateException("blubb");
 
-            assertEquals(e.getCause().getClass(), NestedProxyException.class);
-            assertEquals("blubb", e.getCause().getMessage());
-        }
+				}
+			}, TechnicalException.class);
 
-    }
+			fail("no Exception.");
+		}
+		catch (TechnicalException e)
+		{
+			assertNotNull("java.lang.IllegalStateException: blubb", e.getMessage());
 
-    @Test
-    public void executeWithWrapSameTypeLevel1() {
+			assertEquals(e.getCause().getClass(), NestedProxyException.class);
+			assertEquals("blubb", e.getCause().getMessage());
+		}
 
-        try {
-            String result = SafetyFacade.execute(new IUnsafe<String>() {
+	}
 
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public String run() throws Exception {
-                    throw new TechnicalException("blubb");
+	@Test
+	public void executeWithWrapSameTypeLevel1()
+	{
 
-                }
-            }, TechnicalException.class);
+		try
+		{
+			String result = SafetyFacade.execute(new IUnsafe<String>()
+			{
 
-            fail("no Exception.");
-        } catch (TechnicalException e) {
-            assertEquals("blubb", e.getMessage());
-            assertNull(e.getCause());
-        }
+				/**
+				 * {@inheritDoc}
+				 */
+				@Override
+				public String run() throws Exception
+				{
 
-    }
+					throw new TechnicalException("blubb");
 
-    @Test
-    public void executeWithWrapSameTypeLevel2() {
+				}
+			}, TechnicalException.class);
 
-        try {
-            String result = SafetyFacade.execute(new IUnsafe<String>() {
+			fail("no Exception.");
+		}
+		catch (TechnicalException e)
+		{
+			assertEquals("blubb", e.getMessage());
+			assertNull(e.getCause());
+		}
 
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public String run() throws Exception {
-                    throw new TechnicalException(new IllegalStateException("blubb"));
+	}
 
-                }
-            }, TechnicalException.class);
+	@Test
+	public void executeWithWrapSameTypeLevel2()
+	{
 
-            fail("no Exception.");
-        } catch (TechnicalException e) {
-            assertNotNull(e.getMessage());
+		try
+		{
+			String result = SafetyFacade.execute(new IUnsafe<String>()
+			{
 
-            assertEquals(e.getCause().getClass(), NestedProxyException.class);
-            assertEquals("blubb", e.getCause().getMessage());
-        }
+				/**
+				 * {@inheritDoc}
+				 */
+				@Override
+				public String run() throws Exception
+				{
 
-    }
+					throw new TechnicalException(new IllegalStateException("blubb"));
 
-    @Test
-    public void getStackTrace() {
-        BusinessLogicException exception = new ExceptionUtil().getSafeException(new TechnicalException(),
-                BusinessLogicException.class);
-        StackTraceElement result = exception.getStackTrace()[0];
-        assertEquals("getStackTrace", result.getMethodName());
-    }
+				}
+			}, TechnicalException.class);
 
-    @Test
-    public void getMessage() {
-        TechnicalException exception = new TechnicalException(new IllegalStateException("blubb"));
-        assertNotNull(exception.getMessage());
-    }
+			fail("no Exception.");
+		}
+		catch (TechnicalException e)
+		{
+			assertNotNull(e.getMessage());
+
+			assertEquals(e.getCause().getClass(), NestedProxyException.class);
+			assertEquals("blubb", e.getCause().getMessage());
+		}
+
+	}
+
+	@Test
+	public void getStackTrace()
+	{
+
+		BusinessLogicException exception = new ExceptionUtil().getSafeException(new TechnicalException(),
+				BusinessLogicException.class);
+		StackTraceElement result = exception.getStackTrace()[0];
+		assertEquals("getStackTrace", result.getMethodName());
+	}
+
+	@Test
+	public void getMessage()
+	{
+
+		TechnicalException exception = new TechnicalException(new IllegalStateException("blubb"));
+		assertNotNull(exception.getMessage());
+	}
 
 }
