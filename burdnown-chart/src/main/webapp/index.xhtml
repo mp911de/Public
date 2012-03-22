@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head></h:head>
+<body>
+	<h:form id="form">
+		<rich:panel>
+			<f:facet name="header">
+        Teams
+        </f:facet>
+			<rich:dataTable id="teams" value="#{teamListModel.list}" var="item">
+				<rich:column sortBy="#{item.name}">
+					<f:facet name="header">
+						<h:outputText value="Team-Name" />
+					</f:facet>
+					<h:commandLink value="#{item.name}"
+						action="#{teamListController.selectTeam}" />
+				</rich:column>
+			</rich:dataTable>
+		</rich:panel>
+	</h:form>
+</body>
+</html>

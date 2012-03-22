@@ -2,6 +2,9 @@ package de.paluch.burndown.model;
 
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 /**
  *
  *<br>
@@ -11,12 +14,13 @@ import java.util.Date;
  *<br>
  *<br>
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class SprintEffort
 {
 
 	private Date date;
-	private double burned;
-	private double unplanned;
+	private Double burned;
+	private Double unplanned;
 
 	/**
 	 *
@@ -38,8 +42,6 @@ public class SprintEffort
 		this.burned = burned;
 		this.unplanned = unplanned;
 	}
-
-
 
 	/**
 	 * @param date
@@ -76,7 +78,7 @@ public class SprintEffort
 	/**
 	 * @return the burned
 	 */
-	public double getBurned()
+	public Double getBurned()
 	{
 
 		return burned;
@@ -85,16 +87,20 @@ public class SprintEffort
 	/**
 	 * @param burned the burned to set
 	 */
-	public void setBurned(double burned)
+	public void setBurned(Double burned)
 	{
 
 		this.burned = burned;
+		if(this.burned == null)
+		{
+			this.burned = 0d;
+		}
 	}
 
 	/**
 	 * @return the unplanned
 	 */
-	public double getUnplanned()
+	public Double getUnplanned()
 	{
 
 		return unplanned;
@@ -103,10 +109,79 @@ public class SprintEffort
 	/**
 	 * @param unplanned the unplanned to set
 	 */
-	public void setUnplanned(double unplanned)
+	public void setUnplanned(Double unplanned)
 	{
 
 		this.unplanned = unplanned;
+		if(this.unplanned == null)
+		{
+			this.unplanned = 0d;
+		}
 	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+
+		return getClass().getSimpleName() + " [date=" + date + ", burned=" + burned + ", unplanned=" + unplanned + "]";
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode()
+	{
+
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((burned == null) ? 0 : burned.hashCode());
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + ((unplanned == null) ? 0 : unplanned.hashCode());
+		return result;
+	}
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SprintEffort other = (SprintEffort) obj;
+		if (burned == null)
+		{
+			if (other.burned != null)
+				return false;
+		}
+		else if (!burned.equals(other.burned))
+			return false;
+		if (date == null)
+		{
+			if (other.date != null)
+				return false;
+		}
+		else if (!date.equals(other.date))
+			return false;
+		if (unplanned == null)
+		{
+			if (other.unplanned != null)
+				return false;
+		}
+		else if (!unplanned.equals(other.unplanned))
+			return false;
+		return true;
+	}
+
+
 
 }

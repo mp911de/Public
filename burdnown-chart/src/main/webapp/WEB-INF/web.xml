@@ -6,7 +6,7 @@
 	
 	<context-param>
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
-		<param-value>Development</param-value>
+		<param-value>Productions</param-value>
 	</context-param>
 	
 	<context-param>
@@ -14,12 +14,35 @@
 		<param-value>true</param-value>
 	</context-param>
 	
+	<context-param>
+        <param-name>resteasy.servlet.mapping.prefix</param-name>
+        <param-value>/rest</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>javax.ws.rs.core.Application</param-name>
+        <param-value>de.paluch.burndown.rest.ChartApplication</param-value>
+    </context-param>
+    
+    
+	
 	
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	
+	<servlet>
+        <servlet-name>Resteasy</servlet-name>
+        <servlet-class>
+            org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
+        </servlet-class>
+        <init-param>
+            <param-name>resteasy.scan</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </servlet>
 
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -30,6 +53,11 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>/faces/*</url-pattern>
 	</servlet-mapping>
+	
+	    <servlet-mapping>
+        <servlet-name>Resteasy</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
 	
 	<session-config>
 		<session-timeout>30</session-timeout>

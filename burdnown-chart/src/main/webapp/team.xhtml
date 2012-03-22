@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head></h:head>
+<body>
+	<h:form id="form">
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText value="Sprints for #{sprintsListModel.team.name}" />
+			</f:facet>
+			<rich:dataTable id="sprints" value="#{sprintsListModel.list}"
+				var="item">
+				<rich:column sortBy="#{item.name}">
+					<f:facet name="header">
+						<h:outputText value="Sprint" />
+					</f:facet>
+					<h:commandLink action="#{sprintsListController.gotoSprint}">
+						<h:outputText value="Sprint #{item.id} (" />
+						<h:outputText value="#{item.startDate}">
+							<f:convertDateTime pattern="EEE dd.MM.yyyy" />
+						</h:outputText>
+						<h:outputText value=")" />
+					</h:commandLink>
+				</rich:column>
+			</rich:dataTable>
+			<br />
+			<h:commandButton value="Create new Sprint"
+				action="#{sprintsListController.prepareCreateNewSprint}" />
+		</rich:panel>
+		<a href="index.xhtml">Back to Index</a>
+	</h:form>
+</body>
+</html>

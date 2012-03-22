@@ -1,0 +1,92 @@
+package de.paluch.burndown.jsf.impl;
+
+import java.util.List;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+
+import de.paluch.burndown.DataAccess;
+import de.paluch.burndown.model.Sprint;
+import de.paluch.burndown.model.Team;
+
+import de.paluch.burndown.jsf.base.AbstractJSFListModel;
+
+/**
+ *
+ *<br>
+ *<br>Project: burdnown-chart
+ *<br>Autor: mark
+ *<br>Created: 20.03.2012
+ *<br>
+ *<br>
+ */
+@ManagedBean
+@SessionScoped
+public class SprintsListModel extends AbstractJSFListModel<Sprint>
+{
+
+	private Team team;
+
+	/**
+	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getTableId()
+	 */
+	@Override
+	public String getTableId()
+	{
+
+		return "sprints";
+	}
+
+	/**
+	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getList()
+	 */
+	@Override
+	public List<Sprint> getList()
+	{
+
+		if (super.getList().isEmpty())
+		{
+			refreshList();
+		}
+
+		return super.getList();
+	}
+
+	/**
+	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#refreshList()
+	 */
+	@Override
+	public void refreshList()
+	{
+
+		super.getList().clear();
+
+		DataAccess access = new DataAccess();
+		List<String> sprintIds = access.listSprints(team.getId());
+		for (String id : sprintIds)
+		{
+			super.getList().add(access.getSprint(team.getId(), id));
+		}
+
+	}
+
+	/**
+	 * @return the team
+	 */
+	public Team getTeam()
+	{
+
+		return team;
+	}
+
+	/**
+	 * @param team the team to set
+	 */
+	public void setTeam(Team team)
+	{
+
+		this.team = team;
+	}
+
+}
