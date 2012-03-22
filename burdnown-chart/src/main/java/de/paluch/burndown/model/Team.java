@@ -24,6 +24,25 @@ public class Team
 	private String name;
 
 	/**
+	 *
+	 */
+	public Team()
+	{
+
+		super();
+	}
+
+	/**
+	 * @param id
+	 */
+	public Team(String id)
+	{
+
+		super();
+		this.id = id;
+	}
+
+	/**
 	 * @return the id
 	 */
 	public String getId()

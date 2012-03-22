@@ -47,6 +47,10 @@ public class DataAccess
 	private File getTeamsFile()
 	{
 
+		if (System.getProperty(DATA_LOCATION) == null)
+		{
+			throw new IllegalStateException("System property " + DATA_LOCATION + " not set.");
+		}
 		File teamsFile = new File(new File(System.getProperty(DATA_LOCATION)), TEAMS_FILE);
 		return teamsFile;
 	}
@@ -54,6 +58,10 @@ public class DataAccess
 	public Sprint getSprint(String teamId, String sprintId)
 	{
 
+		if (System.getProperty(DATA_LOCATION) == null)
+		{
+			throw new IllegalStateException("System property " + DATA_LOCATION + " not set.");
+		}
 		File sprintFile = new File(new File(System.getProperty(DATA_LOCATION)), teamId + "/" + sprintId + BD_XML_SUFFIX);
 		if (sprintFile.exists())
 		{
@@ -66,6 +74,10 @@ public class DataAccess
 	public List<String> listSprints(String teamId)
 	{
 
+		if (System.getProperty(DATA_LOCATION) == null)
+		{
+			throw new IllegalStateException("System property " + DATA_LOCATION + " not set.");
+		}
 		File sprintsDir = new File(new File(System.getProperty(DATA_LOCATION)), teamId);
 		List<String> result = new ArrayList<String>();
 		File[] files = sprintsDir.listFiles(new FilenameFilter()
@@ -110,6 +122,10 @@ public class DataAccess
 	public void storeSprint(String teamId, Sprint sprint)
 	{
 
+		if (System.getProperty(DATA_LOCATION) == null)
+		{
+			throw new IllegalStateException("System property " + DATA_LOCATION + " not set.");
+		}
 		File folder = new File(new File(System.getProperty(DATA_LOCATION)), teamId);
 		if (!folder.exists())
 		{

@@ -41,7 +41,13 @@
 					</h:panelGrid>
 
 					<rich:dataTable id="days" value="#{sprintListModel.list}"
-						var="item">
+						var="item" sortMode="single" rowKeyVar="rowKey">
+						<rich:column sortBy="#{rowKey}">
+							<f:facet name="header">
+								<h:outputText value="Sprint Day" />
+							</f:facet>
+							<h:outputText value="#{rowKey}" />
+						</rich:column>
 						<rich:column sortBy="#{item.date}">
 							<f:facet name="header">
 								<h:outputText value="Date" />

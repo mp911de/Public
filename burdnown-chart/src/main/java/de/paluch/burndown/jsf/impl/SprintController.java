@@ -24,6 +24,8 @@ import de.paluch.burndown.model.SprintEffort;
 public class SprintController
 {
 
+	public static  DataAccess DATA_ACCESS = new DataAccess();
+
 	@ManagedProperty("sprintListModel")
 	private SprintListModel sprintListModel;
 
@@ -35,7 +37,7 @@ public class SprintController
 			shiftSprintDays(sprintListModel.getSprint());
 		}
 
-		new DataAccess().storeSprint(sprintListModel.getTeam().getId(), sprintListModel.getSprint());
+		DATA_ACCESS.storeSprint(sprintListModel.getTeam().getId(), sprintListModel.getSprint());
 		sprintListModel.setNewSprint(false);
 		sprintListModel.setOldStartDate(sprintListModel.getSprint().getStartDate());
 	}
