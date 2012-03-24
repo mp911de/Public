@@ -11,36 +11,36 @@
     <effort>
         <date>2012-03-28T00:00:00+02:00</date>
         <burned>10.0</burned>
-        <unplanned>0.0</unplanned>
+        <unplanned>6.0</unplanned>
     </effort>
     <effort>
         <date>2012-03-29T00:00:00+02:00</date>
-        <burned>0.0</burned>
+        <burned>10.0</burned>
         <unplanned>0.0</unplanned>
     </effort>
     <effort>
         <date>2012-03-30T00:00:00+02:00</date>
-        <burned>0.0</burned>
+        <burned>10.0</burned>
         <unplanned>0.0</unplanned>
     </effort>
     <effort>
         <date>2012-04-02T00:00:00+02:00</date>
-        <burned>0.0</burned>
+        <burned>10.0</burned>
         <unplanned>0.0</unplanned>
     </effort>
     <effort>
         <date>2012-04-03T00:00:00+02:00</date>
-        <burned>0.0</burned>
+        <burned>10.0</burned>
         <unplanned>0.0</unplanned>
     </effort>
     <effort>
         <date>2012-04-04T00:00:00+02:00</date>
-        <burned>0.0</burned>
+        <burned>22.0</burned>
         <unplanned>0.0</unplanned>
     </effort>
     <effort>
         <date>2012-04-05T00:00:00+02:00</date>
-        <burned>2.0</burned>
+        <burned>0.0</burned>
         <unplanned>0.0</unplanned>
     </effort>
     <effort>
@@ -50,7 +50,7 @@
     </effort>
     <effort>
         <date>2012-04-09T00:00:00+02:00</date>
-        <burned>0.0</burned>
+        <burned>5.0</burned>
         <unplanned>0.0</unplanned>
     </effort>
 </sprint>

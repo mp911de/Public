@@ -10,8 +10,8 @@ import de.paluch.burndown.SprintDaysGenerator;
 import de.paluch.burndown.TestUtil;
 import de.paluch.burndown.model.Sprint;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  *
@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
 public class ChartDataFactoryTest
 {
 
-	private ChartDataFactory sut = new ChartDataFactory();
+	private final ChartDataFactory sut = new ChartDataFactory();
 
 	/**
 	 * Test method for {@link de.paluch.burndown.chart.ChartDataFactory#createData(de.paluch.burndown.model.Sprint, java.util.List)}.
@@ -36,15 +36,10 @@ public class ChartDataFactoryTest
 
 		Sprint sprint = TestUtil.createSprint();
 
-
-
-
 		SprintDaysGenerator gen = new SprintDaysGenerator();
 		List<Date> days = gen.generateSprintDays(sprint.getDays(), sprint.getStartDate());
 
-
-		sut.createData(sprint, days);
-
+		sut.createData(5, sprint, days);
 
 		ChartData result = sut.getChartData();
 

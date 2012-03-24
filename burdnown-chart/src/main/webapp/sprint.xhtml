@@ -38,6 +38,17 @@
 							<f:validateDoubleRange minimum="0" />
 							<f:validateLength minimum="1" />
 						</h:inputText>
+
+						<h:outputLabel value="Ideal Burndown" for="ideal"
+							rendered="#{sprintListModel.sprint.days != 0}" />
+
+						<h:panelGroup rendered="#{sprintListModel.sprint.days != 0}">
+							<h:outputText id="ideal"
+								value="#{sprintListModel.sprint.planned/sprintListModel.sprint.days}"
+								style="text-align: right;">
+								<f:convertNumber maxFractionDigits="1" minFractionDigits="1" />
+							</h:outputText> per Day
+						</h:panelGroup>
 					</h:panelGrid>
 
 					<rich:dataTable id="days" value="#{sprintListModel.list}"
@@ -58,7 +69,7 @@
 							<f:facet name="header">
 								<h:outputText value="Burned" />
 							</f:facet>
-							<h:inputText value="#{item.burned}" style="text-align: right;" >
+							<h:inputText value="#{item.burned}" style="text-align: right;">
 								<f:convertNumber maxFractionDigits="1" minFractionDigits="1" />
 								<f:validateDoubleRange minimum="0" />
 								<f:validateLength minimum="1" />

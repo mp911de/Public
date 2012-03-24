@@ -16,34 +16,14 @@ import org.jfree.data.time.TimeSeriesCollection;
 public class ChartData
 {
 
-	/**
-	 *
-	 */
 	private TimeSeriesCollection mainSeries;
-	/**
-	 *
-	 */
 	private TimeSeriesCollection baselineSeries;
-	/**
-	 *
-	 */
 	private TimeSeries burndown;
-	/**
-	 *
-	 */
 	private TimeSeries ideal;
-	/**
-	 *
-	 */
 	private TimeSeries burned;
-	/**
-	 *
-	 */
 	private TimeSeries unplanned;
-	/**
-	 *
-	 */
 	private String title;
+	private int teamsize;
 
 	public ChartData()
 	{
@@ -56,36 +36,12 @@ public class ChartData
 		unplanned = new TimeSeries("Unplanned");
 	}
 	/**
-	 * @return the mainSeries
-	 */
-	public TimeSeriesCollection getMainSeries()
-	{
-
-		return mainSeries;
-	}
-	/**
-	 * @param mainSeries the mainSeries to set
-	 */
-	public void setMainSeries(TimeSeriesCollection mainSeries)
-	{
-
-		this.mainSeries = mainSeries;
-	}
-	/**
 	 * @return the baselineSeries
 	 */
 	public TimeSeriesCollection getBaselineSeries()
 	{
 
 		return baselineSeries;
-	}
-	/**
-	 * @param baselineSeries the baselineSeries to set
-	 */
-	public void setBaselineSeries(TimeSeriesCollection baselineSeries)
-	{
-
-		this.baselineSeries = baselineSeries;
 	}
 	/**
 	 * @return the burndown
@@ -96,12 +52,12 @@ public class ChartData
 		return burndown;
 	}
 	/**
-	 * @param burndown the burndown to set
+	 * @return the burned
 	 */
-	public void setBurndown(TimeSeries burndown)
+	public TimeSeries getBurned()
 	{
 
-		this.burndown = burndown;
+		return burned;
 	}
 	/**
 	 * @return the ideal
@@ -112,44 +68,20 @@ public class ChartData
 		return ideal;
 	}
 	/**
-	 * @param ideal the ideal to set
+	 * @return the mainSeries
 	 */
-	public void setIdeal(TimeSeries ideal)
+	public TimeSeriesCollection getMainSeries()
 	{
 
-		this.ideal = ideal;
+		return mainSeries;
 	}
 	/**
-	 * @return the burned
+	 * @return the teamsize
 	 */
-	public TimeSeries getBurned()
+	public int getTeamsize()
 	{
 
-		return burned;
-	}
-	/**
-	 * @param burned the burned to set
-	 */
-	public void setBurned(TimeSeries burned)
-	{
-
-		this.burned = burned;
-	}
-	/**
-	 * @return the unplanned
-	 */
-	public TimeSeries getUnplanned()
-	{
-
-		return unplanned;
-	}
-	/**
-	 * @param unplanned the unplanned to set
-	 */
-	public void setUnplanned(TimeSeries unplanned)
-	{
-
-		this.unplanned = unplanned;
+		return teamsize;
 	}
 	/**
 	 * @return the title
@@ -160,6 +92,63 @@ public class ChartData
 		return title;
 	}
 	/**
+	 * @return the unplanned
+	 */
+	public TimeSeries getUnplanned()
+	{
+
+		return unplanned;
+	}
+	/**
+	 * @param baselineSeries the baselineSeries to set
+	 */
+	public void setBaselineSeries(TimeSeriesCollection baselineSeries)
+	{
+
+		this.baselineSeries = baselineSeries;
+	}
+	/**
+	 * @param burndown the burndown to set
+	 */
+	public void setBurndown(TimeSeries burndown)
+	{
+
+		this.burndown = burndown;
+	}
+	/**
+	 * @param burned the burned to set
+	 */
+	public void setBurned(TimeSeries burned)
+	{
+
+		this.burned = burned;
+	}
+	/**
+	 * @param ideal the ideal to set
+	 */
+	public void setIdeal(TimeSeries ideal)
+	{
+
+		this.ideal = ideal;
+	}
+	/**
+	 * @param mainSeries the mainSeries to set
+	 */
+	public void setMainSeries(TimeSeriesCollection mainSeries)
+	{
+
+		this.mainSeries = mainSeries;
+	}
+	/**
+	 * @param teamsize the teamsize to set
+	 */
+	public void setTeamsize(int teamsize)
+	{
+
+		this.teamsize = teamsize;
+	}
+
+	/**
 	 * @param title the title to set
 	 */
 	public void setTitle(String title)
@@ -167,4 +156,14 @@ public class ChartData
 
 		this.title = title;
 	}
+
+	/**
+	 * @param unplanned the unplanned to set
+	 */
+	public void setUnplanned(TimeSeries unplanned)
+	{
+
+		this.unplanned = unplanned;
+	}
+
 }

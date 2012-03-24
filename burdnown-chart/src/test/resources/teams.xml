@@ -1,0 +1,9 @@
+<teams>
+	<team id="middleware">
+		<teamSize>5</teamSize>
+		<regularSprintLength>10</regularSprintLength>
+		<regularSprintStart>3</regularSprintStart>
+		<name>DIY Middleware</name>
+	</team>
+
+</teams>

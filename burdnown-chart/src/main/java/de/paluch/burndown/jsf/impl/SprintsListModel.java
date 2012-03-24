@@ -3,14 +3,12 @@ package de.paluch.burndown.jsf.impl;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
 import de.paluch.burndown.DataAccess;
+import de.paluch.burndown.jsf.base.AbstractJSFListModel;
 import de.paluch.burndown.model.Sprint;
 import de.paluch.burndown.model.Team;
-
-import de.paluch.burndown.jsf.base.AbstractJSFListModel;
 
 /**
  *
@@ -29,6 +27,21 @@ public class SprintsListModel extends AbstractJSFListModel<Sprint>
 	private Team team;
 
 	/**
+	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getList()
+	 */
+	@Override
+	public List<Sprint> getList()
+	{
+
+		if (team != null && super.getList().isEmpty())
+		{
+			refreshList();
+		}
+
+		return super.getList();
+	}
+
+	/**
 	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getTableId()
 	 */
 	@Override
@@ -39,18 +52,12 @@ public class SprintsListModel extends AbstractJSFListModel<Sprint>
 	}
 
 	/**
-	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getList()
+	 * @return the team
 	 */
-	@Override
-	public List<Sprint> getList()
+	public Team getTeam()
 	{
 
-		if (super.getList().isEmpty())
-		{
-			refreshList();
-		}
-
-		return super.getList();
+		return team;
 	}
 
 	/**
@@ -69,15 +76,6 @@ public class SprintsListModel extends AbstractJSFListModel<Sprint>
 			super.getList().add(access.getSprint(team.getId(), id));
 		}
 
-	}
-
-	/**
-	 * @return the team
-	 */
-	public Team getTeam()
-	{
-
-		return team;
 	}
 
 	/**

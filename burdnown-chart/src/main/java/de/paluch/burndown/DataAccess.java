@@ -2,7 +2,6 @@ package de.paluch.burndown;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -29,9 +28,25 @@ public class DataAccess
 	/**
 	 *
 	 */
-	private static final String BD_XML_SUFFIX = ".bd-xml";
+	private static final String BD_XML_SUFFIX = ".xml";
 	public final static String DATA_LOCATION = "burndown.data.dir";
-	public final static String TEAMS_FILE = "teams.bd-xml";
+	public final static String TEAMS_FILE = "teams.xml";
+
+	public Sprint getSprint(String teamId, String sprintId)
+	{
+
+		if (System.getProperty(DATA_LOCATION) == null)
+		{
+			throw new IllegalStateException("System property " + DATA_LOCATION + " not set.");
+		}
+		File sprintFile = new File(new File(System.getProperty(DATA_LOCATION)), teamId + "/" + sprintId + BD_XML_SUFFIX);
+		if (sprintFile.exists())
+		{
+			return JAXB.unmarshal(sprintFile, Sprint.class);
+		}
+		return null;
+
+	}
 
 	public Teams getTeams()
 	{
@@ -53,22 +68,6 @@ public class DataAccess
 		}
 		File teamsFile = new File(new File(System.getProperty(DATA_LOCATION)), TEAMS_FILE);
 		return teamsFile;
-	}
-
-	public Sprint getSprint(String teamId, String sprintId)
-	{
-
-		if (System.getProperty(DATA_LOCATION) == null)
-		{
-			throw new IllegalStateException("System property " + DATA_LOCATION + " not set.");
-		}
-		File sprintFile = new File(new File(System.getProperty(DATA_LOCATION)), teamId + "/" + sprintId + BD_XML_SUFFIX);
-		if (sprintFile.exists())
-		{
-			return JAXB.unmarshal(sprintFile, Sprint.class);
-		}
-		return null;
-
 	}
 
 	public List<String> listSprints(String teamId)
@@ -119,24 +118,6 @@ public class DataAccess
 		return result;
 	}
 
-	public void storeSprint(String teamId, Sprint sprint)
-	{
-
-		if (System.getProperty(DATA_LOCATION) == null)
-		{
-			throw new IllegalStateException("System property " + DATA_LOCATION + " not set.");
-		}
-		File folder = new File(new File(System.getProperty(DATA_LOCATION)), teamId);
-		if (!folder.exists())
-		{
-			folder.mkdirs();
-		}
-		File sprintFile = new File(folder, sprint.getId()
-											+ BD_XML_SUFFIX);
-		JAXB.marshal(sprint, sprintFile);
-
-	}
-
 	public void saveOrUpdateTeam(Team team)
 	{
 
@@ -159,6 +140,24 @@ public class DataAccess
 		teams.getTeams().add(team);
 
 		JAXB.marshal(teams, getTeamsFile());
+
+	}
+
+	public void storeSprint(String teamId, Sprint sprint)
+	{
+
+		if (System.getProperty(DATA_LOCATION) == null)
+		{
+			throw new IllegalStateException("System property " + DATA_LOCATION + " not set.");
+		}
+		File folder = new File(new File(System.getProperty(DATA_LOCATION)), teamId);
+		if (!folder.exists())
+		{
+			folder.mkdirs();
+		}
+		File sprintFile = new File(folder, sprint.getId()
+											+ BD_XML_SUFFIX);
+		JAXB.marshal(sprint, sprintFile);
 
 	}
 }

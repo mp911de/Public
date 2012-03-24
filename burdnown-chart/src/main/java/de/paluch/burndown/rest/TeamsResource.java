@@ -53,12 +53,14 @@ public class TeamsResource
 	int width, @QueryParam("height")
 	@DefaultValue("786")
 	int height, @QueryParam("multiplier")
-	@DefaultValue("1")
+	@DefaultValue("10")
 	double multiplier) throws FontFormatException, IOException
 	{
 
+		double normalizedMultiplier = multiplier / 10;
 		byte[] result = new byte[0];
 		Sprint sprint = getSprintInternal(teamId, sprintId);
+		Team team = getTeam(teamId);
 
 		if (sprint == null)
 		{
@@ -69,11 +71,13 @@ public class TeamsResource
 		ChartDataFactory dataFactory = new ChartDataFactory();
 		ChartFactory chartFactory = new ChartFactory();
 
-		dataFactory.createData(sprint, gen.generateSprintDays(sprint.getDays(), sprint.getStartDate()));
+		dataFactory.createData(team.getTeamSize(), sprint,
+				gen.generateSprintDays(sprint.getDays() + 1, sprint.getStartDate()));
 
 		JFreeChart chart = chartFactory.createChart(dataFactory.getChartData());
 
-		BufferedImage image = chart.createBufferedImage(width, height, (width / multiplier), (height / multiplier),
+		BufferedImage image = chart.createBufferedImage(width, height, (width / normalizedMultiplier),
+				(height / normalizedMultiplier),
 				null);
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -99,46 +103,6 @@ public class TeamsResource
 		return Response.ok(sprint).build();
 	}
 
-	@GET
-	@Produces(MediaType.TEXT_XML)
-	public Teams listTeams()
-	{
-
-		return new DataAccess().getTeams();
-	}
-
-	@PUT
-	@Path("{teamId}")
-	@Produces(MediaType.TEXT_XML)
-	@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
-	public void storeTeam(@PathParam("teamId")
-	String teamId,
-			Teams teams)
-	{
-
-		for (Team team : teams.getTeams())
-		{
-			new DataAccess().saveOrUpdateTeam(team);
-		}
-	}
-
-	@PUT
-	@Path("{teamId}/sprints/{sprintId}")
-	@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
-	@Produces(MediaType.TEXT_XML)
-	public Response storeSprint(@PathParam("teamId")
-	String teamId, @PathParam("sprintId")
-	String sprintId, Sprint sprint)
-	{
-
-		sprint.setId(sprintId);
-
-		new DataAccess().storeSprint(teamId, sprint);
-		return Response
-				.created(UriBuilder.fromResource(getClass()).path(teamId).path("sprints").path(sprintId).build())
-				.build();
-	}
-
 	/**
 	 * @param teamId
 	 * @param sprintId
@@ -162,6 +126,64 @@ public class TeamsResource
 			sprint = access.getSprint(teamId, sprintId);
 		}
 		return sprint;
+	}
+
+	/**
+	 * @param teamId
+	 * @return
+	 */
+	private Team getTeam(String teamId)
+	{
+
+		Teams teams = listTeams();
+		for (Team team : teams.getTeams())
+		{
+			if (team.getId().equals(teamId))
+			{
+				return team;
+			}
+		}
+		return null;
+	}
+
+	@GET
+	@Produces(MediaType.TEXT_XML)
+	public Teams listTeams()
+	{
+
+		return new DataAccess().getTeams();
+	}
+
+	@PUT
+	@Path("{teamId}/sprints/{sprintId}")
+	@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
+	@Produces(MediaType.TEXT_XML)
+	public Response storeSprint(@PathParam("teamId")
+	String teamId, @PathParam("sprintId")
+	String sprintId, Sprint sprint)
+	{
+
+		sprint.setId(sprintId);
+
+		new DataAccess().storeSprint(teamId, sprint);
+		return Response
+				.created(UriBuilder.fromResource(getClass()).path(teamId).path("sprints").path(sprintId).build())
+				.build();
+	}
+
+	@PUT
+	@Path("{teamId}")
+	@Produces(MediaType.TEXT_XML)
+	@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
+	public void storeTeam(@PathParam("teamId")
+	String teamId,
+			Teams teams)
+	{
+
+		for (Team team : teams.getTeams())
+		{
+			new DataAccess().saveOrUpdateTeam(team);
+		}
 	}
 
 }

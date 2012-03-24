@@ -4,10 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -15,8 +12,12 @@ import java.text.SimpleDateFormat;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.DateTickUnit;
+import org.jfree.chart.axis.DateTickUnitType;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.axis.SegmentedTimeline;
+import org.jfree.chart.axis.TickUnits;
 import org.jfree.chart.block.BlockFrame;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYAreaRenderer;
@@ -36,7 +37,7 @@ import org.jfree.ui.RectangleInsets;
 public class ChartFactory
 {
 
-	private Font font;
+	private final Font font;
 
 	/**
 	 * @throws IOException
@@ -52,28 +53,20 @@ public class ChartFactory
 		font = baseFont.deriveFont(Font.PLAIN).deriveFont(14f);
 	}
 
+	/**
+	 * Create Burndown Chart.
+	 * @param data
+	 * @return JFreeChart
+	 */
 	public JFreeChart createChart(ChartData data)
 	{
 
-		DateAxis dates = new DateAxis("Sprint Days");
-		NumberAxis hours = new NumberAxis("Hours");
-		NumberAxis burnedHours = new NumberAxis("Burned");
+		XYPlot plot = setupAxesAndCreatePlot(data);
 
-		dates.setDateFormatOverride(new SimpleDateFormat("dd. MMM"));
-		dates.setLabelFont(font);
-		hours.setLabelFont(font);
-		hours.setTickLabelFont(font);
-		dates.setTickLabelFont(font);
+		setData(data, plot);
 
-		XYPlot plot = new XYPlot();
-		hours.setTickUnit(new NumberTickUnit(25));
-
-		plot.setDomainAxis(0, dates);
-		plot.setRangeAxis(0, hours);
-		plot.setDataset(0, data.getMainSeries());
-		plot.setDataset(1, data.getBaselineSeries());
-
-		XYLineAndShapeRenderer xyLineRenderer = new XYLineAndShapeRenderer(true, false);
+		XYLineAndShapeRenderer xyLineRenderer = new XYLineAndShapeRenderer();
+		xyLineRenderer.setBaseShapesVisible(false);
 
 		XYAreaRenderer xyAreaRenderer = new XYAreaRenderer();
 
@@ -94,17 +87,16 @@ public class ChartFactory
 	}
 
 	/**
+	 * @param data
 	 * @param plot
 	 */
-	private void setStyle(XYPlot plot)
+	private void setData(ChartData data, XYPlot plot)
 	{
 
-		plot.setDomainCrosshairVisible(false);
-		plot.setDomainGridlinesVisible(false);
-		plot.setRangeCrosshairVisible(false);
-		plot.setRangeGridlinesVisible(true);
-		plot.setRangeGridlinePaint(new Color(170, 170, 170));
-		plot.setRangeGridlineStroke(new BasicStroke(1f));
+		plot.setDataset(0, data.getMainSeries());
+		plot.setDataset(1, data.getBaselineSeries());
+
+		plot.mapDatasetToRangeAxis(1, 1);
 	}
 
 	/**
@@ -118,20 +110,20 @@ public class ChartFactory
 		{
 
 			@Override
+			public void draw(Graphics2D g2, Rectangle2D area)
+			{
+
+			}
+
+			@Override
 			public RectangleInsets getInsets()
 			{
 
 				return RectangleInsets.ZERO_INSETS;
 			}
-
-			@Override
-			public void draw(Graphics2D g2, Rectangle2D area)
-			{
-
-			}
 		});
 
-		chart.getLegend().setPadding(10, 10,10, 10);
+		chart.getLegend().setPadding(10, 10, 10, 10);
 		chart.getLegend().setItemLabelPadding(new RectangleInsets(0, 5, 0, 15));
 
 		chart.setPadding(new RectangleInsets(10, 10, 10, 10));
@@ -160,9 +152,68 @@ public class ChartFactory
 		xyLineRenderer.setSeriesStroke(0, new BasicStroke(3.0f));
 		xyLineRenderer.setSeriesShapesVisible(0, true);
 		xyLineRenderer.setSeriesShape(0, new Ellipse2D.Double(-5, -5, 10, 10));
+		xyLineRenderer.setSeriesOutlineStroke(0, new BasicStroke(3.0f));
 
 		xyLineRenderer.setSeriesPaint(0, new Color(111, 164, 91));
 		xyLineRenderer.setSeriesPaint(1, new Color(118, 151, 187));
 		xyLineRenderer.setSeriesPaint(2, new Color(141, 207, 116));
+	}
+
+	/**
+	 * @param plot
+	 */
+	private void setStyle(XYPlot plot)
+	{
+
+		plot.setDomainCrosshairVisible(false);
+		plot.setDomainGridlinesVisible(false);
+		plot.setRangeCrosshairVisible(false);
+		plot.setRangeGridlinesVisible(true);
+		plot.setRangeGridlinePaint(new Color(170, 170, 170));
+		plot.setRangeGridlineStroke(new BasicStroke(1f));
+	}
+
+	/**
+	 * @return
+	 */
+	private XYPlot setupAxesAndCreatePlot(ChartData chartData)
+	{
+
+		DateAxis dates = new DateAxis("Sprint Days");
+		dates.setTimeline(SegmentedTimeline.newMondayThroughFridayTimeline());
+		dates.setDateFormatOverride(new SimpleDateFormat("dd. MM"));
+
+		TickUnits tu = new TickUnits();
+		tu.add(new DateTickUnit(DateTickUnitType.DAY, 1));
+		tu.add(new DateTickUnit(DateTickUnitType.DAY, 2));
+		tu.add(new DateTickUnit(DateTickUnitType.DAY, 4));
+
+		dates.setTickLabelInsets(new RectangleInsets(10, 5, 0, 5));
+		dates.setStandardTickUnits(tu);
+		dates.setAutoTickUnitSelection(true);
+		dates.setLowerMargin(0.01d);
+		dates.setUpperMargin(0.01d);
+
+		NumberAxis hours = new NumberAxis("Burndown");
+		NumberAxis burnedHours = new NumberAxis("Effort");
+		burnedHours.setAutoRange(false);
+		burnedHours.setRange(0, chartData.getTeamsize() * 8);
+
+		dates.setLabelFont(font);
+		dates.setTickLabelFont(font);
+
+		hours.setLabelFont(font);
+		hours.setTickLabelFont(font);
+		hours.setTickUnit(new NumberTickUnit(25));
+
+		burnedHours.setLabelFont(font);
+		burnedHours.setTickLabelFont(font);
+		burnedHours.setTickUnit(new NumberTickUnit(8));
+
+		XYPlot plot = new XYPlot();
+		plot.setDomainAxis(dates);
+		plot.setRangeAxis(0, hours);
+		plot.setRangeAxis(1, burnedHours);
+		return plot;
 	}
 }

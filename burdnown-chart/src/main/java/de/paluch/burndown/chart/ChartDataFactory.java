@@ -3,11 +3,7 @@ package de.paluch.burndown.chart;
 import java.util.Date;
 import java.util.List;
 
-import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.data.time.Day;
-import org.jfree.data.time.MovingAverage;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.TimeSeriesDataItem;
 
 import de.paluch.burndown.model.Sprint;
@@ -25,73 +21,7 @@ import de.paluch.burndown.model.SprintEffort;
 public class ChartDataFactory
 {
 
-	private ChartData chartData = new ChartData();
-
-	/**
-	 *
-	 */
-	public ChartDataFactory()
-	{
-
-	}
-
-	public void createData(Sprint sprint, List<Date> days)
-	{
-
-		double value = sprint.getPlanned();
-		double sprintGoalPD = sprint.getPlanned();
-		double idealPD = sprintGoalPD / days.size();
-
-		boolean first = true;
-		boolean previousData = false;
-		for (Date date : days)
-		{
-
-			SprintEffort effort = getEffortFor(date, sprint.getEffort());
-			if (effort != null)
-			{
-
-				boolean isLastEffortEntry = true;
-				for (int i = days.indexOf(date) + 1; i < days.size(); i++)
-				{
-					SprintEffort otherEffort = getEffortFor(days.get(i), sprint.getEffort());
-					if (otherEffort != null && (otherEffort.getBurned() != 0 || otherEffort.getUnplanned() != 0))
-					{
-						isLastEffortEntry = false;
-						break;
-					}
-				}
-
-				if (effort.getBurned() != 0 || effort.getUnplanned() != 0 || first || !isLastEffortEntry)
-				{
-					chartData.getBurndown().add(new TimeSeriesDataItem(new Day(date), value));
-					first = false;
-				}
-
-				chartData.getBurned().add(new TimeSeriesDataItem(new Day(date), effort.getBurned()));
-				chartData.getUnplanned().add(new TimeSeriesDataItem(new Day(date), effort.getUnplanned()));
-				value -= effort.getBurned();
-			}
-
-			chartData.getIdeal().add(new TimeSeriesDataItem(new Day(date), sprintGoalPD));
-			sprintGoalPD -= idealPD;
-		}
-
-		chartData.getMainSeries().addSeries(chartData.getBurndown());
-		chartData.getMainSeries().addSeries(chartData.getIdeal());
-		if (chartData.getBurndown()
-				.getItemCount() > 1)
-		{
-			chartData.getMainSeries().addSeries(
-					MovingAverage.createMovingAverage(chartData.getBurndown(), "Trend", chartData.getBurndown()
-							.getItemCount() - 1, 1));
-		}
-
-		chartData.getBaselineSeries().addSeries(chartData.getUnplanned());
-		chartData.getBaselineSeries().addSeries(chartData.getBurned());
-
-	}
-
+	private final ChartData chartData = new ChartData();
 	/**
 	 * @param date
 	 * @param effort
@@ -110,6 +40,62 @@ public class ChartDataFactory
 		}
 		return null;
 	}
+	/**
+	 *
+	 */
+	public ChartDataFactory()
+	{
+
+	}
+
+	public void createData(int teamSize, Sprint sprint, List<Date> days)
+	{
+
+		double value = sprint.getPlanned();
+
+		boolean first = true;
+		Date lastDate = null;
+		boolean isLastEffortEntry = true;
+		int lastEffortIndex = -1;
+		for (Date date : days)
+		{
+
+			lastDate = date;
+			SprintEffort effort = getEffortFor(date, sprint.getEffort());
+			if (effort == null)
+			{
+				continue;
+			}
+
+			isLastEffortEntry = isLastEffortEntry(sprint, days, date);
+
+			if (effort.getBurned() != 0 || effort.getUnplanned() != 0 || first || !isLastEffortEntry)
+			{
+				lastEffortIndex = days.indexOf(date);
+				chartData.getBurndown().add(new TimeSeriesDataItem(new Day(date), value));
+				first = false;
+			}
+			value -= effort.getBurned();
+
+			chartData.getBurned().add(new TimeSeriesDataItem(new Day(date), effort.getBurned()));
+			chartData.getUnplanned().add(new TimeSeriesDataItem(new Day(date), effort.getUnplanned()));
+		}
+
+		if (lastEffortIndex == days.size() - 2)
+		{
+			chartData.getBurndown().addOrUpdate(new TimeSeriesDataItem(new Day(lastDate), value));
+		}
+
+		chartData.getIdeal().addOrUpdate(new TimeSeriesDataItem(new Day(sprint.getStartDate()), sprint.getPlanned()));
+		chartData.getIdeal().addOrUpdate(new TimeSeriesDataItem(new Day(lastDate), 0));
+
+		chartData.getMainSeries().addSeries(chartData.getBurndown());
+		chartData.getMainSeries().addSeries(chartData.getIdeal());
+
+		chartData.getBaselineSeries().addSeries(chartData.getUnplanned());
+		chartData.getBaselineSeries().addSeries(chartData.getBurned());
+		chartData.setTeamsize(teamSize);
+	}
 
 	/**
 	 * @return the chartData
@@ -118,6 +104,28 @@ public class ChartDataFactory
 	{
 
 		return chartData;
+	}
+
+	/**
+	 * @param sprint
+	 * @param days
+	 * @param date
+	 * @return
+	 */
+	private boolean isLastEffortEntry(Sprint sprint, List<Date> days, Date date)
+	{
+
+		boolean isLastEffortEntry = true;
+		for (int i = days.indexOf(date) + 1; i < days.size(); i++)
+		{
+			SprintEffort otherEffort = getEffortFor(days.get(i), sprint.getEffort());
+			if (otherEffort != null && (otherEffort.getBurned() != 0 || otherEffort.getUnplanned() != 0))
+			{
+				isLastEffortEntry = false;
+				break;
+			}
+		}
+		return isLastEffortEntry;
 	}
 
 }

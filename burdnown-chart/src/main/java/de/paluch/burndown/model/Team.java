@@ -21,6 +21,7 @@ public class Team
 	private String id;
 	private int regularSprintLength;
 	private int regularSprintStart;
+	private int teamSize = 0;
 	private String name;
 
 	/**
@@ -43,57 +44,69 @@ public class Team
 	}
 
 	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+
+		if (this == obj)
+		{
+			return true;
+		}
+		if (obj == null)
+		{
+			return false;
+		}
+		if (getClass() != obj.getClass())
+		{
+			return false;
+		}
+		Team other = (Team) obj;
+		if (id == null)
+		{
+			if (other.id != null)
+			{
+				return false;
+			}
+		}
+		else if (!id.equals(other.id))
+		{
+			return false;
+		}
+		if (name == null)
+		{
+			if (other.name != null)
+			{
+				return false;
+			}
+		}
+		else if (!name.equals(other.name))
+		{
+			return false;
+		}
+		if (regularSprintLength != other.regularSprintLength)
+		{
+			return false;
+		}
+		if (regularSprintStart != other.regularSprintStart)
+		{
+			return false;
+		}
+		if (teamSize != other.teamSize)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * @return the id
 	 */
 	public String getId()
 	{
 
 		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(String id)
-	{
-
-		this.id = id;
-	}
-
-	/**
-	 * @return the regularSprintLength
-	 */
-	public int getRegularSprintLength()
-	{
-
-		return regularSprintLength;
-	}
-
-	/**
-	 * @param regularSprintLength the regularSprintLength to set
-	 */
-	public void setRegularSprintLength(int regularSprintLength)
-	{
-
-		this.regularSprintLength = regularSprintLength;
-	}
-
-	/**
-	 * @return the regularSprintStart
-	 */
-	public int getRegularSprintStart()
-	{
-
-		return regularSprintStart;
-	}
-
-	/**
-	 * @param regularSprintStart the regularSprintStart to set
-	 */
-	public void setRegularSprintStart(int regularSprintStart)
-	{
-
-		this.regularSprintStart = regularSprintStart;
 	}
 
 	/**
@@ -106,24 +119,30 @@ public class Team
 	}
 
 	/**
-	 * @param name the name to set
+	 * @return the regularSprintLength
 	 */
-	public void setName(String name)
+	public int getRegularSprintLength()
 	{
 
-		this.name = name;
+		return regularSprintLength;
 	}
 
 	/**
-	 * @see java.lang.Object#toString()
+	 * @return the regularSprintStart
 	 */
-	@Override
-	public String toString()
+	public int getRegularSprintStart()
 	{
 
-		return getClass().getSimpleName() + " [id=" + id + ", regularSprintLength=" + regularSprintLength
-				+ ", regularSprintStart="
-				+ regularSprintStart + ", name=" + name + "]";
+		return regularSprintStart;
+	}
+
+	/**
+	 * @return the teamSize
+	 */
+	public int getTeamSize()
+	{
+
+		return teamSize;
 	}
 
 	/**
@@ -139,42 +158,65 @@ public class Team
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + regularSprintLength;
 		result = prime * result + regularSprintStart;
+		result = prime * result + teamSize;
 		return result;
 	}
 
 	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
+	 * @param id the id to set
 	 */
-	@Override
-	public boolean equals(Object obj)
+	public void setId(String id)
 	{
 
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Team other = (Team) obj;
-		if (id == null)
-		{
-			if (other.id != null)
-				return false;
-		}
-		else if (!id.equals(other.id))
-			return false;
-		if (name == null)
-		{
-			if (other.name != null)
-				return false;
-		}
-		else if (!name.equals(other.name))
-			return false;
-		if (regularSprintLength != other.regularSprintLength)
-			return false;
-		if (regularSprintStart != other.regularSprintStart)
-			return false;
-		return true;
+		this.id = id;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name)
+	{
+
+		this.name = name;
+	}
+
+	/**
+	 * @param regularSprintLength the regularSprintLength to set
+	 */
+	public void setRegularSprintLength(int regularSprintLength)
+	{
+
+		this.regularSprintLength = regularSprintLength;
+	}
+
+	/**
+	 * @param regularSprintStart the regularSprintStart to set
+	 */
+	public void setRegularSprintStart(int regularSprintStart)
+	{
+
+		this.regularSprintStart = regularSprintStart;
+	}
+
+	/**
+	 * @param teamSize the teamSize to set
+	 */
+	public void setTeamSize(int teamSize)
+	{
+
+		this.teamSize = teamSize;
+	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+
+		return getClass().getSimpleName() + " [id=" + id + ", regularSprintLength=" + regularSprintLength
+				+ ", regularSprintStart="
+				+ regularSprintStart + ", teamSize=" + teamSize + ", name=" + name + "]";
 	}
 
 }
