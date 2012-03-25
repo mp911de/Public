@@ -8,24 +8,22 @@
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
 		<param-value>Productions</param-value>
 	</context-param>
-	
 	<context-param>
 		<param-name>javax.faces.SKIP_COMMENTS</param-name>
 		<param-value>true</param-value>
 	</context-param>
-	
 	<context-param>
-        <param-name>resteasy.servlet.mapping.prefix</param-name>
-        <param-value>/rest</param-value>
-    </context-param>
-    
-    <context-param>
-        <param-name>javax.ws.rs.core.Application</param-name>
-        <param-value>de.paluch.burndown.rest.ChartApplication</param-value>
-    </context-param>
-    
-    
+		<param-name>javax.ws.rs.core.Application</param-name>
+		<param-value>de.paluch.burndown.rest.ChartApplication</param-value>
+	</context-param>
+	<context-param>
+		<param-name>resteasy.servlet.mapping.prefix</param-name>
+		<param-value>/rest</param-value>
+	</context-param>
 	
+	<listener>
+		<listener-class>de.paluch.burndown.sync.jira.JiraSyncJobListener</listener-class>
+	</listener>
 	
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -34,30 +32,23 @@
 	</servlet>
 	
 	<servlet>
-        <servlet-name>Resteasy</servlet-name>
-        <servlet-class>
-            org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
-        </servlet-class>
-        <init-param>
-            <param-name>resteasy.scan</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </servlet>
-
+		<servlet-name>Resteasy</servlet-name>
+		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+		<init-param>
+			<param-name>resteasy.scan</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>Faces Servlet</servlet-name>
-		<url-pattern>/faces/*</url-pattern>
-	</servlet-mapping>
 	
-	    <servlet-mapping>
-        <servlet-name>Resteasy</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
-    </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Resteasy</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
 	
 	<session-config>
 		<session-timeout>30</session-timeout>
@@ -71,5 +62,4 @@
 	<welcome-file-list>
 		<welcome-file>index.xhtml</welcome-file>
 	</welcome-file-list>
-	
 </web-app>

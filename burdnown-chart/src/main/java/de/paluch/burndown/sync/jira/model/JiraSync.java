@@ -5,10 +5,11 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * Jira Sync config.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark
@@ -21,6 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class JiraSync
 {
 
+	@XmlElement(name = "teamSync")
 	private List<JiraTeamSync> teamSync = new ArrayList<JiraTeamSync>();
 	private String baseUrl;
 	private String username;

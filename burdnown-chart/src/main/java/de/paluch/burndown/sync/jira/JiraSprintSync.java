@@ -1,7 +1,9 @@
 package de.paluch.burndown.sync.jira;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,20 +12,16 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atlassian.jira.rpc.soap.client.RemoteAuthenticationException;
-import com.atlassian.jira.rpc.soap.client.RemoteCustomFieldValue;
-import com.atlassian.jira.rpc.soap.client.RemoteException;
-import com.atlassian.jira.rpc.soap.client.RemoteIssue;
-import com.atlassian.jira.rpc.soap.client.RemotePermissionException;
-import com.atlassian.jira.rpc.soap.client.RemoteValidationException;
-
 import de.paluch.burndown.model.Sprint;
 import de.paluch.burndown.model.SprintEffort;
+import de.paluch.burndown.sync.jira.client.JiraClient;
+import de.paluch.burndown.sync.jira.client.JiraRestIssue;
+import de.paluch.burndown.sync.jira.client.JiraRestWorklogValue;
 import de.paluch.burndown.sync.jira.model.EffortMode;
 import de.paluch.burndown.sync.jira.model.JiraTeamSync;
 
 /**
- *
+ * Jira to Sprint-Model Synchronizer.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark
@@ -35,7 +33,6 @@ public class JiraSprintSync
 {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-	private JiraTeamSync teamSync;
 	private JiraClient client;
 
 	/**
@@ -62,42 +59,31 @@ public class JiraSprintSync
 	}
 
 	/**
-	 * JIRA Session Logout.
-	 * @throws JiraSyncException
-	 */
-	public void logout() throws JiraSyncException
-	{
-
-		try
-		{
-			client.logout();
-		}
-		catch (Exception e)
-		{
-			throw new JiraSyncException(e);
-		}
-	}
-
-	/**
 	 * Sync Jira Sprint to Sprint Effort.
+	 * @param teamSync
 	 * @param sprint
 	 * @throws JiraSyncException
 	 */
-	public void syncSprint(Sprint sprint) throws JiraSyncException
+	public void syncSprint(JiraTeamSync teamSync, Sprint sprint) throws JiraSyncException
 	{
 
 		try
 		{
 			String versionId = MessageFormat.format(teamSync.getSprintVersionNameScheme(), sprint.getId());
-			RemoteIssue issues[] = client.findSprintIssues(teamSync.getProjectKey(), versionId);
-			if (issues.length == 0)
+
+			List<String> issueKeys = client.findSprintIssues(teamSync.getProjectKey(), versionId);
+
+			if (issueKeys.isEmpty())
 			{
 				logger.info("No issues found for sync " + sprint.getId());
 			}
-			calculateSprintGoal(issues, sprint);
+
+			List<JiraRestIssue> issues = fetchIssues(issueKeys);
+
+			calculateSprintGoal(issues, teamSync, sprint);
 
 			resetSprintEfforts(sprint.getEffort(), teamSync.isUnplanned());
-			calculateBurnedOnDayBasis(issues, sprint.getId(), sprint.getEffort());
+			calculateBurnedOnDayBasis(issues, teamSync, sprint.getId(), sprint.getEffort());
 
 		}
 		catch (Exception e)
@@ -108,103 +94,95 @@ public class JiraSprintSync
 	}
 
 	/**
+	 * Calculate Burndown from Jira Issues.
 	 * @param issues
+	 * @param teamSync
 	 * @param effort
-	 * @throws java.rmi.RemoteException
-	 * @throws RemoteException
-	 * @throws RemoteAuthenticationException
-	 * @throws RemotePermissionException
 	 */
-	private void calculateBurnedOnDayBasis(RemoteIssue[] issues, String sprintId, List<SprintEffort> effort)
-			throws RemotePermissionException, RemoteAuthenticationException, RemoteException, java.rmi.RemoteException
+	private void calculateBurnedOnDayBasis(List<JiraRestIssue> issues, JiraTeamSync teamSync, String sprintId,
+			List<SprintEffort> effort)
 	{
 
-		for (RemoteIssue remoteIssue : issues)
+		for (JiraRestIssue issue : issues)
 		{
 
-			if (remoteIssue.getResolution() == null)
+			if (issue.getFields().getResolution() == null)
 			{
 				continue;
 			}
 
-			Date resolutionDate = client.getResolutionDate(remoteIssue.getKey());
+			Date resolutionDate = issue.getFields().getResolutiondate().getValue();
 			if (resolutionDate == null)
 			{
 				continue;
 			}
 
-			calculateEffort(sprintId, effort, remoteIssue, resolutionDate);
+			calculateEffort(teamSync, sprintId, effort, issue, resolutionDate);
 
 		}
 
 	}
 
 	/**
+	 * Calculate Effort on planned/unplanned items.
+	 * @param teamSync
 	 * @param sprintId
 	 * @param effort
-	 * @param remoteIssue
+	 * @param issue
 	 * @param resolutionDate
-	 * @throws RemotePermissionException
-	 * @throws RemoteValidationException
-	 * @throws RemoteException
-	 * @throws RemoteException
 	 */
-	private void calculateEffort(String sprintId, List<SprintEffort> effort, RemoteIssue remoteIssue,
-			Date resolutionDate) throws RemotePermissionException, RemoteValidationException, RemoteException,
-			java.rmi.RemoteException
+	private void calculateEffort(JiraTeamSync teamSync, String sprintId, List<SprintEffort> effort,
+			JiraRestIssue issue,
+			Date resolutionDate)
 	{
 
-		if (teamSync.isUnplanned() && isUnplanned(remoteIssue))
+		if (teamSync.isUnplanned()
+			&& isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(), issue))
 		{
-			Map<Date, Integer> unplannedEffort = client.getWorklog(remoteIssue.getKey());
+			Map<Date, Integer> unplannedEffort = getWorklog(issue);
 			Set<Entry<Date, Integer>> set = unplannedEffort.entrySet();
 			for (Entry<Date, Integer> entry : set)
 			{
-				updateSprintEffort(effort, entry.getKey(), 0, entry.getValue(), sprintId, remoteIssue.getKey());
+				updateSprintEffort(effort, entry.getKey(), 0, entry.getValue(), sprintId, issue.getKey());
 			}
 		}
 		else
 		{
-			double planned = 0;
-			if (teamSync.getEffortMode() == EffortMode.HOURS)
-			{
-				planned = client.getOriginalEstimate(remoteIssue.getKey()) / 60d;
-			}
+			double planned = getOriginalEstimate(teamSync, issue);
 
 			if (teamSync.getEffortMode() == EffortMode.STORY_POINTS)
 			{
-				planned = getStoryPoints(remoteIssue);
+				planned = getStoryPoints(teamSync.getStoryPointsFieldId(), issue);
 			}
-			updateSprintEffort(effort, resolutionDate, planned, 0, sprintId, remoteIssue.getKey());
+			updateSprintEffort(effort, resolutionDate, planned, 0, sprintId, issue.getKey());
 		}
 	}
+
 	/**
+	 * Calculate Goal.
 	 * @param issues
+	 * @param teamSync
 	 * @param sprint
 	 */
-	private void calculateSprintGoal(RemoteIssue[] issues, Sprint sprint)
+	private void calculateSprintGoal(List<JiraRestIssue> issues, JiraTeamSync teamSync, Sprint sprint)
 	{
 
 		double goal = 0;
 
-		for (RemoteIssue remoteIssue : issues)
+		for (JiraRestIssue issue : issues)
 		{
 
-			if (teamSync.isUnplanned() && isUnplanned(remoteIssue))
+			if (teamSync.isUnplanned()
+				&& isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(), issue))
 			{
 				continue;
 			}
 
-			double itemValue = 0;
-
-			if (teamSync.getEffortMode() == EffortMode.HOURS)
-			{
-				itemValue = client.getOriginalEstimate(remoteIssue.getKey()) / 60d;
-			}
+			double itemValue = getOriginalEstimate(teamSync, issue);
 
 			if (teamSync.getEffortMode() == EffortMode.STORY_POINTS)
 			{
-				itemValue = getStoryPoints(remoteIssue);
+				itemValue = getStoryPoints(teamSync.getStoryPointsFieldId(), issue);
 			}
 
 			goal += itemValue;
@@ -215,27 +193,59 @@ public class JiraSprintSync
 	}
 
 	/**
-	 * @param remoteIssue
-	 * @return Storypoints
+	 * Load Issues from Jira.
+	 * @param issueKeys
+	 * @return List<JiraRestIssue>
 	 */
-	private double getStoryPoints(RemoteIssue remoteIssue)
+	private List<JiraRestIssue> fetchIssues(List<String> issueKeys)
 	{
 
-		RemoteCustomFieldValue values[] = remoteIssue.getCustomFieldValues();
-		for (RemoteCustomFieldValue remoteCustomFieldValue : values)
+		List<JiraRestIssue> result = new ArrayList<JiraRestIssue>();
+		for (String issueKey : issueKeys)
 		{
-			if (!remoteCustomFieldValue.getCustomfieldId().equals(teamSync.getStoryPointsFieldId()))
+			logger.info("Fetching issue " + issueKey);
+			JiraRestIssue issue = client.getIssue(issueKey);
+			if (issue != null)
 			{
-				continue;
+				result.add(issue);
 			}
+		}
+		return result;
+	}
 
-			String fieldValues[] = remoteCustomFieldValue.getValues();
-			for (String fieldValue : fieldValues)
+	/**
+	 * @param teamSync
+	 * @param issue
+	 * @return original Estimate from Issue.
+	 */
+	private double getOriginalEstimate(JiraTeamSync teamSync, JiraRestIssue issue)
+	{
+
+		if (teamSync.getEffortMode() == EffortMode.HOURS && issue.getFields().getTimetracking() != null)
+		{
+			return issue.getFields().getTimetracking().getValue().getOriginalEstimate() / 60d;
+		}
+		return 0;
+	}
+
+	/**
+	 * @param storyPointsFieldId
+	 * @param issue
+	 * @return Storypoints
+	 */
+	@SuppressWarnings("unchecked")
+	private double getStoryPoints(String storyPointsFieldId, JiraRestIssue issue)
+	{
+
+		Map<String, Object> storyPointsField = (Map<String, Object>) issue.getFields().properties()
+				.get(storyPointsFieldId);
+
+		if (storyPointsField != null)
+		{
+			Object value = storyPointsField.get("value");
+			if (value != null)
 			{
-				if (fieldValue != null)
-				{
-					return Double.parseDouble(fieldValue.replace(',', '.').trim());
-				}
+				return Double.parseDouble(value.toString().replace(',', '.').trim());
 			}
 		}
 
@@ -243,35 +253,72 @@ public class JiraSprintSync
 	}
 
 	/**
-	 * @param remoteIssue
-	 * @return true if item is unplanned.
+	 * Retrieve Worklog to Date.
+	 * @param issue
+	 * @return
 	 */
-	private boolean isUnplanned(RemoteIssue remoteIssue)
+	private Map<Date, Integer> getWorklog(JiraRestIssue issue)
 	{
 
-		RemoteCustomFieldValue values[] = remoteIssue.getCustomFieldValues();
-		for (RemoteCustomFieldValue remoteCustomFieldValue : values)
+		Map<Date, Integer> result = new HashMap<Date, Integer>();
+
+		if (issue.getFields().getWorklog() == null)
 		{
-			if (!remoteCustomFieldValue.getCustomfieldId().equals(teamSync.getUnplannedFlagFieldId()))
+			return result;
+		}
+
+		for (JiraRestWorklogValue worklog : issue.getFields().getWorklog().getValue())
+		{
+			Integer time = Math.round(worklog.getMinutesSpent() / 60f);
+			if (result.containsKey(worklog.getStarted()))
 			{
-				continue;
+				time += result.get(worklog.getStarted());
 			}
 
-			String fieldValues[] = remoteCustomFieldValue.getValues();
-			for (String fieldValue : fieldValues)
-			{
-				if (fieldValue.equalsIgnoreCase(teamSync.getUnplannedFlagFieldId()))
-				{
-					return true;
-				}
-			}
+			result.put(worklog.getStarted(), time);
 
+		}
+		return result;
+	}
+	/**
+	 *
+	 * @param unplannedFlagFieldId
+	 * @param unplannedFlagValue
+	 * @param issue
+	 * @return true if item is unplanned
+	 */
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private boolean isUnplanned(String unplannedFlagFieldId, String unplannedFlagValue, JiraRestIssue issue)
+	{
+
+		Map<String, Object> flagField = (Map<String, Object>) issue.getFields().properties()
+				.get(unplannedFlagFieldId);
+
+		if (flagField == null)
+		{
+			return false;
+		}
+
+		List<String> value = (List) flagField.get("value");
+
+		if (value == null)
+		{
+			return false;
+		}
+
+		for (String fieldValueName : value)
+		{
+			if (fieldValueName != null && fieldValueName.equalsIgnoreCase(unplannedFlagValue))
+			{
+				return true;
+			}
 		}
 
 		return false;
 	}
 
 	/**
+	 * Reset Effort Model.
 	 * @param effort
 	 * @param unplanned
 	 */
@@ -289,7 +336,7 @@ public class JiraSprintSync
 	}
 
 	/**
-	 *
+	 * Push Effort to Sprint-Model.
 	 * @param effort
 	 * @param resolutionDate
 	 * @param planned

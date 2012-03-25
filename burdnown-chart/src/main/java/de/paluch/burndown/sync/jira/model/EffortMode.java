@@ -1,7 +1,7 @@
 package de.paluch.burndown.sync.jira.model;
 
 /**
- *
+ * Effort-Mode.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark

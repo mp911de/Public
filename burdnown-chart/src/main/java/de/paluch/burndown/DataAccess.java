@@ -14,7 +14,7 @@ import de.paluch.burndown.model.Team;
 import de.paluch.burndown.model.Teams;
 
 /**
- *
+ * File-Based Sprint Data Accessor. You have to specify burndown.data.dir System-Property in order to use the Data Accessor.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark

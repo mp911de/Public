@@ -31,6 +31,7 @@ public abstract class AbstractJSFController
 	 *            Base {@link UIComponent} from which to search
 	 * @param id
 	 *            Component identifier to be matched
+	 * @return UIComponent
 	 */
 	public static final UIComponent findComponent(UIComponent base, String id)
 	{
@@ -64,7 +65,7 @@ public abstract class AbstractJSFController
 
 	/**
 	* @param id
-	* @return
+	* @return UIComponent
 	*/
 	public static final UIComponent findComponentInRoot(String id)
 	{

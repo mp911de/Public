@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * The Sprint.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark

@@ -1,7 +1,7 @@
 package de.paluch.burndown.sync.jira.model;
 
 /**
- *
+ * Update-Mode for auto-sync.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark

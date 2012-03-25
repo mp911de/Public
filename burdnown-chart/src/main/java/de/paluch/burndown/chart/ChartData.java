@@ -5,7 +5,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 
 /**
  *
- *
+ * Chart Data Transfer Object.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark

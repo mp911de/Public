@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
+ * Sprint Days Calculator. Omits SATURDAY and SUNDAY.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark
@@ -18,7 +18,7 @@ import java.util.List;
 public class SprintDaysGenerator
 {
 
-	private boolean regularFreeDays[] = new boolean[Calendar.SATURDAY + 1];
+	private final boolean regularFreeDays[] = new boolean[Calendar.SATURDAY + 1];
 
 	public SprintDaysGenerator()
 	{

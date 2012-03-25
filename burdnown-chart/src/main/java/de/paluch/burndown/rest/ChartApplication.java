@@ -6,7 +6,7 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 /**
- *
+ * Chart Rest-Application (JAX-RS).
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark
@@ -28,6 +28,7 @@ public class ChartApplication extends Application
 	/**
 	 * @see javax.ws.rs.core.Application#getClasses()
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Set<Class< ? >> getClasses()
 	{

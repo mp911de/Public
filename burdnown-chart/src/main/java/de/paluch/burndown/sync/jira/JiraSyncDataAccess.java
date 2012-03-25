@@ -8,7 +8,7 @@ import de.paluch.burndown.DataAccess;
 import de.paluch.burndown.sync.jira.model.JiraSync;
 
 /**
- *
+ * File-Based Data-Accessor for JiraSync config. See also {@link DataAccess}.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark

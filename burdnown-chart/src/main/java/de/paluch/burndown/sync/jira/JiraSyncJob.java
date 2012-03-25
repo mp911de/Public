@@ -9,12 +9,10 @@ import org.slf4j.LoggerFactory;
 import de.paluch.burndown.DataAccess;
 import de.paluch.burndown.model.Sprint;
 import de.paluch.burndown.model.Team;
-import de.paluch.burndown.model.Teams;
-import de.paluch.burndown.sync.jira.model.JiraSync;
 import de.paluch.burndown.sync.jira.model.JiraTeamSync;
 
 /**
- *
+ *Quartz Sync Job for latest Sprints of all configured Teams.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark
@@ -22,7 +20,7 @@ import de.paluch.burndown.sync.jira.model.JiraTeamSync;
  *<br>
  *<br>
  */
-public class JiraSyncJob implements Job
+public class JiraSyncJob extends AbstractJiraSyncJob implements Job
 {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -30,24 +28,20 @@ public class JiraSyncJob implements Job
 	/**
 	 * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
 	 */
+	@SuppressWarnings("unused")
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException
 	{
 
-		JiraSprintSync sprintSync = null;
 		try
 		{
+			setup();
 
 			logger.debug("execute: start sync");
-			JiraSync syncSettings = new JiraSyncDataAccess().getJiraSync();
-			Teams teams = new DataAccess().getTeams();
 
-			sprintSync = new JiraSprintSync(syncSettings.getBaseUrl(), syncSettings.getUsername(),
-					syncSettings.getPassword());
-
-			for (JiraTeamSync teamSync : syncSettings.getTeamSync())
+			for (JiraTeamSync teamSync : getSyncSettings().getTeamSync())
 			{
-				Team team = getTeam(teams, teamSync.getTeamId());
+				Team team = getTeam(getTeams(), teamSync.getTeamId());
 				if (team == null)
 				{
 					continue;
@@ -59,7 +53,7 @@ public class JiraSyncJob implements Job
 					continue;
 				}
 
-				syncSprint(sprintSync, team, latestSprint);
+				syncSprint(teamSync, team, latestSprint);
 			}
 
 		}
@@ -69,59 +63,10 @@ public class JiraSyncJob implements Job
 		}
 		finally
 		{
-			if (sprintSync != null)
-			{
-				try
-				{
-					sprintSync.logout();
-				}
-				catch (JiraSyncException e)
-				{
-					logger.warn("Sync Sprint: " + e.getMessage(), e);
-				}
-			}
 
 			logger.debug("execute: end sync");
 		}
 
-	}
-
-	/**
-	 * @param teams
-	 * @param teamId
-	 * @return
-	 */
-	private Team getTeam(Teams teams, String teamId)
-	{
-
-		for (Team team : teams.getTeams())
-		{
-			if (team.getId() != null && team.getId().equals(teamId))
-			{
-				return team;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * @param sprintSync
-	 * @param team
-	 * @param latestSprint
-	 */
-	private void syncSprint(JiraSprintSync sprintSync, Team team, Sprint latestSprint)
-	{
-
-		try
-		{
-			logger.info("Sync Sprint " + latestSprint.getId() + "/" + team.getId());
-			sprintSync.syncSprint(latestSprint);
-			logger.info("Sync Sprint " + latestSprint.getId() + "/" + team.getId() + " done");
-		}
-		catch (Exception e)
-		{
-			logger.warn("Sync Sprint " + latestSprint.getId() + "/" + team.getId() + ": " + e.getMessage(), e);
-		}
 	}
 
 }

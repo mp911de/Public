@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 /**
- *
+ * The Sprint-Effort for a Sprint-Day.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark

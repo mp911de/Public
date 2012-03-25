@@ -30,6 +30,13 @@ import de.paluch.burndown.model.Team;
 import de.paluch.burndown.model.Teams;
 
 /**
+ * Teams Resource. Supports:
+ * <ul>
+ * <li>/teams/ (GET)</li>
+ * <li>/teams/{teamId}/sprints/{sprintId}.png?width&height&multiplier (GET)</li>
+ * <li>/teams/{teamId}/sprints/{sprintId} (GET, PUT)</li>
+ * <li>/teams/{teamId} (GET, PUT)</li>
+ * </ul>
  *
  *<br>
  *<br>Project: burdnown-chart
@@ -131,6 +138,7 @@ public class TeamsResource
 	@Path("{teamId}")
 	@Produces(MediaType.TEXT_XML)
 	@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
+	@SuppressWarnings("unused")
 	public void storeTeam(@PathParam("teamId")
 	String teamId,
 			Teams teams)

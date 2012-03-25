@@ -10,7 +10,7 @@ import de.paluch.burndown.model.Sprint;
 import de.paluch.burndown.model.SprintEffort;
 
 /**
- *
+ * Data-Factory to create Chart-Data from Sprint/Team-Model.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark
@@ -22,17 +22,16 @@ public class ChartDataFactory
 {
 
 	private final ChartData chartData = new ChartData();
-	/**
-	 *
-	 */
 	public ChartDataFactory()
 	{
 
 	}
+
 	/**
+	 * Get SprintEffort for a specific Date.
 	 * @param date
 	 * @param effort
-	 * @return
+	 * @return SprintEffort
 	 */
 	private static SprintEffort getEffortFor(Date date, List<SprintEffort> effort)
 	{
@@ -48,6 +47,12 @@ public class ChartDataFactory
 		return null;
 	}
 
+	/**
+	 * Create Chart-Data.
+	 * @param teamSize
+	 * @param sprint
+	 * @param days
+	 */
 	public void createData(int teamSize, Sprint sprint, List<Date> days)
 	{
 

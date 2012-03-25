@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 /**
- *
+ * A Team.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark

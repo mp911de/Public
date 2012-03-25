@@ -26,7 +26,7 @@ import org.jfree.chart.util.DefaultShadowGenerator;
 import org.jfree.ui.RectangleInsets;
 
 /**
- *
+ * Chart-Factory for the JFreeChart.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark

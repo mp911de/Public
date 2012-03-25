@@ -16,7 +16,7 @@ import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
- *
+ * Context-Listener for Sync-Runner.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark
@@ -24,7 +24,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
  *<br>
  *<br>
  */
-public class JiraSyncListener implements ServletContextListener
+public class JiraSyncJobListener implements ServletContextListener
 {
 
 	private Scheduler scheduler;

@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 /**
- *
+ * Sync config for a Team.
  *<br>
  *<br>Project: burdnown-chart
  *<br>Autor: mark
@@ -19,6 +19,7 @@ public class JiraTeamSync
 
 	@XmlAttribute
 	private String teamId;
+
 	private String projectKey;
 	private boolean unplanned;
 	private String unplannedFlagFieldId;
@@ -169,6 +170,20 @@ public class JiraTeamSync
 	{
 
 		this.unplannedFlagName = unplannedFlagName;
+	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+
+		return getClass().getSimpleName() + " [teamId=" + teamId + ", projectKey=" + projectKey + ", unplanned="
+				+ unplanned
+				+ ", unplannedFlagFieldId=" + unplannedFlagFieldId + ", unplannedFlagName=" + unplannedFlagName
+				+ ", effortMode=" + effortMode + ", storyPointsFieldId=" + storyPointsFieldId
+				+ ", sprintVersionNameScheme=" + sprintVersionNameScheme + "]";
 	}
 
 }
