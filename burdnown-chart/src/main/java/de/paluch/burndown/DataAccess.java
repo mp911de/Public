@@ -27,9 +27,6 @@ public class DataAccess
 
 	public final static String DATA_LOCATION = "burndown.data.dir";
 	public final static String TEAMS_FILE = "teams.xml";
-	/**
-	 *
-	 */
 	private static final String BD_XML_SUFFIX = ".xml";
 
 	public Sprint getSprint(String teamId, String sprintId)
@@ -39,7 +36,19 @@ public class DataAccess
 		{
 			throw new IllegalStateException("System property " + DataAccess.DATA_LOCATION + " not set.");
 		}
-		File sprintFile = new File(new File(System.getProperty(DataAccess.DATA_LOCATION)), teamId + "/" + sprintId
+
+		String localSprintId = sprintId;
+
+		if (sprintId.equals("latest"))
+		{
+			List<String> sprintIds = listSprints(teamId);
+			if (!sprintIds.isEmpty())
+			{
+				localSprintId = sprintIds.get(sprintIds.size() - 1);
+			}
+		}
+
+		File sprintFile = new File(new File(System.getProperty(DataAccess.DATA_LOCATION)), teamId + "/" + localSprintId
 																							+ DataAccess.BD_XML_SUFFIX);
 		if (sprintFile.exists())
 		{

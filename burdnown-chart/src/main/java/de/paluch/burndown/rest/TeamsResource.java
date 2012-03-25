@@ -4,7 +4,6 @@ import java.awt.FontFormatException;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.ws.rs.Consumes;
@@ -59,7 +58,7 @@ public class TeamsResource
 
 		double normalizedMultiplier = multiplier / 10;
 		byte[] result = new byte[0];
-		Sprint sprint = getSprintInternal(teamId, sprintId);
+		Sprint sprint = new DataAccess().getSprint(teamId, sprintId);
 		Team team = getTeam(teamId);
 
 		if (sprint == null)
@@ -95,7 +94,7 @@ public class TeamsResource
 	String sprintId)
 	{
 
-		Sprint sprint = getSprintInternal(teamId, sprintId);
+		Sprint sprint = new DataAccess().getSprint(teamId, sprintId);
 		if (sprint == null)
 		{
 			return Response.status(Status.NOT_FOUND).build();
@@ -141,31 +140,6 @@ public class TeamsResource
 		{
 			new DataAccess().saveOrUpdateTeam(team);
 		}
-	}
-
-	/**
-	 * @param teamId
-	 * @param sprintId
-	 * @return
-	 */
-	private Sprint getSprintInternal(String teamId, String sprintId)
-	{
-
-		DataAccess access = new DataAccess();
-		Sprint sprint = null;
-		if (sprintId.equals("latest"))
-		{
-			List<String> sprintIds = access.listSprints(teamId);
-			if (!sprintIds.isEmpty())
-			{
-				sprint = access.getSprint(teamId, sprintIds.get(sprintIds.size() - 1));
-			}
-		}
-		else
-		{
-			sprint = access.getSprint(teamId, sprintId);
-		}
-		return sprint;
 	}
 
 	/**
