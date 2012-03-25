@@ -24,17 +24,11 @@ import de.paluch.burndown.model.Teams;
 public class TeamListModel extends AbstractJSFListModel<Team>
 {
 
-	private String selectedTeamId;
-
 	/**
-	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getTableId()
+	 * 
 	 */
-	@Override
-	public String getTableId()
-	{
-
-		return "teams";
-	}
+	private static final long serialVersionUID = -8676697153331901104L;
+	private String selectedTeamId;
 
 	/**
 	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getList()
@@ -51,15 +45,22 @@ public class TeamListModel extends AbstractJSFListModel<Team>
 	}
 
 	/**
-	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#refreshList()
+	 * @return the selectedTeamId
 	 */
-	@Override
-	public void refreshList()
+	public String getSelectedTeamId()
 	{
 
-		Teams teams = new DataAccess().getTeams();
-		super.getList().clear();
-		super.getList().addAll(teams.getTeams());
+		return selectedTeamId;
+	}
+
+	/**
+	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getTableId()
+	 */
+	@Override
+	public String getTableId()
+	{
+
+		return "teams";
 	}
 
 	public Team getTeamById(String teamId)
@@ -77,12 +78,15 @@ public class TeamListModel extends AbstractJSFListModel<Team>
 	}
 
 	/**
-	 * @return the selectedTeamId
+	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#refreshList()
 	 */
-	public String getSelectedTeamId()
+	@Override
+	public void refreshList()
 	{
 
-		return selectedTeamId;
+		Teams teams = new DataAccess().getTeams();
+		super.getList().clear();
+		super.getList().addAll(teams.getTeams());
 	}
 
 	/**

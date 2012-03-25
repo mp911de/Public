@@ -26,12 +26,59 @@ public class Teams
 	private List<Team> teams = new ArrayList<Team>();
 
 	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+
+		if (this == obj)
+		{
+			return true;
+		}
+		if (obj == null)
+		{
+			return false;
+		}
+		if (getClass() != obj.getClass())
+		{
+			return false;
+		}
+		Teams other = (Teams) obj;
+		if (teams == null)
+		{
+			if (other.teams != null)
+			{
+				return false;
+			}
+		}
+		else if (!teams.equals(other.teams))
+		{
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * @return the teams
 	 */
 	public List<Team> getTeams()
 	{
 
 		return teams;
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode()
+	{
+
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((teams == null) ? 0 : teams.hashCode());
+		return result;
 	}
 
 	/**
@@ -52,44 +99,5 @@ public class Teams
 
 		return getClass().getSimpleName() + " [teams=" + teams + "]";
 	}
-
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode()
-	{
-
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((teams == null) ? 0 : teams.hashCode());
-		return result;
-	}
-
-	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj)
-	{
-
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Teams other = (Teams) obj;
-		if (teams == null)
-		{
-			if (other.teams != null)
-				return false;
-		}
-		else if (!teams.equals(other.teams))
-			return false;
-		return true;
-	}
-
-
 
 }

@@ -23,6 +23,13 @@ public class ChartDataFactory
 
 	private final ChartData chartData = new ChartData();
 	/**
+	 *
+	 */
+	public ChartDataFactory()
+	{
+
+	}
+	/**
 	 * @param date
 	 * @param effort
 	 * @return
@@ -40,13 +47,6 @@ public class ChartDataFactory
 		}
 		return null;
 	}
-	/**
-	 *
-	 */
-	public ChartDataFactory()
-	{
-
-	}
 
 	public void createData(int teamSize, Sprint sprint, List<Date> days)
 	{
@@ -61,7 +61,7 @@ public class ChartDataFactory
 		{
 
 			lastDate = date;
-			SprintEffort effort = getEffortFor(date, sprint.getEffort());
+			SprintEffort effort = ChartDataFactory.getEffortFor(date, sprint.getEffort());
 			if (effort == null)
 			{
 				continue;
@@ -118,7 +118,7 @@ public class ChartDataFactory
 		boolean isLastEffortEntry = true;
 		for (int i = days.indexOf(date) + 1; i < days.size(); i++)
 		{
-			SprintEffort otherEffort = getEffortFor(days.get(i), sprint.getEffort());
+			SprintEffort otherEffort = ChartDataFactory.getEffortFor(days.get(i), sprint.getEffort());
 			if (otherEffort != null && (otherEffort.getBurned() != 0 || otherEffort.getUnplanned() != 0))
 			{
 				isLastEffortEntry = false;

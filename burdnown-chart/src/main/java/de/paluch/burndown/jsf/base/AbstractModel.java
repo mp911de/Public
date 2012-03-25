@@ -1,9 +1,6 @@
-
 package de.paluch.burndown.jsf.base;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -22,6 +19,5 @@ abstract class AbstractModel implements Serializable
 	 *
 	 */
 	private static final long serialVersionUID = 3523699813032610010L;
-
 
 }

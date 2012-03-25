@@ -24,10 +24,19 @@ import de.paluch.burndown.model.SprintEffort;
 public class SprintController
 {
 
-	public static  DataAccess DATA_ACCESS = new DataAccess();
+	public static DataAccess DATA_ACCESS = new DataAccess();
 
 	@ManagedProperty("sprintListModel")
 	private SprintListModel sprintListModel;
+
+	/**
+	 * @return the sprintListModel
+	 */
+	public SprintListModel getSprintListModel()
+	{
+
+		return sprintListModel;
+	}
 
 	public void save()
 	{
@@ -37,9 +46,18 @@ public class SprintController
 			shiftSprintDays(sprintListModel.getSprint());
 		}
 
-		DATA_ACCESS.storeSprint(sprintListModel.getTeam().getId(), sprintListModel.getSprint());
+		SprintController.DATA_ACCESS.storeSprint(sprintListModel.getTeam().getId(), sprintListModel.getSprint());
 		sprintListModel.setNewSprint(false);
 		sprintListModel.setOldStartDate(sprintListModel.getSprint().getStartDate());
+	}
+
+	/**
+	 * @param sprintListModel the sprintListModel to set
+	 */
+	public void setSprintListModel(SprintListModel sprintListModel)
+	{
+
+		this.sprintListModel = sprintListModel;
 	}
 
 	/**
@@ -57,24 +75,6 @@ public class SprintController
 			effort.setDate(new Date(effort.getDate().getTime() + difference));
 		}
 
-	}
-
-	/**
-	 * @return the sprintListModel
-	 */
-	public SprintListModel getSprintListModel()
-	{
-
-		return sprintListModel;
-	}
-
-	/**
-	 * @param sprintListModel the sprintListModel to set
-	 */
-	public void setSprintListModel(SprintListModel sprintListModel)
-	{
-
-		this.sprintListModel = sprintListModel;
 	}
 
 }

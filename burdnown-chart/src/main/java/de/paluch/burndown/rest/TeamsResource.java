@@ -103,6 +103,46 @@ public class TeamsResource
 		return Response.ok(sprint).build();
 	}
 
+	@GET
+	@Produces(MediaType.TEXT_XML)
+	public Teams listTeams()
+	{
+
+		return new DataAccess().getTeams();
+	}
+
+	@PUT
+	@Path("{teamId}/sprints/{sprintId}")
+	@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
+	@Produces(MediaType.TEXT_XML)
+	public Response storeSprint(@PathParam("teamId")
+	String teamId, @PathParam("sprintId")
+	String sprintId, Sprint sprint)
+	{
+
+		sprint.setId(sprintId);
+
+		new DataAccess().storeSprint(teamId, sprint);
+		return Response
+				.created(UriBuilder.fromResource(getClass()).path(teamId).path("sprints").path(sprintId).build())
+				.build();
+	}
+
+	@PUT
+	@Path("{teamId}")
+	@Produces(MediaType.TEXT_XML)
+	@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
+	public void storeTeam(@PathParam("teamId")
+	String teamId,
+			Teams teams)
+	{
+
+		for (Team team : teams.getTeams())
+		{
+			new DataAccess().saveOrUpdateTeam(team);
+		}
+	}
+
 	/**
 	 * @param teamId
 	 * @param sprintId
@@ -144,46 +184,6 @@ public class TeamsResource
 			}
 		}
 		return null;
-	}
-
-	@GET
-	@Produces(MediaType.TEXT_XML)
-	public Teams listTeams()
-	{
-
-		return new DataAccess().getTeams();
-	}
-
-	@PUT
-	@Path("{teamId}/sprints/{sprintId}")
-	@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
-	@Produces(MediaType.TEXT_XML)
-	public Response storeSprint(@PathParam("teamId")
-	String teamId, @PathParam("sprintId")
-	String sprintId, Sprint sprint)
-	{
-
-		sprint.setId(sprintId);
-
-		new DataAccess().storeSprint(teamId, sprint);
-		return Response
-				.created(UriBuilder.fromResource(getClass()).path(teamId).path("sprints").path(sprintId).build())
-				.build();
-	}
-
-	@PUT
-	@Path("{teamId}")
-	@Produces(MediaType.TEXT_XML)
-	@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
-	public void storeTeam(@PathParam("teamId")
-	String teamId,
-			Teams teams)
-	{
-
-		for (Team team : teams.getTeams())
-		{
-			new DataAccess().saveOrUpdateTeam(team);
-		}
 	}
 
 }

@@ -19,10 +19,10 @@ public class Team
 
 	@XmlAttribute
 	private String id;
+	private String name;
 	private int regularSprintLength;
 	private int regularSprintStart;
 	private int teamSize = 0;
-	private String name;
 
 	/**
 	 *

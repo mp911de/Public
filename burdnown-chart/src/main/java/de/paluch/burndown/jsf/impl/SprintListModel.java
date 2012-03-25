@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 
 import de.paluch.burndown.jsf.base.AbstractJSFListModel;
 import de.paluch.burndown.model.Sprint;
@@ -25,10 +24,32 @@ import de.paluch.burndown.model.Team;
 public class SprintListModel extends AbstractJSFListModel<SprintEffort>
 {
 
-	private Sprint sprint;
-	private Team team;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5438182710349436352L;
 	private boolean newSprint = false;
 	private Date oldStartDate;
+	private Sprint sprint;
+	private Team team;
+
+	/**
+	 * @return the oldStartDate
+	 */
+	public Date getOldStartDate()
+	{
+
+		return oldStartDate;
+	}
+
+	/**
+	 * @return the sprint
+	 */
+	public Sprint getSprint()
+	{
+
+		return sprint;
+	}
 
 	/**
 	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getTableId()
@@ -38,6 +59,24 @@ public class SprintListModel extends AbstractJSFListModel<SprintEffort>
 	{
 
 		return "days";
+	}
+
+	/**
+	 * @return the team
+	 */
+	public Team getTeam()
+	{
+
+		return team;
+	}
+
+	/**
+	 * @return the newSprint
+	 */
+	public boolean isNewSprint()
+	{
+
+		return newSprint;
 	}
 
 	/**
@@ -53,12 +92,21 @@ public class SprintListModel extends AbstractJSFListModel<SprintEffort>
 	}
 
 	/**
-	 * @return the sprint
+	 * @param newSprint the newSprint to set
 	 */
-	public Sprint getSprint()
+	public void setNewSprint(boolean newSprint)
 	{
 
-		return sprint;
+		this.newSprint = newSprint;
+	}
+
+	/**
+	 * @param oldStartDate the oldStartDate to set
+	 */
+	public void setOldStartDate(Date oldStartDate)
+	{
+
+		this.oldStartDate = oldStartDate;
 	}
 
 	/**
@@ -71,15 +119,6 @@ public class SprintListModel extends AbstractJSFListModel<SprintEffort>
 	}
 
 	/**
-	 * @return the team
-	 */
-	public Team getTeam()
-	{
-
-		return team;
-	}
-
-	/**
 	 * @param team the team to set
 	 */
 	public void setTeam(Team team)
@@ -87,45 +126,5 @@ public class SprintListModel extends AbstractJSFListModel<SprintEffort>
 
 		this.team = team;
 	}
-
-	/**
-	 * @return the newSprint
-	 */
-	public boolean isNewSprint()
-	{
-
-		return newSprint;
-	}
-
-	/**
-	 * @param newSprint the newSprint to set
-	 */
-	public void setNewSprint(boolean newSprint)
-	{
-
-		this.newSprint = newSprint;
-	}
-
-
-	/**
-	 * @return the oldStartDate
-	 */
-	public Date getOldStartDate()
-	{
-
-		return oldStartDate;
-	}
-
-
-	/**
-	 * @param oldStartDate the oldStartDate to set
-	 */
-	public void setOldStartDate(Date oldStartDate)
-	{
-
-		this.oldStartDate = oldStartDate;
-	}
-
-
 
 }

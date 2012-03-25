@@ -3,11 +3,9 @@ package de.paluch.burndown.jsf.impl;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
 
 import org.richfaces.component.UIDataTable;
 
-import de.paluch.burndown.DataAccess;
 import de.paluch.burndown.jsf.base.AbstractJSFController;
 import de.paluch.burndown.model.Team;
 
@@ -25,41 +23,10 @@ import de.paluch.burndown.model.Team;
 public class TeamListController extends AbstractJSFController
 {
 
-	@ManagedProperty("teamListModel")
-	private TeamListModel teams;
 	@ManagedProperty("sprintsListModel")
 	private SprintsListModel sprints;
-
-	public String selectTeam()
-	{
-
-		UIDataTable table = (UIDataTable) findComponentInRoot(teams.getTableId());
-
-		sprints.setTeam((Team) table.getRowData());
-
-		return Navigation.SPRINTS_OVERVIEW;
-	}
-
-
-	/**
-	 * @return the teams
-	 */
-	public TeamListModel getTeams()
-	{
-
-		return teams;
-	}
-
-
-	/**
-	 * @param teams the teams to set
-	 */
-	public void setTeams(TeamListModel teams)
-	{
-
-		this.teams = teams;
-	}
-
+	@ManagedProperty("teamListModel")
+	private TeamListModel teams;
 
 	/**
 	 * @return the sprints
@@ -70,6 +37,24 @@ public class TeamListController extends AbstractJSFController
 		return sprints;
 	}
 
+	/**
+	 * @return the teams
+	 */
+	public TeamListModel getTeams()
+	{
+
+		return teams;
+	}
+
+	public String selectTeam()
+	{
+
+		UIDataTable table = (UIDataTable) AbstractJSFController.findComponentInRoot(teams.getTableId());
+
+		sprints.setTeam((Team) table.getRowData());
+
+		return Navigation.SPRINTS_OVERVIEW;
+	}
 
 	/**
 	 * @param sprints the sprints to set
@@ -80,6 +65,13 @@ public class TeamListController extends AbstractJSFController
 		this.sprints = sprints;
 	}
 
+	/**
+	 * @param teams the teams to set
+	 */
+	public void setTeams(TeamListModel teams)
+	{
 
+		this.teams = teams;
+	}
 
 }

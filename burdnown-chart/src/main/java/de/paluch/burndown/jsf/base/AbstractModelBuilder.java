@@ -1,4 +1,3 @@
-
 package de.paluch.burndown.jsf.base;
 
 /**

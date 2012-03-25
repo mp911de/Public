@@ -30,10 +30,44 @@ import de.paluch.burndown.model.SprintEffort;
 public class SprintsListController extends AbstractJSFController
 {
 
-	@ManagedProperty("sprintsListModel")
-	private SprintsListModel sprintsListModel;
 	@ManagedProperty("sprintListModel")
 	private SprintListModel sprintListModel;
+	@ManagedProperty("sprintsListModel")
+	private SprintsListModel sprintsListModel;
+
+	/**
+	 * @return the sprintListModel
+	 */
+	public SprintListModel getSprintListModel()
+	{
+
+		return sprintListModel;
+	}
+
+	/**
+	 * @return the sprintsListModel
+	 */
+	public SprintsListModel getSprintsListModel()
+	{
+
+		return sprintsListModel;
+	}
+
+	public String gotoSprint()
+	{
+
+		UIDataTable table = (UIDataTable) AbstractJSFController.findComponentInRoot(sprintsListModel.getTableId());
+
+		Sprint selection = (Sprint) table.getRowData();
+		Sprint sprint = new DataAccess().getSprint(sprintsListModel.getTeam().getId(), selection.getId());
+
+		sprintListModel.setTeam(sprintsListModel.getTeam());
+		sprintListModel.setOldStartDate(sprint.getStartDate());
+		sprintListModel.setSprint(sprint);
+		sprintListModel.refreshList();
+
+		return Navigation.SPRINT;
+	}
 
 	public String prepareCreateNewSprint()
 	{
@@ -91,29 +125,13 @@ public class SprintsListController extends AbstractJSFController
 		return Navigation.SPRINT;
 	}
 
-	public String gotoSprint()
-	{
-
-		UIDataTable table = (UIDataTable) findComponentInRoot(sprintsListModel.getTableId());
-
-		Sprint selection = (Sprint) table.getRowData();
-		Sprint sprint = new DataAccess().getSprint(sprintsListModel.getTeam().getId(), selection.getId());
-
-		sprintListModel.setTeam(sprintsListModel.getTeam());
-		sprintListModel.setOldStartDate(sprint.getStartDate());
-		sprintListModel.setSprint(sprint);
-		sprintListModel.refreshList();
-
-		return Navigation.SPRINT;
-	}
-
 	/**
-	 * @return the sprintsListModel
+	 * @param sprintListModel the sprintListModel to set
 	 */
-	public SprintsListModel getSprintsListModel()
+	public void setSprintListModel(SprintListModel sprintListModel)
 	{
 
-		return sprintsListModel;
+		this.sprintListModel = sprintListModel;
 	}
 
 	/**
@@ -123,24 +141,6 @@ public class SprintsListController extends AbstractJSFController
 	{
 
 		this.sprintsListModel = sprintsListModel;
-	}
-
-	/**
-	 * @return the sprintListModel
-	 */
-	public SprintListModel getSprintListModel()
-	{
-
-		return sprintListModel;
-	}
-
-	/**
-	 * @param sprintListModel the sprintListModel to set
-	 */
-	public void setSprintListModel(SprintListModel sprintListModel)
-	{
-
-		this.sprintListModel = sprintListModel;
 	}
 
 }

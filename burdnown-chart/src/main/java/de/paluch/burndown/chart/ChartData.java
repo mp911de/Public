@@ -16,14 +16,14 @@ import org.jfree.data.time.TimeSeriesCollection;
 public class ChartData
 {
 
-	private TimeSeriesCollection mainSeries;
 	private TimeSeriesCollection baselineSeries;
 	private TimeSeries burndown;
-	private TimeSeries ideal;
 	private TimeSeries burned;
-	private TimeSeries unplanned;
-	private String title;
+	private TimeSeries ideal;
+	private TimeSeriesCollection mainSeries;
 	private int teamsize;
+	private String title;
+	private TimeSeries unplanned;
 
 	public ChartData()
 	{

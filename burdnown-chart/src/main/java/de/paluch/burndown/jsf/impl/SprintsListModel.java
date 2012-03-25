@@ -24,6 +24,10 @@ import de.paluch.burndown.model.Team;
 public class SprintsListModel extends AbstractJSFListModel<Sprint>
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5066713971117471465L;
 	private Team team;
 
 	/**

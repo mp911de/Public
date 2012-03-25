@@ -1,6 +1,5 @@
 package de.paluch.burndown.jsf.base;
 
-import java.text.Format;
 
 /**
  *

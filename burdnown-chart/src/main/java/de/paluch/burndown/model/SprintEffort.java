@@ -18,8 +18,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 public class SprintEffort
 {
 
-	private Date date;
 	private Double burned;
+	private Date date;
 	private Double unplanned;
 
 	/**
@@ -29,18 +29,6 @@ public class SprintEffort
 	{
 
 		super();
-	}
-
-	/**
-	 * @param burned
-	 * @param unplanned
-	 */
-	public SprintEffort(double burned, double unplanned)
-	{
-
-		super();
-		this.burned = burned;
-		this.unplanned = unplanned;
 	}
 
 	/**
@@ -58,21 +46,71 @@ public class SprintEffort
 	}
 
 	/**
-	 * @return the date
+	 * @param burned
+	 * @param unplanned
 	 */
-	public Date getDate()
+	public SprintEffort(double burned, double unplanned)
 	{
 
-		return date;
+		super();
+		this.burned = burned;
+		this.unplanned = unplanned;
 	}
 
 	/**
-	 * @param date the date to set
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	public void setDate(Date date)
+	@Override
+	public boolean equals(Object obj)
 	{
 
-		this.date = date;
+		if (this == obj)
+		{
+			return true;
+		}
+		if (obj == null)
+		{
+			return false;
+		}
+		if (getClass() != obj.getClass())
+		{
+			return false;
+		}
+		SprintEffort other = (SprintEffort) obj;
+		if (burned == null)
+		{
+			if (other.burned != null)
+			{
+				return false;
+			}
+		}
+		else if (!burned.equals(other.burned))
+		{
+			return false;
+		}
+		if (date == null)
+		{
+			if (other.date != null)
+			{
+				return false;
+			}
+		}
+		else if (!date.equals(other.date))
+		{
+			return false;
+		}
+		if (unplanned == null)
+		{
+			if (other.unplanned != null)
+			{
+				return false;
+			}
+		}
+		else if (!unplanned.equals(other.unplanned))
+		{
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -85,16 +123,12 @@ public class SprintEffort
 	}
 
 	/**
-	 * @param burned the burned to set
+	 * @return the date
 	 */
-	public void setBurned(Double burned)
+	public Date getDate()
 	{
 
-		this.burned = burned;
-		if(this.burned == null)
-		{
-			this.burned = 0d;
-		}
+		return date;
 	}
 
 	/**
@@ -104,29 +138,6 @@ public class SprintEffort
 	{
 
 		return unplanned;
-	}
-
-	/**
-	 * @param unplanned the unplanned to set
-	 */
-	public void setUnplanned(Double unplanned)
-	{
-
-		this.unplanned = unplanned;
-		if(this.unplanned == null)
-		{
-			this.unplanned = 0d;
-		}
-	}
-
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString()
-	{
-
-		return getClass().getSimpleName() + " [date=" + date + ", burned=" + burned + ", unplanned=" + unplanned + "]";
 	}
 
 	/**
@@ -145,43 +156,48 @@ public class SprintEffort
 	}
 
 	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
+	 * @param burned the burned to set
 	 */
-	@Override
-	public boolean equals(Object obj)
+	public void setBurned(Double burned)
 	{
 
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SprintEffort other = (SprintEffort) obj;
-		if (burned == null)
+		this.burned = burned;
+		if (this.burned == null)
 		{
-			if (other.burned != null)
-				return false;
+			this.burned = 0d;
 		}
-		else if (!burned.equals(other.burned))
-			return false;
-		if (date == null)
-		{
-			if (other.date != null)
-				return false;
-		}
-		else if (!date.equals(other.date))
-			return false;
-		if (unplanned == null)
-		{
-			if (other.unplanned != null)
-				return false;
-		}
-		else if (!unplanned.equals(other.unplanned))
-			return false;
-		return true;
 	}
 
+	/**
+	 * @param date the date to set
+	 */
+	public void setDate(Date date)
+	{
 
+		this.date = date;
+	}
+
+	/**
+	 * @param unplanned the unplanned to set
+	 */
+	public void setUnplanned(Double unplanned)
+	{
+
+		this.unplanned = unplanned;
+		if (this.unplanned == null)
+		{
+			this.unplanned = 0d;
+		}
+	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+
+		return getClass().getSimpleName() + " [date=" + date + ", burned=" + burned + ", unplanned=" + unplanned + "]";
+	}
 
 }

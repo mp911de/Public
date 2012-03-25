@@ -1,4 +1,3 @@
-
 package de.paluch.burndown.jsf.base;
 
 import java.util.ArrayList;
@@ -22,35 +21,40 @@ public abstract class AbstractJSFListModel<T> extends AbstractJSFModel
 	 *
 	 */
 	private static final long serialVersionUID = -2044067718130918418L;
-	private String tableId = "";
 	private int currentPage = 0;
 	private List<T> list = new ArrayList<T>();
-
-	public abstract void refreshList();
-
-	public String getTableId()
-	{
-		return tableId;
-	}
-
-	public void setTableId(String tableId)
-	{
-		this.tableId = tableId;
-	}
+	private String tableId = "";
 
 	public int getCurrentPage()
 	{
-		return currentPage;
-	}
 
-	public void setCurrentPage(int currentPage)
-	{
-		this.currentPage = currentPage;
+		return currentPage;
 	}
 
 	public List<T> getList()
 	{
+
 		return list;
+	}
+
+	public String getTableId()
+	{
+
+		return tableId;
+	}
+
+	public abstract void refreshList();
+
+	public void setCurrentPage(int currentPage)
+	{
+
+		this.currentPage = currentPage;
+	}
+
+	public void setTableId(String tableId)
+	{
+
+		this.tableId = tableId;
 	}
 
 }

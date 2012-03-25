@@ -24,6 +24,17 @@ public abstract class AbstractJSFModel extends AbstractModel
 	private boolean disabled;
 	private Map<String, Serializable> properties = new HashMap<String, Serializable>();
 
+	public void clear()
+	{
+
+	}
+
+	public Map<String, Serializable> getProperties()
+	{
+
+		return properties;
+	}
+
 	public boolean isDisabled()
 	{
 
@@ -36,21 +47,10 @@ public abstract class AbstractJSFModel extends AbstractModel
 		this.disabled = disabled;
 	}
 
-	public Map<String, Serializable> getProperties()
-	{
-
-		return properties;
-	}
-
 	public void setProperty(String key, Serializable value)
 	{
 
 		properties.put(key, value);
-
-	}
-
-	public void clear()
-	{
 
 	}
 

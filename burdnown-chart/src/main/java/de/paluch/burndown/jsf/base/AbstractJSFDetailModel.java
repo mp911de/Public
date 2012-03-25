@@ -1,4 +1,3 @@
-
 package de.paluch.burndown.jsf.base;
 
 /**
@@ -23,11 +22,13 @@ public abstract class AbstractJSFDetailModel<T> extends AbstractJSFModel
 
 	public T getDetail()
 	{
+
 		return m_detail;
 	}
 
 	public void setDetail(T detail)
 	{
+
 		m_detail = detail;
 	}
 

@@ -12,6 +12,6 @@ package de.paluch.burndown.jsf.impl;
 public class Navigation
 {
 
-	public static final String SPRINTS_OVERVIEW = "gotoSprintList";
 	public static final String SPRINT = "gotoSprint";
+	public static final String SPRINTS_OVERVIEW = "gotoSprintList";
 }

@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  *
@@ -24,31 +23,77 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class Sprint
 {
 
-	@XmlAttribute
-	private String id = "";
-
 	private int days;
-	private Date startDate;
-	private double planned = 0;
 
 	private List<SprintEffort> effort = new ArrayList<SprintEffort>();
+	@XmlAttribute
+	private String id = "";
+	private double planned = 0;
+
+	private Date startDate;
 
 	/**
-	 * @return the id
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	public String getId()
+	@Override
+	public boolean equals(Object obj)
 	{
 
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(String id)
-	{
-
-		this.id = id;
+		if (this == obj)
+		{
+			return true;
+		}
+		if (obj == null)
+		{
+			return false;
+		}
+		if (getClass() != obj.getClass())
+		{
+			return false;
+		}
+		Sprint other = (Sprint) obj;
+		if (days != other.days)
+		{
+			return false;
+		}
+		if (effort == null)
+		{
+			if (other.effort != null)
+			{
+				return false;
+			}
+		}
+		else if (!effort.equals(other.effort))
+		{
+			return false;
+		}
+		if (id == null)
+		{
+			if (other.id != null)
+			{
+				return false;
+			}
+		}
+		else if (!id.equals(other.id))
+		{
+			return false;
+		}
+		if (Double.doubleToLongBits(planned) != Double.doubleToLongBits(other.planned))
+		{
+			return false;
+		}
+		if (startDate == null)
+		{
+			if (other.startDate != null)
+			{
+				return false;
+			}
+		}
+		else if (!startDate.equals(other.startDate))
+		{
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -61,33 +106,6 @@ public class Sprint
 	}
 
 	/**
-	 * @param days the days to set
-	 */
-	public void setDays(int days)
-	{
-
-		this.days = days;
-	}
-
-	/**
-	 * @return the startDate
-	 */
-	public Date getStartDate()
-	{
-
-		return startDate;
-	}
-
-	/**
-	 * @param startDate the startDate to set
-	 */
-	public void setStartDate(Date startDate)
-	{
-
-		this.startDate = startDate;
-	}
-
-	/**
 	 * @return the effort
 	 */
 	public List<SprintEffort> getEffort()
@@ -97,12 +115,12 @@ public class Sprint
 	}
 
 	/**
-	 * @param effort the effort to set
+	 * @return the id
 	 */
-	public void setEffort(List<SprintEffort> effort)
+	public String getId()
 	{
 
-		this.effort = effort;
+		return id;
 	}
 
 	/**
@@ -115,23 +133,12 @@ public class Sprint
 	}
 
 	/**
-	 * @param planned the planned to set
+	 * @return the startDate
 	 */
-	public void setPlanned(double planned)
+	public Date getStartDate()
 	{
 
-		this.planned = planned;
-	}
-
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString()
-	{
-
-		return getClass().getSimpleName()+" [id=" + id + ", days=" + days + ", startDate=" + startDate + ", planned=" + planned
-				+ ", effort=" + effort + "]";
+		return startDate;
 	}
 
 	/**
@@ -154,49 +161,60 @@ public class Sprint
 	}
 
 	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
+	 * @param days the days to set
 	 */
-	@Override
-	public boolean equals(Object obj)
+	public void setDays(int days)
 	{
 
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Sprint other = (Sprint) obj;
-		if (days != other.days)
-			return false;
-		if (effort == null)
-		{
-			if (other.effort != null)
-				return false;
-		}
-		else if (!effort.equals(other.effort))
-			return false;
-		if (id == null)
-		{
-			if (other.id != null)
-				return false;
-		}
-		else if (!id.equals(other.id))
-			return false;
-		if (Double.doubleToLongBits(planned) != Double.doubleToLongBits(other.planned))
-			return false;
-		if (startDate == null)
-		{
-			if (other.startDate != null)
-				return false;
-		}
-		else if (!startDate.equals(other.startDate))
-			return false;
-		return true;
+		this.days = days;
 	}
 
+	/**
+	 * @param effort the effort to set
+	 */
+	public void setEffort(List<SprintEffort> effort)
+	{
 
+		this.effort = effort;
+	}
 
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id)
+	{
 
+		this.id = id;
+	}
+
+	/**
+	 * @param planned the planned to set
+	 */
+	public void setPlanned(double planned)
+	{
+
+		this.planned = planned;
+	}
+
+	/**
+	 * @param startDate the startDate to set
+	 */
+	public void setStartDate(Date startDate)
+	{
+
+		this.startDate = startDate;
+	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+
+		return getClass().getSimpleName() + " [id=" + id + ", days=" + days + ", startDate=" + startDate + ", planned="
+				+ planned
+				+ ", effort=" + effort + "]";
+	}
 
 }

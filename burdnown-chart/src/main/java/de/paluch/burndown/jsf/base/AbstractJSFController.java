@@ -2,7 +2,9 @@ package de.paluch.burndown.jsf.base;
 
 import java.util.Iterator;
 
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 
 /**
@@ -16,25 +18,6 @@ import javax.faces.context.FacesContext;
  */
 public abstract class AbstractJSFController
 {
-
-	/**
-	* @param id
-	* @return
-	*/
-	public static final UIComponent findComponentInRoot(String id)
-	{
-
-		UIComponent ret = null;
-
-		FacesContext context = FacesContext.getCurrentInstance();
-		if (context != null)
-		{
-			UIComponent root = context.getViewRoot();
-			ret = findComponent(root, id);
-		}
-
-		return ret;
-	}
 
 	/**
 	 * <p>
@@ -70,12 +53,31 @@ public abstract class AbstractJSFController
 				result = kid;
 				break;
 			}
-			result = findComponent(kid, id);
+			result = AbstractJSFController.findComponent(kid, id);
 			if (result != null)
 			{
 				break;
 			}
 		}
 		return result;
+	}
+
+	/**
+	* @param id
+	* @return
+	*/
+	public static final UIComponent findComponentInRoot(String id)
+	{
+
+		UIComponent ret = null;
+
+		FacesContext context = FacesContext.getCurrentInstance();
+		if (context != null)
+		{
+			UIComponent root = context.getViewRoot();
+			ret = AbstractJSFController.findComponent(root, id);
+		}
+
+		return ret;
 	}
 }
