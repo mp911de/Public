@@ -1,105 +1,108 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:rich="http://richfaces.org/rich"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head></h:head>
 <body>
-	<h:form id="form">
-		<rich:panel>
-			<f:facet name="header">
-				<h:outputText value="Sprint #{sprintListModel.sprint.id}" />
-			</f:facet>
-			<h:panelGrid columns="2" width="99%">
-				<h:panelGroup>
-					<h:panelGrid columns="2">
-						<h:outputLabel value="Sprint Id" for="sprintId" />
-						<h:inputText id="sprintId" value="#{sprintListModel.sprint.id}" />
+    <h:form id="form">
+        <rich:panel>
+            <f:facet name="header">
+                <h:outputText value="Sprint #{sprintListModel.sprint.id}" />
+            </f:facet>
+            <h:messages showDetail="true" />
+            <h:panelGrid columns="2" width="99%">
+                <h:panelGroup>
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="Sprint Id" for="sprintId" />
+                        <h:inputText id="sprintId" value="#{sprintListModel.sprint.id}" />
 
-						<h:outputLabel value="Sprint Days" for="dayCount" />
-						<h:inputText id="dayCount" value="#{sprintListModel.sprint.days}"
-							style="text-align: right;">
-							<f:convertNumber maxFractionDigits="0" minFractionDigits="0" />
-						</h:inputText>
+                        <h:outputLabel value="Sprint Days" for="dayCount" />
+                        <h:inputText id="dayCount" value="#{sprintListModel.sprint.days}" style="text-align: right;">
+                            <f:convertNumber maxFractionDigits="0" minFractionDigits="0" />
+                        </h:inputText>
 
-						<h:outputLabel value="Beginning from" for="startDate" />
-						<rich:calendar id="startDate"
-							value="#{sprintListModel.sprint.startDate}"
-							datePattern="dd.MM.yyyy" />
+                        <h:outputLabel value="Beginning from" for="startDate" />
+                        <rich:calendar id="startDate" value="#{sprintListModel.sprint.startDate}"
+                            datePattern="dd.MM.yyyy" />
 
-						<h:outputLabel value="Planned Effort" for="planned" />
-						<h:inputText id="planned"
-							value="#{sprintListModel.sprint.planned}"
-							style="text-align: right;">
-							<f:convertNumber maxFractionDigits="1" minFractionDigits="1" />
-							<f:validateDoubleRange minimum="0" />
-							<f:validateLength minimum="1" />
-						</h:inputText>
+                        <h:outputLabel value="Planned Effort" for="planned" />
+                        <h:inputText id="planned" value="#{sprintListModel.sprint.planned}" style="text-align: right;">
+                            <f:convertNumber maxFractionDigits="1" minFractionDigits="1" />
+                            <f:validateDoubleRange minimum="0" />
+                            <f:validateLength minimum="1" />
+                        </h:inputText>
 
-						<h:outputLabel value="Ideal Burndown" for="ideal"
-							rendered="#{sprintListModel.sprint.days != 0}" />
+                        <h:outputLabel value="Ideal Burndown" for="ideal" rendered="#{sprintListModel.sprint.days != 0}" />
 
-						<h:panelGroup rendered="#{sprintListModel.sprint.days != 0}">
-							<h:outputText id="ideal"
-								value="#{sprintListModel.sprint.planned/sprintListModel.sprint.days}"
-								style="text-align: right;">
-								<f:convertNumber maxFractionDigits="1" minFractionDigits="1" />
-							</h:outputText> per Day
+                        <h:panelGroup rendered="#{sprintListModel.sprint.days != 0}">
+                            <h:outputText id="ideal"
+                                value="#{sprintListModel.sprint.planned/sprintListModel.sprint.days}"
+                                style="text-align: right;">
+                                <f:convertNumber maxFractionDigits="1" minFractionDigits="1" />
+                            </h:outputText> per Day
 						</h:panelGroup>
-					</h:panelGrid>
+                    </h:panelGrid>
 
-					<rich:dataTable id="days" value="#{sprintListModel.list}"
-						var="item" sortMode="single" rowKeyVar="rowKey">
-						<rich:column sortBy="#{rowKey}">
-							<f:facet name="header">
-								<h:outputText value="Sprint Day" />
-							</f:facet>
-							<h:outputText value="#{rowKey}" />
-						</rich:column>
-						<rich:column sortBy="#{item.date}">
-							<f:facet name="header">
-								<h:outputText value="Date" />
-							</f:facet>
-							<rich:calendar value="#{item.date}" datePattern="dd.MM.yyyy" />
-						</rich:column>
-						<rich:column sortBy="#{item.burned}">
-							<f:facet name="header">
-								<h:outputText value="Burned" />
-							</f:facet>
-							<h:inputText value="#{item.burned}" style="text-align: right;">
-								<f:convertNumber maxFractionDigits="1" minFractionDigits="1" />
-								<f:validateDoubleRange minimum="0" />
-								<f:validateLength minimum="1" />
-							</h:inputText>
-						</rich:column>
-						<rich:column sortBy="#{item.name}">
-							<f:facet name="header">
-								<h:outputText value="Unplanned" />
-							</f:facet>
-							<h:inputText value="#{item.unplanned}" style="text-align: right;">
-								<f:convertNumber maxFractionDigits="1" minFractionDigits="1" />
-								<f:validateDoubleRange minimum="0" />
-								<f:validateLength minimum="1" />
-							</h:inputText>
-						</rich:column>
-					</rich:dataTable>
-					<h:commandButton value="Save" action="#{sprintController.save}" />
-				</h:panelGroup>
-				<h:outputLink
-					value="rest/teams/#{sprintListModel.team.id}/sprints/#{sprintListModel.sprint.id}.png"
-					target="_blank">
-					<h:graphicImage rendered="#{!sprintListModel.newSprint}"
-						value="rest/teams/#{sprintListModel.team.id}/sprints/#{sprintListModel.sprint.id}.png?width=640&amp;height=480" />
-				</h:outputLink>
-			</h:panelGrid>
-		</rich:panel>
+                    <rich:dataTable id="days" value="#{sprintListModel.list}" var="item" sortMode="single"
+                        rowKeyVar="rowKey">
+                        <rich:column sortBy="#{rowKey}">
+                            <f:facet name="header">
+                                <h:outputText value="Sprint Day" />
+                            </f:facet>
+                            <h:outputText value="#{rowKey}" />
+                        </rich:column>
+                        <rich:column sortBy="#{item.date}">
+                            <f:facet name="header">
+                                <h:outputText value="Date" />
+                            </f:facet>
+                            <rich:calendar value="#{item.date}" datePattern="dd.MM.yyyy" />
+                        </rich:column>
+                        <rich:column sortBy="#{item.burned}">
+                            <f:facet name="header">
+                                <h:outputText value="Burned" />
+                            </f:facet>
+                            <f:facet name="footer">
+                                <h:outputText value="#{sprintListModel.sumBurned}" style="text-align: right;">
+                                    <f:convertNumber maxFractionDigits="1" minFractionDigits="1" />
+                                </h:outputText>
+                            </f:facet>
+                            <h:inputText value="#{item.burned}" style="text-align: right;">
+                                <f:convertNumber maxFractionDigits="1" minFractionDigits="1" />
+                                <f:validateDoubleRange minimum="0" />
+                                <f:validateLength minimum="1" />
+                            </h:inputText>
+                        </rich:column>
+                        <rich:column sortBy="#{item.name}">
+                            <f:facet name="header">
+                                <h:outputText value="Unplanned" />
+                            </f:facet>
+                            <f:facet name="footer">
+                                <h:outputText value="#{sprintListModel.sumUnplanned}" style="text-align: right;">
+                                    <f:convertNumber maxFractionDigits="1" minFractionDigits="1" />
+                                </h:outputText>
+                            </f:facet>
+                            <h:inputText value="#{item.unplanned}" style="text-align: right;">
+                                <f:convertNumber maxFractionDigits="1" minFractionDigits="1" />
+                                <f:validateDoubleRange minimum="0" />
+                                <f:validateLength minimum="1" />
+                            </h:inputText>
+                        </rich:column>
+                    </rich:dataTable>
+                    <h:commandButton value="Save" action="#{sprintController.save}" />
+                    <h:commandButton value="Poll from Jira" action="#{sprintController.jiraSync}" />
+                </h:panelGroup>
+                <h:outputLink value="rest/teams/#{sprintListModel.team.id}/sprints/#{sprintListModel.sprint.id}.png"
+                    target="_blank">
+                    <h:graphicImage rendered="#{!sprintListModel.newSprint}"
+                        value="rest/teams/#{sprintListModel.team.id}/sprints/#{sprintListModel.sprint.id}.png?width=640&amp;height=480" />
+                </h:outputLink>
+            </h:panelGrid>
+        </rich:panel>
 
-		<a href="team.xhtml">Back to Team</a>
-		<br />
-		<a href="index.xhtml">Back to Index</a>
-	</h:form>
+        <a href="team.xhtml">Back to Team</a>
+        <br />
+        <a href="index.xhtml">Back to Index</a>
+    </h:form>
 </body>
 </html>

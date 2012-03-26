@@ -11,120 +11,130 @@ import de.paluch.burndown.model.SprintEffort;
 import de.paluch.burndown.model.Team;
 
 /**
- *
- *<br>
- *<br>Project: burdnown-chart
- *<br>Autor: mark
- *<br>Created: 20.03.2012
- *<br>
- *<br>
+ * <br>
+ * <br>
+ * Project: burdnown-chart <br>
+ * Autor: mark <br>
+ * Created: 20.03.2012 <br>
+ * <br>
  */
 @ManagedBean
 @RequestScoped
-public class SprintListModel extends AbstractJSFListModel<SprintEffort>
-{
+public class SprintListModel extends AbstractJSFListModel<SprintEffort> {
 
-	/**
-	 * 
+    /**
+	 *
 	 */
-	private static final long serialVersionUID = 5438182710349436352L;
-	private boolean newSprint = false;
-	private Date oldStartDate;
-	private Sprint sprint;
-	private Team team;
+    private static final long serialVersionUID = 5438182710349436352L;
+    private boolean newSprint = false;
+    private Date oldStartDate;
+    private Sprint sprint;
+    private Team team;
 
-	/**
-	 * @return the oldStartDate
-	 */
-	public Date getOldStartDate()
-	{
+    /**
+     * @return the oldStartDate
+     */
+    public Date getOldStartDate() {
 
-		return oldStartDate;
-	}
+        return oldStartDate;
+    }
 
-	/**
-	 * @return the sprint
-	 */
-	public Sprint getSprint()
-	{
+    /**
+     * @return the sprint
+     */
+    public Sprint getSprint() {
 
-		return sprint;
-	}
+        return sprint;
+    }
 
-	/**
-	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getTableId()
-	 */
-	@Override
-	public String getTableId()
-	{
+    /**
+     * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getTableId()
+     */
+    @Override
+    public String getTableId() {
 
-		return "days";
-	}
+        return "days";
+    }
 
-	/**
-	 * @return the team
-	 */
-	public Team getTeam()
-	{
+    /**
+     * @return the team
+     */
+    public Team getTeam() {
 
-		return team;
-	}
+        return team;
+    }
 
-	/**
-	 * @return the newSprint
-	 */
-	public boolean isNewSprint()
-	{
+    /**
+     * @return the newSprint
+     */
+    public boolean isNewSprint() {
 
-		return newSprint;
-	}
+        return newSprint;
+    }
 
-	/**
-	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#refreshList()
-	 */
-	@Override
-	public void refreshList()
-	{
+    /**
+     * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#refreshList()
+     */
+    @Override
+    public void refreshList() {
 
-		getList().clear();
-		getList().addAll(sprint.getEffort());
+        getList().clear();
+        getList().addAll(sprint.getEffort());
 
-	}
+    }
 
-	/**
-	 * @param newSprint the newSprint to set
-	 */
-	public void setNewSprint(boolean newSprint)
-	{
+    /**
+     * @param newSprint
+     *            the newSprint to set
+     */
+    public void setNewSprint(boolean newSprint) {
 
-		this.newSprint = newSprint;
-	}
+        this.newSprint = newSprint;
+    }
 
-	/**
-	 * @param oldStartDate the oldStartDate to set
-	 */
-	public void setOldStartDate(Date oldStartDate)
-	{
+    /**
+     * @param oldStartDate
+     *            the oldStartDate to set
+     */
+    public void setOldStartDate(Date oldStartDate) {
 
-		this.oldStartDate = oldStartDate;
-	}
+        this.oldStartDate = oldStartDate;
+    }
 
-	/**
-	 * @param sprint the sprint to set
-	 */
-	public void setSprint(Sprint sprint)
-	{
+    /**
+     * @param sprint
+     *            the sprint to set
+     */
+    public void setSprint(Sprint sprint) {
 
-		this.sprint = sprint;
-	}
+        this.sprint = sprint;
+    }
 
-	/**
-	 * @param team the team to set
-	 */
-	public void setTeam(Team team)
-	{
+    /**
+     * @param team
+     *            the team to set
+     */
+    public void setTeam(Team team) {
 
-		this.team = team;
-	}
+        this.team = team;
+    }
+
+    public double getSumBurned() {
+        double result = 0;
+        for (SprintEffort effort : sprint.getEffort()) {
+            result += effort.getBurned();
+        }
+
+        return result;
+    }
+
+    public double getSumUnplanned() {
+        double result = 0;
+        for (SprintEffort effort : sprint.getEffort()) {
+            result += effort.getUnplanned();
+        }
+
+        return result;
+    }
 
 }

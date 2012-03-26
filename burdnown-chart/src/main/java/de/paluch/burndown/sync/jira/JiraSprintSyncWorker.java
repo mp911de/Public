@@ -21,311 +21,283 @@ import de.paluch.burndown.sync.jira.model.EffortMode;
 import de.paluch.burndown.sync.jira.model.JiraTeamSync;
 
 /**
- * Jira to Sprint-Model Synchronizer.
- *<br>
- *<br>Project: burdnown-chart
- *<br>Autor: mark
- *<br>Created: 25.03.2012
- *<br>
- *<br>
+ * Jira to Sprint-Model Synchronizer. <br>
+ * <br>
+ * Project: burdnown-chart <br>
+ * Autor: mark <br>
+ * Created: 25.03.2012 <br>
+ * <br>
  */
-public class JiraSprintSyncWorker
-{
+public class JiraSprintSyncWorker {
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
-	private JiraClient client;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private JiraClient client;
 
-	/**
-	 * Create Sprint Sync with JIRA Client.
-	 * @param baseUrl
-	 * @param username
-	 * @param password
-	 * @throws JiraSyncException
-	 */
-	public JiraSprintSyncWorker(String baseUrl, String username, String password) throws JiraSyncException
-	{
+    /**
+     * Create Sprint Sync with JIRA Client.
+     * 
+     * @param baseUrl
+     * @param username
+     * @param password
+     * @throws JiraSyncException
+     */
+    public JiraSprintSyncWorker(String baseUrl, String username, String password) throws JiraSyncException {
 
-		super();
+        super();
 
-		try
-		{
-			client = new JiraClient(baseUrl);
-			if (username != null && !username.trim().equals(""))
-			{
-				client.login(username, password);
-			}
-		}
-		catch (Exception e)
-		{
-			throw new JiraSyncException(e);
-		}
-	}
+        try {
+            client = new JiraClient(baseUrl);
+            if (username != null && !username.trim().equals("")) {
+                client.login(username, password);
+            }
+        } catch (Exception e) {
+            throw new JiraSyncException(e);
+        }
+    }
 
-	/**
-	 * @param client the client to set
-	 */
-	public void setClient(JiraClient client)
-	{
+    /**
+     * @param client
+     *            the client to set
+     */
+    public void setClient(JiraClient client) {
 
-		this.client = client;
-	}
+        this.client = client;
+    }
 
-	/**
-	 * Sync Jira Sprint to Sprint Effort.
-	 * @param teamSync
-	 * @param sprint
-	 * @throws JiraSyncException
-	 */
-	public void syncSprint(JiraTeamSync teamSync, Sprint sprint) throws JiraSyncException
-	{
+    /**
+     * Sync Jira Sprint to Sprint Effort.
+     * 
+     * @param teamSync
+     * @param sprint
+     * @throws JiraSyncException
+     */
+    public void syncSprint(JiraTeamSync teamSync, Sprint sprint) throws JiraSyncException {
 
-		try
-		{
-			String versionId = MessageFormat.format(teamSync.getSprintVersionNameScheme(), sprint.getId());
+        try {
+            String versionId = MessageFormat.format(teamSync.getSprintVersionNameScheme(), sprint.getId());
 
-			List<String> issueKeys = client.findSprintIssues(teamSync.getProjectKey(), versionId);
+            List<String> issueKeys = client.findSprintIssues(teamSync.getProjectKey(), versionId);
 
-			if (issueKeys.isEmpty())
-			{
-				logger.info("No issues found for sync " + sprint.getId());
-			}
+            if (issueKeys.isEmpty()) {
+                logger.info("No issues found for sync " + sprint.getId());
+            }
 
-			List<JiraRestIssue> issues = fetchIssues(issueKeys);
+            List<JiraRestIssue> issues = fetchIssues(issueKeys);
 
-			calculateSprintGoal(issues, teamSync, sprint);
+            calculateSprintGoal(issues, teamSync, sprint);
 
-			resetSprintEfforts(sprint.getEffort(), teamSync.isUnplanned());
-			calculateBurnedOnDayBasis(issues, teamSync, sprint.getId(), sprint.getEffort());
+            resetSprintEfforts(sprint.getEffort(), teamSync.isUnplanned());
+            calculateBurnedOnDayBasis(issues, teamSync, sprint.getId(), sprint.getEffort());
 
-		}
-		catch (Exception e)
-		{
-			throw new JiraSyncException(e);
-		}
+        } catch (Exception e) {
+            throw new JiraSyncException(e);
+        }
 
-	}
+    }
 
-	/**
-	 * Calculate Burndown from Jira Issues.
-	 * @param issues
-	 * @param teamSync
-	 * @param effort
-	 */
-	private void calculateBurnedOnDayBasis(List<JiraRestIssue> issues, JiraTeamSync teamSync, String sprintId,
-			List<SprintEffort> effort)
-	{
+    /**
+     * Calculate Burndown from Jira Issues.
+     * 
+     * @param issues
+     * @param teamSync
+     * @param effort
+     */
+    private void calculateBurnedOnDayBasis(List<JiraRestIssue> issues, JiraTeamSync teamSync, String sprintId,
+            List<SprintEffort> effort) {
 
-		for (JiraRestIssue issue : issues)
-		{
+        for (JiraRestIssue issue : issues) {
 
-			if (issue.getFields().getResolution() == null)
-			{
-				continue;
-			}
+            if (issue.getFields().getResolution() == null) {
+                continue;
+            }
 
-			calculateEffort(teamSync, sprintId, effort, issue);
+            calculateEffort(teamSync, sprintId, effort, issue);
 
-		}
+        }
 
-	}
+    }
 
-	/**
-	 * Calculate Effort on planned/unplanned items.
-	 * @param teamSync
-	 * @param sprintId
-	 * @param effort
-	 * @param issue
-	 */
-	private void calculateEffort(JiraTeamSync teamSync, String sprintId, List<SprintEffort> effort,
-			JiraRestIssue issue)
-	{
+    /**
+     * Calculate Effort on planned/unplanned items.
+     * 
+     * @param teamSync
+     * @param sprintId
+     * @param effort
+     * @param issue
+     */
+    private void calculateEffort(JiraTeamSync teamSync, String sprintId, List<SprintEffort> effort, JiraRestIssue issue) {
 
-		if (teamSync.isUnplanned()
-			&& JiraIssueHelper.isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(), issue))
-		{
-			Map<Date, Integer> unplannedEffort = getWorklog(issue);
-			Set<Entry<Date, Integer>> set = unplannedEffort.entrySet();
-			for (Entry<Date, Integer> entry : set)
-			{
-				updateSprintEffort(effort, entry.getKey(), 0, entry.getValue(), sprintId, issue.getKey());
-			}
-		}
-		else
-		{
+        if (teamSync.isUnplanned()
+                && JiraIssueHelper.isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(),
+                        issue)) {
+            Map<Date, Integer> unplannedEffort = getWorklog(issue);
+            Set<Entry<Date, Integer>> set = unplannedEffort.entrySet();
+            for (Entry<Date, Integer> entry : set) {
+                updateSprintEffort(effort, entry.getKey(), 0, entry.getValue(), sprintId, issue.getKey());
+            }
+        } else {
 
-			Date resolutionDate = issue.getFields().getResolutiondate().getValue();
-			if (resolutionDate == null)
-			{
-				return;
-			}
+            double planned = JiraIssueHelper.getOriginalEstimate(teamSync, issue);
 
-			if (JiraIssueHelper.isInSprint(resolutionDate, effort))
-			{
+            if (teamSync.getEffortMode() == EffortMode.STORY_POINTS) {
+                planned = JiraIssueHelper.getStoryPoints(teamSync.getStoryPointsFieldId(), issue);
+            }
 
-				double planned = JiraIssueHelper.getOriginalEstimate(teamSync, issue);
+            Date resolutionDate = issue.getFields().getResolutiondate().getValue();
+            if (resolutionDate == null) {
+                logger.info("Issue " + issue.getKey() + " unresolved (Value: " + planned + ")");
+                return;
+            }
 
-				if (teamSync.getEffortMode() == EffortMode.STORY_POINTS)
-				{
-					planned = JiraIssueHelper.getStoryPoints(teamSync.getStoryPointsFieldId(), issue);
-				}
-				updateSprintEffort(effort, resolutionDate, planned, 0, sprintId, issue.getKey());
-			}
-		}
-	}
+            if (JiraIssueHelper.isInSprint(resolutionDate, effort)) {
 
-	/**
-	 * Calculate Goal.
-	 * @param issues
-	 * @param teamSync
-	 * @param sprint
-	 */
-	private void calculateSprintGoal(List<JiraRestIssue> issues, JiraTeamSync teamSync, Sprint sprint)
-	{
+                updateSprintEffort(effort, resolutionDate, planned, 0, sprintId, issue.getKey());
+            } else {
+                logger.info("Issue " + issue.getKey() + " resolved out of sprint (" + resolutionDate + ", Value: "
+                        + planned + ")");
+            }
+        }
+    }
 
-		double goal = 0;
+    /**
+     * Calculate Goal.
+     * 
+     * @param issues
+     * @param teamSync
+     * @param sprint
+     */
+    private void calculateSprintGoal(List<JiraRestIssue> issues, JiraTeamSync teamSync, Sprint sprint) {
 
-		for (JiraRestIssue issue : issues)
-		{
+        double goal = 0;
 
-			if (teamSync.isUnplanned()
-				&& JiraIssueHelper.isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(), issue))
-			{
-				continue;
-			}
+        for (JiraRestIssue issue : issues) {
 
-			Date resolutionDate = issue.getFields().getResolutiondate().getValue();
-			if (resolutionDate != null)
-			{
-				if (!JiraIssueHelper.isInSprint(resolutionDate, sprint.getEffort()))
-				{
-					continue;
-				}
-			}
+            if (teamSync.isUnplanned()
+                    && JiraIssueHelper.isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(),
+                            issue)) {
+                continue;
+            }
 
-			double itemValue = JiraIssueHelper.getOriginalEstimate(teamSync, issue);
+            if (issue.getFields().getResolutiondate() != null) {
+                Date resolutionDate = issue.getFields().getResolutiondate().getValue();
+                if (resolutionDate != null) {
+                    if (!JiraIssueHelper.isInSprint(resolutionDate, sprint.getEffort())) {
+                        continue;
+                    }
+                }
+            }
 
-			if (teamSync.getEffortMode() == EffortMode.STORY_POINTS)
-			{
-				itemValue = JiraIssueHelper.getStoryPoints(teamSync.getStoryPointsFieldId(), issue);
-			}
+            double itemValue = JiraIssueHelper.getOriginalEstimate(teamSync, issue);
 
-			goal += itemValue;
-		}
+            if (teamSync.getEffortMode() == EffortMode.STORY_POINTS) {
+                itemValue = JiraIssueHelper.getStoryPoints(teamSync.getStoryPointsFieldId(), issue);
+            }
 
-		sprint.setPlanned(goal);
+            goal += itemValue;
+        }
 
-	}
-	/**
-	 * Load Issues from Jira.
-	 * @param issueKeys
-	 * @return List<JiraRestIssue>
-	 */
-	private List<JiraRestIssue> fetchIssues(List<String> issueKeys)
-	{
+        sprint.setPlanned(goal);
 
-		List<JiraRestIssue> result = new ArrayList<JiraRestIssue>();
-		for (String issueKey : issueKeys)
-		{
-			logger.info("Fetching issue " + issueKey);
-			JiraRestIssue issue = client.getIssue(issueKey);
-			if (issue != null)
-			{
-				result.add(issue);
-			}
-		}
-		return result;
-	}
+    }
 
-	/**
-	 * Retrieve Worklog to Date.
-	 * @param issue
-	 * @return
-	 */
-	private Map<Date, Integer> getWorklog(JiraRestIssue issue)
-	{
+    /**
+     * Load Issues from Jira.
+     * 
+     * @param issueKeys
+     * @return List<JiraRestIssue>
+     */
+    private List<JiraRestIssue> fetchIssues(List<String> issueKeys) {
 
-		Map<Date, Integer> result = new HashMap<Date, Integer>();
+        List<JiraRestIssue> result = new ArrayList<JiraRestIssue>();
+        for (String issueKey : issueKeys) {
+            logger.info("Fetching issue " + issueKey);
+            JiraRestIssue issue = client.getIssue(issueKey);
+            if (issue != null) {
+                result.add(issue);
+            }
+        }
+        return result;
+    }
 
-		if (issue.getFields().getWorklog() == null)
-		{
-			return result;
-		}
+    /**
+     * Retrieve Worklog to Date.
+     * 
+     * @param issue
+     * @return
+     */
+    private Map<Date, Integer> getWorklog(JiraRestIssue issue) {
 
-		for (JiraRestWorklogValue worklog : issue.getFields().getWorklog().getValue())
-		{
-			Integer time = Math.round(worklog.getMinutesSpent() / 60f);
-			if (result.containsKey(worklog.getStarted()))
-			{
-				time += result.get(worklog.getStarted());
-			}
+        Map<Date, Integer> result = new HashMap<Date, Integer>();
 
-			result.put(worklog.getStarted(), time);
+        if (issue.getFields().getWorklog() == null) {
+            return result;
+        }
 
-		}
-		return result;
-	}
+        for (JiraRestWorklogValue worklog : issue.getFields().getWorklog().getValue()) {
+            Integer time = Math.round(worklog.getMinutesSpent() / 60f);
+            if (result.containsKey(worklog.getStarted())) {
+                time += result.get(worklog.getStarted());
+            }
 
-	/**
-	 * Reset Effort Model.
-	 * @param effort
-	 * @param unplanned
-	 */
-	private void resetSprintEfforts(List<SprintEffort> effort, boolean unplanned)
-	{
+            result.put(worklog.getStarted(), time);
 
-		for (SprintEffort sprintEffort : effort)
-		{
-			sprintEffort.setBurned(0d);
-			if (unplanned)
-			{
-				sprintEffort.setUnplanned(0d);
-			}
-		}
-	}
+        }
+        return result;
+    }
 
-	/**
-	 * Push Effort to Sprint-Model.
-	 * @param effort
-	 * @param resolutionDate
-	 * @param planned
-	 * @param unplanned
-	 * @param sprintId
-	 * @param issueKey
-	 */
-	private void updateSprintEffort(List<SprintEffort> effort, Date resolutionDate, double planned, double unplanned,
-			String sprintId, String issueKey)
-	{
+    /**
+     * Reset Effort Model.
+     * 
+     * @param effort
+     * @param unplanned
+     */
+    private void resetSprintEfforts(List<SprintEffort> effort, boolean unplanned) {
 
-		DateDayComparator comparator = new DateDayComparator();
-		SprintEffort lastFound = null;
+        for (SprintEffort sprintEffort : effort) {
+            sprintEffort.setBurned(0d);
+            if (unplanned) {
+                sprintEffort.setUnplanned(0d);
+            }
+        }
+    }
 
-		int lastComparison = 1;
-		for (SprintEffort sprintEffort : effort)
-		{
-			int comparison = comparator.compare(resolutionDate, sprintEffort.getDate());
+    /**
+     * Push Effort to Sprint-Model.
+     * 
+     * @param effort
+     * @param resolutionDate
+     * @param planned
+     * @param unplanned
+     * @param sprintId
+     * @param issueKey
+     */
+    private void updateSprintEffort(List<SprintEffort> effort, Date resolutionDate, double planned, double unplanned,
+            String sprintId, String issueKey) {
 
-			if (lastComparison > 0 && comparison <= 0)
-			{
-				lastFound = sprintEffort;
-			}
+        DateDayComparator comparator = new DateDayComparator();
+        SprintEffort lastFound = null;
 
-			lastComparison = comparison;
-		}
-		if (lastFound == null)
-		{
-			lastFound = effort.get(effort.size() - 1);
-		}
+        int lastComparison = 1;
+        for (SprintEffort sprintEffort : effort) {
+            int comparison = comparator.compare(resolutionDate, sprintEffort.getDate());
 
-		if (lastFound == null)
-		{
-			logger.info("Cannot add efforts for Issue " + issueKey + ", Sprint " + sprintId + " for Date "
-						+ resolutionDate + " because date is out of range.");
-		}
-		else
-		{
-			lastFound.setBurned(lastFound.getBurned() + planned);
-			lastFound.setUnplanned(lastFound.getUnplanned() + unplanned);
-		}
+            if (lastComparison > 0 && comparison <= 0) {
+                lastFound = sprintEffort;
+            }
 
-	}
+            lastComparison = comparison;
+        }
+        if (lastFound == null) {
+            lastFound = effort.get(effort.size() - 1);
+        }
+
+        if (lastFound == null) {
+            logger.info("Cannot add efforts for Issue " + issueKey + ", Sprint " + sprintId + " for Date "
+                    + resolutionDate + " because date is out of range.");
+        } else {
+            lastFound.setBurned(lastFound.getBurned() + planned);
+            lastFound.setUnplanned(lastFound.getUnplanned() + unplanned);
+        }
+
+    }
 }

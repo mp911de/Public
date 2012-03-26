@@ -26,194 +26,180 @@ import org.jfree.chart.util.DefaultShadowGenerator;
 import org.jfree.ui.RectangleInsets;
 
 /**
- * Chart-Factory for the JFreeChart.
- *<br>
- *<br>Project: burdnown-chart
- *<br>Autor: mark
- *<br>Created: 20.03.2012
- *<br>
- *<br>
+ * Chart-Factory for the JFreeChart. <br>
+ * <br>
+ * Project: burdnown-chart <br>
+ * Autor: mark <br>
+ * Created: 20.03.2012 <br>
+ * <br>
  */
-public class ChartFactory
-{
+public class ChartFactory {
 
-	private final Font font;
+    private final Font font;
 
-	/**
-	 * @throws IOException
-	 * @throws FontFormatException
-	 *
-	 */
-	public ChartFactory() throws FontFormatException, IOException
-	{
+    /**
+     * @throws IOException
+     * @throws FontFormatException
+     */
+    public ChartFactory() throws FontFormatException, IOException {
 
-		Font baseFont = Font.createFont(Font.TRUETYPE_FONT, getClass()
-				.getResourceAsStream("/HelveticaNeueLTCom-Lt.ttf"));
+        Font baseFont = Font.createFont(Font.TRUETYPE_FONT, getClass()
+                .getResourceAsStream("/HelveticaNeueLTCom-Lt.ttf"));
 
-		font = baseFont.deriveFont(Font.PLAIN).deriveFont(14f);
-	}
+        font = baseFont.deriveFont(Font.PLAIN).deriveFont(14f);
+    }
 
-	/**
-	 * Create Burndown Chart.
-	 * @param data
-	 * @return JFreeChart
-	 */
-	public JFreeChart createChart(ChartData data)
-	{
+    /**
+     * Create Burndown Chart.
+     * 
+     * @param data
+     * @return JFreeChart
+     */
+    public JFreeChart createChart(ChartData data) {
 
-		XYPlot plot = setupAxesAndCreatePlot(data);
+        XYPlot plot = setupAxesAndCreatePlot(data);
 
-		setData(data, plot);
+        setData(data, plot);
 
-		XYLineAndShapeRenderer xyLineRenderer = new XYLineAndShapeRenderer();
-		xyLineRenderer.setBaseShapesVisible(false);
+        XYLineAndShapeRenderer xyLineRenderer = new XYLineAndShapeRenderer();
+        xyLineRenderer.setBaseShapesVisible(false);
 
-		XYAreaRenderer xyAreaRenderer = new XYAreaRenderer();
+        XYAreaRenderer xyAreaRenderer = new XYAreaRenderer();
 
-		plot.setRenderer(0, xyLineRenderer);
-		plot.setRenderer(1, xyAreaRenderer);
-		plot.setShadowGenerator(new DefaultShadowGenerator());
+        plot.setRenderer(0, xyLineRenderer);
+        plot.setRenderer(1, xyAreaRenderer);
+        plot.setShadowGenerator(new DefaultShadowGenerator());
 
-		JFreeChart chart = new JFreeChart(plot);
+        JFreeChart chart = new JFreeChart(plot);
 
-		chart.setTitle(data.getTitle());
-		setStyle(xyLineRenderer);
-		setStyle(xyAreaRenderer);
-		setStyle(chart);
-		setStyle(plot);
+        chart.setTitle(data.getTitle());
+        setStyle(xyLineRenderer);
+        setStyle(xyAreaRenderer);
+        setStyle(chart);
+        setStyle(plot);
 
-		return chart;
+        return chart;
 
-	}
+    }
 
-	/**
-	 * @param data
-	 * @param plot
-	 */
-	private void setData(ChartData data, XYPlot plot)
-	{
+    /**
+     * @param data
+     * @param plot
+     */
+    private void setData(ChartData data, XYPlot plot) {
 
-		plot.setDataset(0, data.getMainSeries());
-		plot.setDataset(1, data.getBaselineSeries());
+        plot.setDataset(0, data.getMainSeries());
+        plot.setDataset(1, data.getBaselineSeries());
 
-		plot.mapDatasetToRangeAxis(1, 1);
-	}
+        plot.mapDatasetToRangeAxis(1, 1);
+    }
 
-	/**
-	 * @param chart
-	 */
-	private void setStyle(JFreeChart chart)
-	{
+    /**
+     * @param chart
+     */
+    private void setStyle(JFreeChart chart) {
 
-		chart.getLegend().setItemFont(font);
-		chart.getLegend().setFrame(new BlockFrame()
-		{
+        chart.getLegend().setItemFont(font);
+        chart.getLegend().setFrame(new BlockFrame() {
 
-			@Override
-			public void draw(Graphics2D g2, Rectangle2D area)
-			{
+            @Override
+            public void draw(Graphics2D g2, Rectangle2D area) {
 
-			}
+            }
 
-			@Override
-			public RectangleInsets getInsets()
-			{
+            @Override
+            public RectangleInsets getInsets() {
 
-				return RectangleInsets.ZERO_INSETS;
-			}
-		});
+                return RectangleInsets.ZERO_INSETS;
+            }
+        });
 
-		chart.getLegend().setPadding(10, 10, 10, 10);
-		chart.getLegend().setItemLabelPadding(new RectangleInsets(0, 5, 0, 15));
+        chart.getLegend().setPadding(10, 10, 10, 10);
+        chart.getLegend().setItemLabelPadding(new RectangleInsets(0, 5, 0, 15));
 
-		chart.setPadding(new RectangleInsets(10, 10, 10, 10));
-		chart.setBorderVisible(false);
-		chart.setAntiAlias(true);
-		chart.setTextAntiAlias(true);
-		chart.setBackgroundPaint(Color.WHITE);
-	}
+        chart.setPadding(new RectangleInsets(10, 10, 10, 10));
+        chart.setBorderVisible(false);
+        chart.setAntiAlias(true);
+        chart.setTextAntiAlias(true);
+        chart.setBackgroundPaint(Color.WHITE);
+    }
 
-	/**
-	 * @param xyAreaRenderer
-	 */
-	private void setStyle(XYAreaRenderer xyAreaRenderer)
-	{
+    /**
+     * @param xyAreaRenderer
+     */
+    private void setStyle(XYAreaRenderer xyAreaRenderer) {
 
-		xyAreaRenderer.setSeriesPaint(0, new Color(221, 37, 44));
-		xyAreaRenderer.setSeriesPaint(1, new Color(237, 176, 51));
-	}
+        xyAreaRenderer.setSeriesPaint(0, new Color(221, 37, 44));
+        xyAreaRenderer.setSeriesPaint(1, new Color(237, 176, 51));
+    }
 
-	/**
-	 * @param xyLineRenderer
-	 */
-	private void setStyle(XYLineAndShapeRenderer xyLineRenderer)
-	{
+    /**
+     * @param xyLineRenderer
+     */
+    private void setStyle(XYLineAndShapeRenderer xyLineRenderer) {
 
-		xyLineRenderer.setSeriesStroke(0, new BasicStroke(3.0f));
-		xyLineRenderer.setSeriesShapesVisible(0, true);
-		xyLineRenderer.setSeriesShape(0, new Ellipse2D.Double(-5, -5, 10, 10));
-		xyLineRenderer.setSeriesOutlineStroke(0, new BasicStroke(3.0f));
+        xyLineRenderer.setSeriesStroke(0, new BasicStroke(3.0f));
+        xyLineRenderer.setSeriesShapesVisible(0, true);
+        xyLineRenderer.setSeriesShape(0, new Ellipse2D.Double(-5, -5, 10, 10));
+        xyLineRenderer.setSeriesOutlineStroke(0, new BasicStroke(3.0f));
 
-		xyLineRenderer.setSeriesPaint(0, new Color(111, 164, 91));
-		xyLineRenderer.setSeriesPaint(1, new Color(118, 151, 187));
-		xyLineRenderer.setSeriesPaint(2, new Color(141, 207, 116));
-	}
+        xyLineRenderer.setSeriesPaint(0, new Color(111, 164, 91));
+        xyLineRenderer.setSeriesPaint(1, new Color(118, 151, 187));
+        xyLineRenderer.setSeriesPaint(2, new Color(141, 207, 116));
+    }
 
-	/**
-	 * @param plot
-	 */
-	private void setStyle(XYPlot plot)
-	{
+    /**
+     * @param plot
+     */
+    private void setStyle(XYPlot plot) {
 
-		plot.setDomainCrosshairVisible(false);
-		plot.setDomainGridlinesVisible(false);
-		plot.setRangeCrosshairVisible(false);
-		plot.setRangeGridlinesVisible(true);
-		plot.setRangeGridlinePaint(new Color(170, 170, 170));
-		plot.setRangeGridlineStroke(new BasicStroke(1f));
-	}
+        plot.setDomainCrosshairVisible(false);
+        plot.setDomainGridlinesVisible(false);
+        plot.setRangeCrosshairVisible(false);
+        plot.setRangeGridlinesVisible(true);
+        plot.setRangeGridlinePaint(new Color(170, 170, 170));
+        plot.setRangeGridlineStroke(new BasicStroke(1f));
+    }
 
-	/**
-	 * @return
-	 */
-	private XYPlot setupAxesAndCreatePlot(ChartData chartData)
-	{
+    /**
+     * @return
+     */
+    private XYPlot setupAxesAndCreatePlot(ChartData chartData) {
 
-		DateAxis dates = new DateAxis("Sprint Days");
-		dates.setTimeline(SegmentedTimeline.newMondayThroughFridayTimeline());
-		dates.setDateFormatOverride(new SimpleDateFormat("dd. MM"));
+        DateAxis dates = new DateAxis("Sprint Days");
+        dates.setTimeline(SegmentedTimeline.newMondayThroughFridayTimeline());
+        dates.setDateFormatOverride(new SimpleDateFormat("dd. MM"));
 
-		TickUnits tu = new TickUnits();
-		tu.add(new DateTickUnit(DateTickUnitType.DAY, 1));
-		tu.add(new DateTickUnit(DateTickUnitType.DAY, 2));
-		tu.add(new DateTickUnit(DateTickUnitType.DAY, 4));
+        TickUnits tu = new TickUnits();
+        tu.add(new DateTickUnit(DateTickUnitType.DAY, 1));
+        tu.add(new DateTickUnit(DateTickUnitType.DAY, 4));
 
-		dates.setTickLabelInsets(new RectangleInsets(10, 5, 0, 5));
-		dates.setStandardTickUnits(tu);
-		dates.setAutoTickUnitSelection(true);
-		dates.setLowerMargin(0.01d);
-		dates.setUpperMargin(0.01d);
+        dates.setTickLabelInsets(new RectangleInsets(10, 5, 0, 5));
+        //dates.setStandardTickUnits(tu);
+        //dates.setAutoTickUnitSelection(true);
+        dates.setLowerMargin(0.01d);
+        dates.setUpperMargin(0.01d);
 
-		NumberAxis hours = new NumberAxis("Burndown");
-		NumberAxis burnedHours = new NumberAxis("Effort");
-		burnedHours.setAutoRange(false);
-		burnedHours.setRange(0, chartData.getTeamsize() * 8);
+        NumberAxis hours = new NumberAxis("Burndown");
+        NumberAxis burnedHours = new NumberAxis("Effort");
+        burnedHours.setAutoRange(false);
+        burnedHours.setRange(0, chartData.getTeamsize() * 8);
 
-		dates.setLabelFont(font);
-		dates.setTickLabelFont(font);
+        dates.setLabelFont(font);
+        dates.setTickLabelFont(font);
 
-		hours.setLabelFont(font);
-		hours.setTickLabelFont(font);
-		hours.setTickUnit(new NumberTickUnit(25));
+        hours.setLabelFont(font);
+        hours.setTickLabelFont(font);
+        hours.setTickUnit(new NumberTickUnit(25));
 
-		burnedHours.setLabelFont(font);
-		burnedHours.setTickLabelFont(font);
-		burnedHours.setTickUnit(new NumberTickUnit(8));
+        burnedHours.setLabelFont(font);
+        burnedHours.setTickLabelFont(font);
+        burnedHours.setTickUnit(new NumberTickUnit(8));
 
-		XYPlot plot = new XYPlot();
-		plot.setDomainAxis(dates);
-		plot.setRangeAxis(0, hours);
-		plot.setRangeAxis(1, burnedHours);
-		return plot;
-	}
+        XYPlot plot = new XYPlot();
+        plot.setDomainAxis(dates);
+        plot.setRangeAxis(0, hours);
+        plot.setRangeAxis(1, burnedHours);
+        return plot;
+    }
 }
