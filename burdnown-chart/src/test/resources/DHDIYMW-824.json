@@ -1,0 +1,913 @@
+{
+    "expand": "html",
+    "self": "http://jira.com/rest/api/latest/issue/DHDIYMW-824",
+    "key": "DHDIYMW-824",
+    "fields": {
+        "summary": {
+            "name": "summary",
+            "type": "java.lang.String",
+            "value": "Create Rest resource for WebsiteItem"
+        },
+        "customfield_11370": {
+            "name": "Partly fulfilled",
+            "type": "com.onresolve.jira.plugin.Behaviours:hideable-textarea"
+        },
+        "customfield_11951": {
+            "name": "RolloutNumber",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:float",
+            "value": 0.0
+        },
+        "customfield_11950": {
+            "name": "Rollout Status Information",
+            "type": "com.onresolve.jira.plugin.Behaviours:hideable-textarea"
+        },
+        "issuetype": {
+            "name": "issuetype",
+            "type": "com.atlassian.jira.issue.issuetype.IssueType",
+            "value": {
+                "self": "http://jira.com/rest/api/latest/issueType/9",
+                "name": "Aufgabe",
+                "subtask": false
+            }
+        },
+        "customfield_10610": {
+            "name": "Release Version History",
+            "type": "com.pyxis.greenhopper.jira:greenhopper-releasedmultiversionhistory"
+        },
+        "customfield_12744": {
+            "name": "Time since Created",
+            "type": "com.atlassian.jira.toolkit:velocityviewmessage",
+            "value": "<script type=\"text/javascript\" src=\"/includes/js/humanized_time_span.js\" ></script>\r\n\r\n#set( $updateTime = $issue.getCreated() )\r\n\r\n<span><script type=\"text/javascript\">document.write(humanized_time_span($updateTime.getTime()));</script></span>\r\n"
+        },
+        "customfield_10898": {
+            "name": "Version der Software-Komponente",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_10240": {
+            "name": "Details HW Removal/Disposal",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+        },
+        "customfield_10896": {
+            "name": "Vorhaben",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_10897": {
+            "name": "Rollout-Artefakte",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+        },
+        "customfield_11563": {
+            "name": "PJM",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:userpicker"
+        },
+        "reporter": {
+            "name": "reporter",
+            "type": "com.opensymphony.user.User",
+            "value": {
+                "self": "http://jira.com/rest/api/latest/user?username=rizquierdoabad",
+                "name": "rizquierdoabad",
+                "displayName": "Raul Izquierdo Abad"
+            }
+        },
+        "customfield_11564": {
+            "name": "Head of QA_mult",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multiuserpicker"
+        },
+        "customfield_11259": {
+            "name": "Special Note/Comment",
+            "type": "com.onresolve.jira.plugin.Behaviours:hideable-textarea"
+        },
+        "customfield_11949": {
+            "name": "Rollout Status",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_11560": {
+            "name": "RDEV",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:userpicker"
+        },
+        "created": {
+            "name": "created",
+            "type": "java.util.Date",
+            "value": "2012-02-21T10:53:51.000+0100"
+        },
+        "customfield_11561": {
+            "name": "Test Manager QCBS",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:userpicker"
+        },
+        "customfield_11562": {
+            "name": "Tester",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multiuserpicker"
+        },
+        "customfield_11946": {
+            "name": "DueDateONCE Flag",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:float",
+            "value": 0.0
+        },
+        "customfield_10620": {
+            "name": "Release Version History",
+            "type": "com.pyxis.greenhopper.jira:greenhopper-releasedmultiversionhistory"
+        },
+        "customfield_11614": {
+            "name": "Client",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multiuserpicker"
+        },
+        "customfield_10763": {
+            "name": "origin",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multiselect"
+        },
+        "customfield_10762": {
+            "name": "Commission description",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_11421": {
+            "name": "Watcher Groups",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multigrouppicker",
+            "value": ["Billing-Core", "Business Intelligence Operations", "Datenbanksysteme BS", "EBI Development & EBI Analysis", "Finance Product & Projects", "Finance Product Development (BS)", "Financial Services", "Infrastructure BS", "Mediation & Rating", "OPS Infrastructure", "Operations & Customer-Care BS", "Operations Finance BS", "Payment Core", "Project- & Program- & Account-Management BS", "Quality Center BS", "Sales & Commission"]
+        },
+        "customfield_11944": {
+            "name": "Rollout Status Light",
+            "type": "de.polscheit.jira.plugins.trafficlight:trafficlight-status"
+        },
+        "customfield_10760": {
+            "name": "Target Date",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+        },
+        "customfield_11381": {
+            "name": "Higher or lower estimation",
+            "type": "com.onresolve.jira.plugin.Behaviours:hideable-textarea"
+        },
+        "customfield_10764": {
+            "name": "Payout Date",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multiselect"
+        },
+        "customfield_10765": {
+            "name": "Commission rule",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_11380": {
+            "name": "Please keep detailed estimation in the test concept and define it in the project documentation",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons"
+        },
+        "customfield_10768": {
+            "name": "num_attachments",
+            "type": "com.atlassian.jira.toolkit:attachments",
+            "value": 0.0
+        },
+        "customfield_11150": {
+            "name": "Branch",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:url"
+        },
+        "customfield_12940": {
+            "name": "Kundennummer / User-ID",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_11255": {
+            "name": "Link to the Project-Documentation",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:url"
+        },
+        "customfield_11256": {
+            "name": "Target Date of Effort",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+        },
+        "customfield_13245": {
+            "name": "Parent Key",
+            "type": "com.princeton.jira.plugin.parentfield:parentfield"
+        },
+        "project": {
+            "name": "project",
+            "type": "com.atlassian.jira.project.Project",
+            "value": {
+                "self": "http://jira.com/rest/api/latest/project/DHDIYMW",
+                "key": "DHDIYMW",
+                "name": "DH DIY Middleware"
+            }
+        },
+        "customfield_13244": {
+            "name": "Parent Summary",
+            "type": "com.princeton.jira.plugin.parentfield:parentfield"
+        },
+        "customfield_13140": {
+            "name": "T-Shirt Size",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_10981": {
+            "name": "Component",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multiselect"
+        },
+        "customfield_11248": {
+            "name": "Project Information",
+            "type": "com.onresolve.jira.plugin.Behaviours:hideable-textarea"
+        },
+        "customfield_12743": {
+            "name": "Time since Update",
+            "type": "com.atlassian.jira.toolkit:velocityviewmessage",
+            "value": "<script type=\"text/javascript\" src=\"/includes/js/humanized_time_span.js\" ></script>\r\n\r\n#set( $updateTime = $issue.getUpdated() )\r\n#set ( $issuekey = $issue.getKey() )\r\n\r\n#set ($value = $updateTime.getTime() )\r\n\r\n#set ( $value = $dateutils.getMilliseconds() - $value)\r\n\r\n<p id=\"timeupdate+$issuekey\"></p>\r\n\r\n<script type=\"text/javascript\">\r\ndocument.getElementById(\"timeupdate+$issuekey\").innerHTML=humanized_time_span($updateTime.getTime());\r\n</script>\r\n\r\n\r\n\r\n   ##if ($value.intValue() < 60)\r\n      ##  Less than a minute ago\r\n    ##else\r\n     ##   $!dateutils.formatDurationPretty($value.longValue()) ago\r\n    ##end\r\n\r\n$!dateutils.getDateDay()\r\n\r\n\r\n\r\n\r\n     ##   $!dateutils.formatDurationPretty(\"$!value\") ago\r\n"
+        },
+        "customfield_13246": {
+            "name": "Parent Status",
+            "type": "com.princeton.jira.plugin.parentfield:parentfield"
+        },
+        "customfield_10825": {
+            "name": "Array of communication",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textarea",
+            "value": "\r\n"
+        },
+        "customfield_12385": {
+            "name": "Aufwand",
+            "type": "com.atlassian.jira.toolkit:originalestimate",
+            "value": 4.0
+        },
+        "components": {
+            "name": "components",
+            "type": "com.atlassian.jira.bc.project.component.ProjectComponent",
+            "value": [{
+                "self": "http://jira.com/rest/api/latest/component/12654",
+                "name": "Jimdo MW"
+            }]
+        },
+        "customfield_13340": {
+            "name": "Current Rolled Out Date",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+        },
+        "comment": {
+            "name": "comment",
+            "type": "com.atlassian.jira.issue.fields.CommentSystemField",
+            "value": [{
+                "self": "http://jira.com/rest/api/latest/comment/537231",
+                "author": {
+                    "self": "http://jira.com/rest/api/latest/user?username=bkwabla",
+                    "name": "bkwabla",
+                    "displayName": "Bens Kwabla"
+                },
+                "body": "Related to 664, not testable on LIVE since Sitebuilder is not ready. Issue will be closed and a follow-up opened as the case may be...",
+                "updateAuthor": {
+                    "self": "http://jira.com/rest/api/latest/user?username=bkwabla",
+                    "name": "bkwabla",
+                    "displayName": "Bens Kwabla"
+                },
+                "created": "2012-03-13T14:35:05.000+0100",
+                "updated": "2012-03-13T14:35:05.000+0100"
+            }]
+        },
+        "customfield_13240": {
+            "name": "HideCloneOption",
+            "type": "com.atlassian.jira.toolkit:velocityviewmessage",
+            "value": "<script type=\"text/javascript\">\r\n{\r\ncloneMenuItem = document.getElementById('clone-issue');\r\n\r\nlabelItem = document.getElementById('rowForcustomfield_13240');\r\n\r\n// hide the Clone menu item\r\nif (cloneMenuItem) { cloneMenuItem.parentNode.style.display = 'none'; }\r\n}\r\n// hide the label\r\nif ( labelItem  ) { labelItem.style.display = 'none'; }\r\n</script>"
+        },
+        "customfield_10774": {
+            "name": "Executing Team",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multiselect"
+        },
+        "customfield_10901": {
+            "name": "Startdatum",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+        },
+        "customfield_12469": {
+            "name": "DB Changes",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+        },
+        "customfield_10159": {
+            "name": "Risc Description",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+        },
+        "votes": {
+            "name": "votes",
+            "type": "com.atlassian.jira.issue.fields.VotesSystemField",
+            "value": {
+                "self": "http://jira.com/rest/api/latest/issue/DHDIYMW-824/votes",
+                "votes": 0,
+                "hasVoted": false
+            }
+        },
+        "customfield_10963": {
+            "name": "Deployment Date Time",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datetime"
+        },
+        "resolutiondate": {
+            "name": "resolutiondate",
+            "type": "java.util.Date",
+            "value": "2012-03-25T10:49:07.000+0100"
+        },
+        "customfield_11740": {
+            "name": "Initial Due Date",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+        },
+        "customfield_10968": {
+            "name": "Involved systems",
+            "type": "com.unitedinternet.portal.tools.java.jiraPlugins.zeusServiceTree.zeus-service-tree:zeusServiceTreeCustomfield"
+        },
+        "customfield_10879": {
+            "name": "WebDesk Product",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multiselect"
+        },
+        "customfield_10880": {
+            "name": "ThinkFree Product",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multiselect"
+        },
+        "customfield_10161": {
+            "name": "GreenHopper Ranking",
+            "type": "com.pyxis.greenhopper.jira:greenhopper-ranking"
+        },
+        "customfield_10206": {
+            "name": "IA-Number",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_13254": {
+            "name": "QA approved by",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:userpicker"
+        },
+        "customfield_13253": {
+            "name": "IA - PSP Mapping ",
+            "type": "com.atlassian.jira.toolkit:message",
+            "value": "<div class=\"notify info\"><center>If you got a problem to find the correct PSP-Element - take a look to the IA - PSP mapping-list (with reservation): \r\n<a href=\"http://wiki.intranet.1and1.com/bin/view/ITOM/PSP#bersichtstabelle_PSP_IA\" target=\"_blank\">Wiki-Link</a></center></div>"
+        },
+        "customfield_13255": {
+            "name": "BoxForOperationsRequirements",
+            "type": "com.atlassian.jira.toolkit:velocitymessage",
+            "value": "<script type=\"text/javascript\">\r\n\r\n\r\n\r\nfunction setBGColor_grandparent(element) {\r\n\tparent = element.parentNode;\r\n\tgrandparent = parent.parentNode;\r\n    \r\n    if (grandparent) { grandparent.style.backgroundColor = \"#819FF7\"; \r\n\t} \r\n}\r\n\r\nfunction setBGColor_parent(element) {\r\n\tparent = element.parentNode;\r\n    \r\n    if (parent) { parent.style.backgroundColor = \"#819FF7\"\r\n\t}\r\n}\r\n\r\n// blaue Box hinter bestimmten Feldern\r\n\r\ndbareview = document.getElementById('cf-customfield_13242');\r\nqasystemrollout = document.getElementById('cf-customfield_13243');\r\nqualityassurance = document.getElementById('cf-customfield_13247');\r\nqastatus = document.getElementById('customfield_13040');\r\nqscomment = document.getElementById('customfield_11090');\r\n//alert( cloneMenuItem.parentNode.nodeN );\r\n\r\n\r\nsetBGColor_grandparent(dbareview);\r\nsetBGColor_grandparent(qasystemrollout);\r\nsetBGColor_grandparent(qualityassurance);\r\nsetBGColor_parent(qastatus);\r\nsetBGColor_parent(qscomment);\r\n\r\n// Titel \r\nvar neuLegend = document.createElement(\"legend\");\r\nvar neuSpan = document.createElement(\"span\");\r\nvar neuText = document.createTextNode(\"Operations Requirements\");\r\n\r\nneuSpan.appendChild(neuText);\r\nneuLegend.appendChild(neuSpan);\r\nneuLegend.style.backgroundColor = \"#819FF7\";\r\nneuLegend.style.fontWeight = \"bold\";\r\n\r\nvar parent = dbareview.parentNode;\r\nvar grandparent = parent.parentNode;\r\nvar ur = grandparent.parentNode;\r\nur.insertBefore(neuLegend, grandparent);\r\n\r\n\r\n</script>"
+        },
+        "customfield_10971": {
+            "name": "OriginalEmail",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "duedate": {
+            "name": "duedate",
+            "type": "java.util.Date"
+        },
+        "customfield_13250": {
+            "name": "PSP-Element",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_13252": {
+            "name": "Company",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_13251": {
+            "name": "PSP-Element-Optional",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_11697": {
+            "name": "RC",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "watcher": {
+            "name": "watcher",
+            "type": "watcher",
+            "value": {
+                "self": "http://jira.com/rest/api/latest/issue/DHDIYMW-824/watchers",
+                "isWatching": false,
+                "watchCount": 0
+            }
+        },
+        "worklog": {
+            "name": "worklog",
+            "type": "worklog",
+            "value": [{
+                "self": "http://jira.com/rest/api/latest/worklog/60227",
+                "issue": "http://jira.com/rest/api/latest/issue/DHDIYMW-824",
+                "author": {
+                    "self": "http://jira.com/rest/api/latest/user?username=rizquierdoabad",
+                    "name": "rizquierdoabad",
+                    "displayName": "Raul Izquierdo Abad"
+                },
+                "updateAuthor": {
+                    "self": "http://jira.com/rest/api/latest/user?username=rizquierdoabad",
+                    "name": "rizquierdoabad",
+                    "displayName": "Raul Izquierdo Abad"
+                },
+                "comment": "",
+                "created": "2012-02-22T10:49:17.000+0100",
+                "updated": "2012-02-22T10:49:17.000+0100",
+                "started": "2012-02-22T10:49:00.000+0100",
+                "minutesSpent": 240
+            },
+            {
+                "self": "http://jira.com/rest/api/latest/worklog/60324",
+                "issue": "http://jira.com/rest/api/latest/issue/DHDIYMW-824",
+                "author": {
+                    "self": "http://jira.com/rest/api/latest/user?username=rizquierdoabad",
+                    "name": "rizquierdoabad",
+                    "displayName": "Raul Izquierdo Abad"
+                },
+                "updateAuthor": {
+                    "self": "http://jira.com/rest/api/latest/user?username=rizquierdoabad",
+                    "name": "rizquierdoabad",
+                    "displayName": "Raul Izquierdo Abad"
+                },
+                "comment": "",
+                "created": "2012-02-22T15:53:04.000+0100",
+                "updated": "2012-02-22T15:53:04.000+0100",
+                "started": "2012-02-22T15:53:00.000+0100",
+                "minutesSpent": 120
+            }]
+        },
+        "customfield_10602": {
+            "name": "Rank",
+            "type": "com.pyxis.greenhopper.jira:greenhopper-ranking",
+            "value": 3.04E9
+        },
+        "customfield_10601": {
+            "name": "Epic/Theme",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:labels"
+        },
+        "customfield_10600": {
+            "name": "Flagged",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes"
+        },
+        "customfield_11940": {
+            "name": "Due Date changed flag",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:float",
+            "value": 0.0
+        },
+        "customfield_11699": {
+            "name": "Reminder",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+        },
+        "customfield_10885": {
+            "name": "Destination",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_10886": {
+            "name": "Notes",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+        },
+        "links": {
+            "name": "links",
+            "type": "issuelinks",
+            "value": [{
+                "issueKey": "DHDIYMW-664",
+                "issue": "http://jira.com/rest/api/latest/issue/DHDIYMW-664",
+                "type": {
+                    "name": "Relate Link",
+                    "direction": "INBOUND",
+                    "description": "is related to"
+                }
+            }]
+        },
+        "customfield_11730": {
+            "name": "Team Lead",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:userpicker"
+        },
+        "sub-tasks": {
+            "name": "sub-tasks",
+            "type": "issuelinks",
+            "value": []
+        },
+        "customfield_10891": {
+            "name": "Sort of hardware",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons"
+        },
+        "customfield_10170": {
+            "name": "Starttermin",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datetime"
+        },
+        "customfield_12267": {
+            "name": "Approved by responsible SE",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes"
+        },
+        "customfield_10400": {
+            "name": "ZEUS Servicetree",
+            "type": "com.unitedinternet.portal.tools.java.jiraPlugins.zeusServiceTree.zeus-service-tree:zeusServiceTreeCustomfield"
+        },
+        "customfield_10892": {
+            "name": "Zielumgebung",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_11530": {
+            "name": "Reason",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+        },
+        "customfield_10895": {
+            "name": "Kundenprojekt",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:project"
+        },
+        "customfield_10894": {
+            "name": "Link zum Softwareprojekt",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_11531": {
+            "name": "Source host",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_11128": {
+            "name": "Approved by",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multiuserpicker"
+        },
+        "customfield_12468": {
+            "name": "Installation instructions",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+        },
+        "customfield_13649": {
+            "name": "Deployed by",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:userpicker"
+        },
+        "customfield_12465": {
+            "name": "Content of release",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+        },
+        "timetracking": {
+            "name": "timetracking",
+            "type": "com.atlassian.jira.issue.fields.TimeTrackingSystemField",
+            "value": {
+                "timeoriginalestimate": 240,
+                "timeestimate": 0,
+                "timespent": 360
+            }
+        },
+        "customfield_10080": {
+            "name": "Trac TicketID",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_12141": {
+            "name": "DBMS Hostname + Port (live)",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_12140": {
+            "name": "Similar Issues",
+            "type": "com.suggestimate:similar-issues-custom-field",
+            "value": "<script language=\"JavaScript\">jQuery('#websiteLinkInjection').hide()</script><script language=\"JavaScript\">\nfunction showIssues() {\n  jQuery('#similarIssuesBlock').show();\n  jQuery('#websiteLinkInjection').show();\n  jQuery('#similarIssuesCollapser').html('Hide&nbsp;<img src=\"http://jira.com/download/resources/com.suggestimate:static/navigate_down_10.gif\"/>');\n}\nfunction hideIssues() {\n  jQuery('#similarIssuesBlock').hide();\n  jQuery('#websiteLinkInjection').hide();\n  jQuery('#similarIssuesCollapser').html('Show 10 results&nbsp;<img src=\"http://jira.com/download/resources/com.suggestimate:static/navigate_right_10.gif\"/>');\n}\nfunction toggleIssues() {\n  if (jQuery('#similarIssuesCollapser').text().substr(0, 4) == 'Show') {\n    showIssues();\n  } else {\n    hideIssues();\n  }\n}\n</script>\n<span id=\"similarIssuesCollapserBlock\">\n<a style=\"text-decoration:none\" id=\"similarIssuesCollapser\" onClick=\"toggleIssues(); return false;\">Show 10 results&nbsp;<img src=\"http://jira.com/download/resources/com.suggestimate:static/navigate_right_10.gif\"/></a>\n</span>\n<span id=\"similarIssuesBlock\" style=\"display: none;\"><br/><br/>\n<a href=\"http://jira.com/browse/DHDIYMW-338\"><strike>DHDIYMW-338</strike></a> C(R)UD for partition REST resource<br/><a href=\"http://jira.com/browse/DHDIYMW-614\"><strike>DHDIYMW-614</strike></a> Complete Stacktrace displayed in Browser for REST Resources<br/><a href=\"http://jira.com/browse/DHDIYMW-903\">DHDIYMW-903</a> Switch Jettison to Jackson and Review implemented REST resources in Middleware<br/><a href=\"http://jira.com/browse/DHDIYMW-601\"><strike>DHDIYMW-601</strike></a> Improve Monitoring and create Monitoring Interface<br/><a href=\"http://jira.com/browse/DHDIYMW-213\"><strike>DHDIYMW-213</strike></a> Add Partition-Info REST resource to Jimdo MW<br/><a href=\"http://jira.com/browse/DHDIYMW-286\"><strike>DHDIYMW-286</strike></a> migrate all REST resource to DIY MW<br/><a href=\"http://jira.com/browse/DHDIYMW-389\"><strike>DHDIYMW-389</strike></a> create rest client consuming cms rs interface<br/><a href=\"http://jira.com/browse/DHDIYMW-154\"><strike>DHDIYMW-154</strike></a> CMS CSPs integration<br/><a href=\"http://jira.com/browse/DHDIYMW-261\"><strike>DHDIYMW-261</strike></a> Sharding Improvements (Jimdo MW)<br/><a href=\"http://jira.com/browse/DHDIYMW-249\"><strike>DHDIYMW-249</strike></a> Extend partition resource by return all partitions<br/></span>\n"
+        },
+        "customfield_12143": {
+            "name": "DBMS Hostname + Port (QA)",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_12142": {
+            "name": "DB Name (live)",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_12144": {
+            "name": "DB Name (QA)",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_11842": {
+            "name": "defaultUser",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:userpicker",
+            "value": {
+                "self": "http://jira.com/rest/api/latest/user?username=bsqsjadmin",
+                "name": "bsqsjadmin",
+                "displayName": "Sebastian Platter (ADMIN)"
+            }
+        },
+        "customfield_12447": {
+            "name": "tal_id",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_12454": {
+            "name": "Test Instructions",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+        },
+        "customfield_10141": {
+            "name": "SE Responsible",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multiuserpicker"
+        },
+        "customfield_12456": {
+            "name": "Subi",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multiuserpicker"
+        },
+        "customfield_12450": {
+            "name": "Generischer Task",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "updated": {
+            "name": "updated",
+            "type": "java.util.Date",
+            "value": "2012-03-13T14:35:10.000+0100"
+        },
+        "priority": {
+            "name": "priority",
+            "type": "com.atlassian.jira.issue.priority.Priority",
+            "value": {
+                "self": "http://jira.com/rest/api/latest/priority/3",
+                "name": "Major"
+            }
+        },
+        "description": {
+            "name": "description",
+            "type": "java.lang.String"
+        },
+        "customfield_10333": {
+            "name": "Parent Details HW Removal/Disposal",
+            "type": "com.princeton.jira.plugin.parentfield:parentfield"
+        },
+        "customfield_10001": {
+            "name": "Date of First Response",
+            "type": "com.atlassian.jira.ext.charting:firstresponsedate"
+        },
+        "customfield_10002": {
+            "name": "Time in Status",
+            "type": "com.atlassian.jira.ext.charting:timeinstatus",
+            "value": "3_*:*_1_*:*_76861000_*|*_10243_*:*_1_*:*_9213000_*|*_1_*:*_1_*:*_35000_*|*_5_*:*_1_*:*_0_*|*_10098_*:*_1_*:*_7000"
+        },
+        "customfield_11346": {
+            "name": "Comments - creation of test concept",
+            "type": "com.onresolve.jira.plugin.Behaviours:hideable-textarea"
+        },
+        "customfield_10092": {
+            "name": "Bugzilla URL",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:url"
+        },
+        "customfield_10093": {
+            "name": "Request Tracker ID",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_10672": {
+            "name": "MUCFREETEXT",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multiuserpicker"
+        },
+        "customfield_11345": {
+            "name": "Comments - technical concepts",
+            "type": "com.onresolve.jira.plugin.Behaviours:hideable-textarea"
+        },
+        "customfield_10094": {
+            "name": "Request Tracker System",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_10931": {
+            "name": "PlannedEnd",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+        },
+        "status": {
+            "name": "status",
+            "type": "com.atlassian.jira.issue.status.Status",
+            "value": {
+                "self": "http://jira.com/rest/api/latest/status/6",
+                "name": "Closed"
+            }
+        },
+        "customfield_10671": {
+            "name": "Principal",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_10930": {
+            "name": "PlannedStart",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+        },
+        "customfield_10090": {
+            "name": "Trac URL",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:url"
+        },
+        "customfield_10670": {
+            "name": "Beneficiary",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select",
+            "value": "All"
+        },
+        "customfield_10091": {
+            "name": "Bugzilla ID",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "labels": {
+            "name": "labels",
+            "type": "com.atlassian.jira.issue.label.Label",
+            "value": []
+        },
+        "customfield_11114": {
+            "name": "System Dependencies",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_12245": {
+            "name": "Rollout Date",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+        },
+        "customfield_12242": {
+            "name": "Link to file(s)",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:url"
+        },
+        "customfield_12445": {
+            "name": "ext_vertragnr",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_12446": {
+            "name": "techauftrag_id",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_12444": {
+            "name": "ext_kdnr",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "environment": {
+            "name": "environment",
+            "type": "java.lang.String"
+        },
+        "customfield_10866": {
+            "name": "Cloud environment",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multiselect",
+            "value": ["QA"]
+        },
+        "customfield_12441": {
+            "name": "Term",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons"
+        },
+        "customfield_11339": {
+            "name": "Number",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:float"
+        },
+        "customfield_11245": {
+            "name": "Link to iPMT",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:url"
+        },
+        "customfield_11351": {
+            "name": "Check the test concept",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes"
+        },
+        "customfield_10446": {
+            "name": "Environment",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_11247": {
+            "name": "Target Date for the Project",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+        },
+        "customfield_11246": {
+            "name": "Date of KickOff-Meeting",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+        },
+        "customfield_11241": {
+            "name": "iPMT Category",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_12373": {
+            "name": "Start-Datum",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+        },
+        "customfield_11357": {
+            "name": "Traceability functional requirements to technical realisation and test case",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons"
+        },
+        "customfield_10640": {
+            "name": "Watcher",
+            "type": "com.burningcode.jira.issue.customfields.impl.jira-watcher-field:watcherfieldtype",
+            "value": []
+        },
+        "customfield_11243": {
+            "name": "iPMT Project Number",
+            "type": "com.onresolve.jira.plugin.Behaviours:hideable-textfield"
+        },
+        "security": {
+            "name": "security",
+            "type": "com.atlassian.jira.issue.security.IssueSecurityLevel"
+        },
+        "fixVersions": {
+            "name": "fixVersions",
+            "type": "com.atlassian.jira.project.version.Version",
+            "value": [{
+                "self": "http://jira.com/rest/api/latest/version/18176",
+                "description": "",
+                "name": "Sprint 20",
+                "archived": false,
+                "released": true,
+                "releaseDate": "2012-03-12T00:00:00.000+0100"
+            },
+            {
+                "self": "http://jira.com/rest/api/latest/version/18186",
+                "description": "",
+                "name": "Jimdo MW 4.4.x",
+                "archived": false,
+                "released": true,
+                "releaseDate": "2012-03-12T00:00:00.000+0100"
+            }]
+        },
+        "resolution": {
+            "name": "resolution",
+            "type": "com.atlassian.jira.issue.resolution.Resolution",
+            "value": {
+                "self": "http://jira.com/rest/api/latest/resolution/1",
+                "name": "Behoben"
+            }
+        },
+        "customfield_10122": {
+            "name": "Risk Sum",
+            "type": "com.ja.jira.plugin.report.riskmanagement:RiskManagementCalculatedNumberField",
+            "value": 0.0
+        },
+        "customfield_10355": {
+            "name": "Valid until",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datetime"
+        },
+        "customfield_10739": {
+            "name": "Link zum Testprojekt",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_10120": {
+            "name": "Risk Consequence",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select",
+            "value": "0"
+        },
+        "customfield_10121": {
+            "name": "Risk Probability",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select",
+            "value": "0"
+        },
+        "customfield_11347": {
+            "name": "Comments - test concept",
+            "type": "com.onresolve.jira.plugin.Behaviours:hideable-textarea"
+        },
+        "customfield_10021": {
+            "name": "iPMT-No.",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        },
+        "customfield_10022": {
+            "name": "iPMT Link",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:url"
+        },
+        "customfield_13748": {
+            "name": "Rights/Roles for multiple persons",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+        },
+        "customfield_13747": {
+            "name": "Global Rights/Roles for more persons",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+        },
+        "customfield_11362": {
+            "name": "Traceability functional requirements to technical realisation",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons"
+        },
+        "customfield_13745": {
+            "name": "Specific Project(s)",
+            "type": "com.onresolve.jira.plugin.Behaviours:hideable-textfield"
+        },
+        "customfield_10652": {
+            "name": "file_uploaded",
+            "type": "com.atlassian.jira.toolkit:attachments",
+            "value": 0.0
+        },
+        "assignee": {
+            "name": "assignee",
+            "type": "com.opensymphony.user.User",
+            "value": {
+                "self": "http://jira.com/rest/api/latest/user?username=rizquierdoabad",
+                "name": "rizquierdoabad",
+                "displayName": "Raul Izquierdo Abad"
+            }
+        },
+        "attachment": {
+            "name": "attachment",
+            "type": "attachment",
+            "value": []
+        },
+        "customfield_10919": {
+            "name": "date of shipment",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+        },
+        "versions": {
+            "name": "versions",
+            "type": "com.atlassian.jira.project.version.Version",
+            "value": []
+        },
+        "customfield_10132": {
+            "name": "Change Category",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_10130": {
+            "name": "System",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_13740": {
+            "name": "Quantity of persons",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_13750": {
+            "name": "Estimated by",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:userpicker"
+        },
+        "customfield_13751": {
+            "name": "Date Time requested",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datetime"
+        },
+        "customfield_11358": {
+            "name": "Partly or not fulfilled",
+            "type": "com.onresolve.jira.plugin.Behaviours:hideable-textarea"
+        },
+        "customfield_10646": {
+            "name": "Desired Date",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datetime"
+        },
+        "customfield_13744": {
+            "name": "Rights specific to one/more Project(s)",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_13743": {
+            "name": "Rights/Roles",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_13742": {
+            "name": "Intranet User",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:userpicker"
+        },
+        "customfield_13752": {
+            "name": "Date Time resolved",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:datetime"
+        },
+        "customfield_10441": {
+            "name": "Hostname(s)",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+        },
+        "customfield_13741": {
+            "name": "Action options",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+        },
+        "customfield_11227": {
+            "name": "Help",
+            "type": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+        }
+    },
+    "transitions": "http://jira.com/rest/api/latest/issue/DHDIYMW-824/transitions"
+}

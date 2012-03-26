@@ -26,12 +26,12 @@ public class AbstractJiraSyncJob
 
 	private JiraSync syncSettings;
 	private Teams teams;
-	private JiraSprintSync sprintSync;
+	private JiraSprintSyncWorker sprintSync;
 
 	/**
 	 * @return the sprintSync
 	 */
-	public JiraSprintSync getSprintSync()
+	public JiraSprintSyncWorker getSprintSync()
 	{
 
 		return sprintSync;
@@ -66,7 +66,7 @@ public class AbstractJiraSyncJob
 		syncSettings = new JiraSyncDataAccess().getJiraSync();
 		teams = new DataAccess().getTeams();
 
-		sprintSync = new JiraSprintSync(syncSettings.getBaseUrl(), syncSettings.getUsername(),
+		sprintSync = new JiraSprintSyncWorker(syncSettings.getBaseUrl(), syncSettings.getUsername(),
 				syncSettings.getPassword());
 		logger.debug("setup ok");
 	}

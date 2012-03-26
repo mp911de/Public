@@ -2,6 +2,7 @@ package de.paluch.burndown.sync.jira;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ import de.paluch.burndown.sync.jira.model.JiraTeamSync;
  *<br>
  *<br>
  */
-public class JiraSprintSync
+public class JiraSprintSyncWorker
 {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -42,7 +43,7 @@ public class JiraSprintSync
 	 * @param password
 	 * @throws JiraSyncException
 	 */
-	public JiraSprintSync(String baseUrl, String username, String password) throws JiraSyncException
+	public JiraSprintSyncWorker(String baseUrl, String username, String password) throws JiraSyncException
 	{
 
 		super();
@@ -50,12 +51,24 @@ public class JiraSprintSync
 		try
 		{
 			client = new JiraClient(baseUrl);
-			client.login(username, password);
+			if (username != null && !username.trim().equals(""))
+			{
+				client.login(username, password);
+			}
 		}
 		catch (Exception e)
 		{
 			throw new JiraSyncException(e);
 		}
+	}
+
+	/**
+	 * @param client the client to set
+	 */
+	public void setClient(JiraClient client)
+	{
+
+		this.client = client;
 	}
 
 	/**
@@ -111,13 +124,7 @@ public class JiraSprintSync
 				continue;
 			}
 
-			Date resolutionDate = issue.getFields().getResolutiondate().getValue();
-			if (resolutionDate == null)
-			{
-				continue;
-			}
-
-			calculateEffort(teamSync, sprintId, effort, issue, resolutionDate);
+			calculateEffort(teamSync, sprintId, effort, issue);
 
 		}
 
@@ -129,11 +136,9 @@ public class JiraSprintSync
 	 * @param sprintId
 	 * @param effort
 	 * @param issue
-	 * @param resolutionDate
 	 */
 	private void calculateEffort(JiraTeamSync teamSync, String sprintId, List<SprintEffort> effort,
-			JiraRestIssue issue,
-			Date resolutionDate)
+			JiraRestIssue issue)
 	{
 
 		if (teamSync.isUnplanned()
@@ -148,13 +153,24 @@ public class JiraSprintSync
 		}
 		else
 		{
-			double planned = getOriginalEstimate(teamSync, issue);
 
-			if (teamSync.getEffortMode() == EffortMode.STORY_POINTS)
+			Date resolutionDate = issue.getFields().getResolutiondate().getValue();
+			if (resolutionDate == null)
 			{
-				planned = getStoryPoints(teamSync.getStoryPointsFieldId(), issue);
+				return;
 			}
-			updateSprintEffort(effort, resolutionDate, planned, 0, sprintId, issue.getKey());
+
+			if (isInSprint(resolutionDate, effort))
+			{
+
+				double planned = getOriginalEstimate(teamSync, issue);
+
+				if (teamSync.getEffortMode() == EffortMode.STORY_POINTS)
+				{
+					planned = getStoryPoints(teamSync.getStoryPointsFieldId(), issue);
+				}
+				updateSprintEffort(effort, resolutionDate, planned, 0, sprintId, issue.getKey());
+			}
 		}
 	}
 
@@ -176,6 +192,15 @@ public class JiraSprintSync
 				&& isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(), issue))
 			{
 				continue;
+			}
+
+			Date resolutionDate = issue.getFields().getResolutiondate().getValue();
+			if (resolutionDate != null)
+			{
+				if (!isInSprint(resolutionDate, sprint.getEffort()))
+				{
+					continue;
+				}
 			}
 
 			double itemValue = getOriginalEstimate(teamSync, issue);
@@ -226,6 +251,50 @@ public class JiraSprintSync
 			return issue.getFields().getTimetracking().getValue().getOriginalEstimate() / 60d;
 		}
 		return 0;
+	}
+
+	/**
+	 * @param effort
+	 * @return
+	 */
+	private Date getSprintEnd(List<SprintEffort> effort)
+	{
+
+		Date max = new Date(0);
+		for (SprintEffort sprintEffort : effort)
+		{
+			if (sprintEffort.getDate().after(max))
+			{
+				max = sprintEffort.getDate();
+			}
+		}
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(max);
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.HOUR, 0);
+		cal.add(Calendar.DATE, 1);
+		return cal.getTime();
+	}
+
+	/**
+	 * @param effort
+	 * @return
+	 */
+	private Date getSprintStart(List<SprintEffort> effort)
+	{
+
+		Date min = new Date(Long.MAX_VALUE);
+		for (SprintEffort sprintEffort : effort)
+		{
+			if (sprintEffort.getDate().before(min))
+			{
+				min = sprintEffort.getDate();
+			}
+		}
+		return min;
 	}
 
 	/**
@@ -280,6 +349,24 @@ public class JiraSprintSync
 		}
 		return result;
 	}
+	/**
+	 * @param resolutionDate
+	 * @param effort
+	 * @return
+	 */
+	private boolean isInSprint(Date resolutionDate, List<SprintEffort> effort)
+	{
+
+		Date min = getSprintStart(effort);
+		Date max = new Date(Long.MAX_VALUE);
+
+		if (resolutionDate.after(min) && resolutionDate.before(max))
+		{
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 *
 	 * @param unplannedFlagFieldId
@@ -349,25 +436,34 @@ public class JiraSprintSync
 	{
 
 		DateDayComparator comparator = new DateDayComparator();
-		boolean updated = false;
+		SprintEffort lastFound = null;
 
+		int lastComparison = 1;
 		for (SprintEffort sprintEffort : effort)
 		{
-			if (comparator.compare(resolutionDate, sprintEffort.getDate()) != 0)
+			int comparison = comparator.compare(resolutionDate, sprintEffort.getDate());
+
+			if (lastComparison > 0 && comparison <= 0)
 			{
-				continue;
+				lastFound = sprintEffort;
 			}
 
-			sprintEffort.setBurned(sprintEffort.getBurned() + planned);
-			sprintEffort.setUnplanned(sprintEffort.getUnplanned() + unplanned);
-			updated = true;
-			break;
+			lastComparison = comparison;
+		}
+		if (lastFound == null)
+		{
+			lastFound = effort.get(effort.size() - 1);
 		}
 
-		if (!updated)
+		if (lastFound == null)
 		{
 			logger.info("Cannot add efforts for Issue " + issueKey + ", Sprint " + sprintId + " for Date "
 						+ resolutionDate + " because date is out of range.");
+		}
+		else
+		{
+			lastFound.setBurned(lastFound.getBurned() + planned);
+			lastFound.setUnplanned(lastFound.getUnplanned() + unplanned);
 		}
 
 	}
