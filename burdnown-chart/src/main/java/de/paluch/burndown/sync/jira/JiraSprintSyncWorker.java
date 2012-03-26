@@ -2,7 +2,6 @@ package de.paluch.burndown.sync.jira;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -142,7 +141,7 @@ public class JiraSprintSyncWorker
 	{
 
 		if (teamSync.isUnplanned()
-			&& isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(), issue))
+			&& JiraIssueHelper.isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(), issue))
 		{
 			Map<Date, Integer> unplannedEffort = getWorklog(issue);
 			Set<Entry<Date, Integer>> set = unplannedEffort.entrySet();
@@ -160,14 +159,14 @@ public class JiraSprintSyncWorker
 				return;
 			}
 
-			if (isInSprint(resolutionDate, effort))
+			if (JiraIssueHelper.isInSprint(resolutionDate, effort))
 			{
 
-				double planned = getOriginalEstimate(teamSync, issue);
+				double planned = JiraIssueHelper.getOriginalEstimate(teamSync, issue);
 
 				if (teamSync.getEffortMode() == EffortMode.STORY_POINTS)
 				{
-					planned = getStoryPoints(teamSync.getStoryPointsFieldId(), issue);
+					planned = JiraIssueHelper.getStoryPoints(teamSync.getStoryPointsFieldId(), issue);
 				}
 				updateSprintEffort(effort, resolutionDate, planned, 0, sprintId, issue.getKey());
 			}
@@ -189,7 +188,7 @@ public class JiraSprintSyncWorker
 		{
 
 			if (teamSync.isUnplanned()
-				&& isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(), issue))
+				&& JiraIssueHelper.isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(), issue))
 			{
 				continue;
 			}
@@ -197,17 +196,17 @@ public class JiraSprintSyncWorker
 			Date resolutionDate = issue.getFields().getResolutiondate().getValue();
 			if (resolutionDate != null)
 			{
-				if (!isInSprint(resolutionDate, sprint.getEffort()))
+				if (!JiraIssueHelper.isInSprint(resolutionDate, sprint.getEffort()))
 				{
 					continue;
 				}
 			}
 
-			double itemValue = getOriginalEstimate(teamSync, issue);
+			double itemValue = JiraIssueHelper.getOriginalEstimate(teamSync, issue);
 
 			if (teamSync.getEffortMode() == EffortMode.STORY_POINTS)
 			{
-				itemValue = getStoryPoints(teamSync.getStoryPointsFieldId(), issue);
+				itemValue = JiraIssueHelper.getStoryPoints(teamSync.getStoryPointsFieldId(), issue);
 			}
 
 			goal += itemValue;
@@ -216,7 +215,6 @@ public class JiraSprintSyncWorker
 		sprint.setPlanned(goal);
 
 	}
-
 	/**
 	 * Load Issues from Jira.
 	 * @param issueKeys
@@ -236,89 +234,6 @@ public class JiraSprintSyncWorker
 			}
 		}
 		return result;
-	}
-
-	/**
-	 * @param teamSync
-	 * @param issue
-	 * @return original Estimate from Issue.
-	 */
-	private double getOriginalEstimate(JiraTeamSync teamSync, JiraRestIssue issue)
-	{
-
-		if (teamSync.getEffortMode() == EffortMode.HOURS && issue.getFields().getTimetracking() != null)
-		{
-			return issue.getFields().getTimetracking().getValue().getOriginalEstimate() / 60d;
-		}
-		return 0;
-	}
-
-	/**
-	 * @param effort
-	 * @return
-	 */
-	private Date getSprintEnd(List<SprintEffort> effort)
-	{
-
-		Date max = new Date(0);
-		for (SprintEffort sprintEffort : effort)
-		{
-			if (sprintEffort.getDate().after(max))
-			{
-				max = sprintEffort.getDate();
-			}
-		}
-
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(max);
-		cal.set(Calendar.MILLISECOND, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.HOUR, 0);
-		cal.add(Calendar.DATE, 1);
-		return cal.getTime();
-	}
-
-	/**
-	 * @param effort
-	 * @return
-	 */
-	private Date getSprintStart(List<SprintEffort> effort)
-	{
-
-		Date min = new Date(Long.MAX_VALUE);
-		for (SprintEffort sprintEffort : effort)
-		{
-			if (sprintEffort.getDate().before(min))
-			{
-				min = sprintEffort.getDate();
-			}
-		}
-		return min;
-	}
-
-	/**
-	 * @param storyPointsFieldId
-	 * @param issue
-	 * @return Storypoints
-	 */
-	@SuppressWarnings("unchecked")
-	private double getStoryPoints(String storyPointsFieldId, JiraRestIssue issue)
-	{
-
-		Map<String, Object> storyPointsField = (Map<String, Object>) issue.getFields().properties()
-				.get(storyPointsFieldId);
-
-		if (storyPointsField != null)
-		{
-			Object value = storyPointsField.get("value");
-			if (value != null)
-			{
-				return Double.parseDouble(value.toString().replace(',', '.').trim());
-			}
-		}
-
-		return 0;
 	}
 
 	/**
@@ -348,60 +263,6 @@ public class JiraSprintSyncWorker
 
 		}
 		return result;
-	}
-	/**
-	 * @param resolutionDate
-	 * @param effort
-	 * @return
-	 */
-	private boolean isInSprint(Date resolutionDate, List<SprintEffort> effort)
-	{
-
-		Date min = getSprintStart(effort);
-		Date max = new Date(Long.MAX_VALUE);
-
-		if (resolutionDate.after(min) && resolutionDate.before(max))
-		{
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 *
-	 * @param unplannedFlagFieldId
-	 * @param unplannedFlagValue
-	 * @param issue
-	 * @return true if item is unplanned
-	 */
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	private boolean isUnplanned(String unplannedFlagFieldId, String unplannedFlagValue, JiraRestIssue issue)
-	{
-
-		Map<String, Object> flagField = (Map<String, Object>) issue.getFields().properties()
-				.get(unplannedFlagFieldId);
-
-		if (flagField == null)
-		{
-			return false;
-		}
-
-		List<String> value = (List) flagField.get("value");
-
-		if (value == null)
-		{
-			return false;
-		}
-
-		for (String fieldValueName : value)
-		{
-			if (fieldValueName != null && fieldValueName.equalsIgnoreCase(unplannedFlagValue))
-			{
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	/**
