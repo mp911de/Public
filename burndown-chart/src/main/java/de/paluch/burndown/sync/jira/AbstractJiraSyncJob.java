@@ -11,119 +11,105 @@ import de.paluch.burndown.sync.jira.model.JiraSync;
 import de.paluch.burndown.sync.jira.model.JiraTeamSync;
 
 /**
- *Abstract Jira Syncer.
- *<br>
- *<br>Project: burdnown-chart
- *<br>Autor: mark
- *<br>Created: 25.03.2012
- *<br>
- *<br>
+ * Abstract Jira Syncer. <br>
+ * <br>
+ * Project: burdnown-chart <br>
+ * Autor: mark <br>
+ * Created: 25.03.2012 <br>
+ * <br>
  */
-public class AbstractJiraSyncJob
-{
+public class AbstractJiraSyncJob {
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private JiraSync syncSettings;
-	private Teams teams;
-	private JiraSprintSyncWorker sprintSync;
+    private JiraSync syncSettings;
+    private Teams teams;
+    private JiraSprintSyncWorker sprintSync;
 
-	/**
-	 * @return the sprintSync
-	 */
-	public JiraSprintSyncWorker getSprintSync()
-	{
+    /**
+     * @return the sprintSync
+     */
+    public JiraSprintSyncWorker getSprintSync() {
 
-		return sprintSync;
-	}
+        return sprintSync;
+    }
 
-	/**
-	 * @return the syncSettings
-	 */
-	public JiraSync getSyncSettings()
-	{
+    /**
+     * @return the syncSettings
+     */
+    public JiraSync getSyncSettings() {
 
-		return syncSettings;
-	}
+        return syncSettings;
+    }
 
-	/**
-	 * @return the teams
-	 */
-	public Teams getTeams()
-	{
+    /**
+     * @return the teams
+     */
+    public Teams getTeams() {
 
-		return teams;
-	}
+        return teams;
+    }
 
-	/**
-	 * Setup Sync-Job.
-	 * @throws JiraSyncException
-	 */
-	public void setup() throws JiraSyncException
-	{
+    /**
+     * Setup Sync-Job.
+     * 
+     * @throws JiraSyncException
+     */
+    public void setup() throws JiraSyncException {
 
-		logger.debug("setup");
-		syncSettings = new JiraSyncDataAccess().getJiraSync();
-		teams = new DataAccess().getTeams();
+        logger.debug("setup");
+        syncSettings = new JiraSyncDataAccess().getJiraSync();
+        teams = new DataAccess().getTeams();
 
-		sprintSync = new JiraSprintSyncWorker(syncSettings.getBaseUrl(), syncSettings.getUsername(),
-				syncSettings.getPassword());
-		logger.debug("setup ok");
-	}
+        sprintSync = new JiraSprintSyncWorker(syncSettings.getBaseUrl(), syncSettings.getUsername(),
+                syncSettings.getPassword());
+        logger.debug("setup ok");
+    }
 
-	/**
-	 * @param teams
-	 * @param teamId
-	 * @return Team
-	 */
-	protected Team getTeam(Teams teams, String teamId)
-	{
+    /**
+     * @param teams
+     * @param teamId
+     * @return Team
+     */
+    protected Team getTeam(Teams teams, String teamId) {
 
-		for (Team team : teams.getTeams())
-		{
-			if (team.getId() != null && team.getId().equals(teamId))
-			{
-				return team;
-			}
-		}
-		return null;
-	}
+        for (Team team : teams.getTeams()) {
+            if (team.getId() != null && team.getId().equals(teamId)) {
+                return team;
+            }
+        }
+        return null;
+    }
 
-	/**
-	 * @param teamId
-	 * @return Team
-	 */
-	protected JiraTeamSync getTeamSync(String teamId)
-	{
+    /**
+     * @param teamId
+     * @return Team
+     */
+    protected JiraTeamSync getTeamSync(String teamId) {
 
-		for (JiraTeamSync team : getSyncSettings().getTeamSync())
-		{
-			if (team.getTeamId() != null && team.getTeamId().equals(teamId))
-			{
-				return team;
-			}
-		}
-		return null;
-	}
+        for (JiraTeamSync team : getSyncSettings().getTeamSync()) {
+            if (team.getTeamId() != null && team.getTeamId().equals(teamId)) {
+                return team;
+            }
+        }
+        return null;
+    }
 
-	/**
-	 * Start Sprint synchronisation.
-	 * @param teamSync
-	 * @param team
-	 * @param latestSprint
-	 */
-	protected void syncSprint(JiraTeamSync teamSync, Team team, Sprint latestSprint)
-	{
+    /**
+     * Start Sprint synchronisation.
+     * 
+     * @param teamSync
+     * @param team
+     * @param latestSprint
+     */
+    protected void syncSprint(JiraTeamSync teamSync, Team team, Sprint latestSprint) {
 
-		try
-		{
-			logger.info("Sync Sprint " + latestSprint.getId() + "/" + team.getId());
-			sprintSync.syncSprint(teamSync, latestSprint);
-			logger.info("Sync Sprint " + latestSprint.getId() + "/" + team.getId() + " done");
-		}
-		catch (Exception e)
-		{
-			logger.warn("Sync Sprint " + latestSprint.getId() + "/" + team.getId() + ": " + e.getMessage(), e);
-		}
-	}
+        try {
+            logger.info("Sync Sprint " + latestSprint.getId() + "/" + team.getId());
+            sprintSync.syncSprint(teamSync, latestSprint);
+            logger.info("Sync Sprint " + latestSprint.getId() + "/" + team.getId() + " done");
+        } catch (Exception e) {
+            logger.warn("Sync Sprint " + latestSprint.getId() + "/" + team.getId() + ": " + e.getMessage(), e);
+        }
+    }
 }

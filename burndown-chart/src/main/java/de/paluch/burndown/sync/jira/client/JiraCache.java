@@ -9,7 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class JiraCache {
 
     private static JiraCache instance = new JiraCache();
+
     private final Map<String, JiraRestIssue> issues = new ConcurrentHashMap<String, JiraRestIssue>();
+    private final boolean useCache = false;
 
     /**
      * @return the instance
@@ -19,10 +21,22 @@ public class JiraCache {
     }
 
     /**
-     * @return the issues
+     * Add Issue to cache if cache is used.
+     * 
+     * @param issue
      */
-    public Map<String, JiraRestIssue> getIssues() {
-        return issues;
+    public void addIssue(JiraRestIssue issue) {
+        if (useCache) {
+            issues.put(issue.getKey(), issue);
+        }
+    }
+
+    /**
+     * @param issueKey
+     * @return JiraRestIssue
+     */
+    public JiraRestIssue getIssue(String issueKey) {
+        return issues.get(issueKey);
     }
 
 }

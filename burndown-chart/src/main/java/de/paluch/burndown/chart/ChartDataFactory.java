@@ -10,127 +10,118 @@ import de.paluch.burndown.model.Sprint;
 import de.paluch.burndown.model.SprintEffort;
 
 /**
- * Data-Factory to create Chart-Data from Sprint/Team-Model.
- *<br>
- *<br>Project: burdnown-chart
- *<br>Autor: mark
- *<br>Created: 20.03.2012
- *<br>
- *<br>
+ * Data-Factory to create Chart-Data from Sprint/Team-Model. <br>
+ * <br>
+ * Project: burdnown-chart <br>
+ * Autor: mark <br>
+ * Created: 20.03.2012 <br>
+ * <br>
  */
-public class ChartDataFactory
-{
+public class ChartDataFactory {
 
-	private final ChartData chartData = new ChartData();
-	public ChartDataFactory()
-	{
+    private final ChartData chartData = new ChartData();
 
-	}
+    public ChartDataFactory() {
 
-	/**
-	 * Get SprintEffort for a specific Date.
-	 * @param date
-	 * @param effort
-	 * @return SprintEffort
-	 */
-	private static SprintEffort getEffortFor(Date date, List<SprintEffort> effort)
-	{
+    }
 
-		for (SprintEffort sprintEffort : effort)
-		{
-			if (sprintEffort.getDate().equals(date))
-			{
-				return sprintEffort;
-			}
+    /**
+     * Get SprintEffort for a specific Date.
+     * 
+     * @param date
+     * @param effort
+     * @return SprintEffort
+     */
+    private static SprintEffort getEffortFor(Date date, List<SprintEffort> effort) {
 
-		}
-		return null;
-	}
+        for (SprintEffort sprintEffort : effort) {
+            if (sprintEffort.getDate().equals(date)) {
+                return sprintEffort;
+            }
 
-	/**
-	 * Create Chart-Data.
-	 * @param teamSize
-	 * @param sprint
-	 * @param days
-	 */
-	public void createData(int teamSize, Sprint sprint, List<Date> days)
-	{
+        }
+        return null;
+    }
 
-		double value = sprint.getPlanned();
+    /**
+     * Create Chart-Data.
+     * 
+     * @param teamTitle
+     * @param teamSize
+     * @param sprint
+     * @param days
+     */
+    public void createData(String teamTitle, int teamSize, Sprint sprint, List<Date> days) {
 
-		boolean first = true;
-		Date lastDate = null;
-		boolean isLastEffortEntry = true;
-		int lastEffortIndex = -1;
-		for (Date date : days)
-		{
+        double value = sprint.getPlanned();
 
-			lastDate = date;
-			SprintEffort effort = ChartDataFactory.getEffortFor(date, sprint.getEffort());
-			if (effort == null)
-			{
-				continue;
-			}
+        boolean first = true;
+        Date lastDate = null;
+        boolean isLastEffortEntry = true;
+        int lastEffortIndex = -1;
+        for (Date date : days) {
 
-			isLastEffortEntry = isLastEffortEntry(sprint, days, date);
+            lastDate = date;
+            SprintEffort effort = ChartDataFactory.getEffortFor(date, sprint.getEffort());
+            if (effort == null) {
+                continue;
+            }
 
-			if (effort.getBurned() != 0 || effort.getUnplanned() != 0 || first || !isLastEffortEntry)
-			{
-				lastEffortIndex = days.indexOf(date);
-				chartData.getBurndown().add(new TimeSeriesDataItem(new Day(date), value));
-				first = false;
-			}
-			value -= effort.getBurned();
+            isLastEffortEntry = isLastEffortEntry(sprint, days, date);
 
-			chartData.getBurned().add(new TimeSeriesDataItem(new Day(date), effort.getBurned()));
-			chartData.getUnplanned().add(new TimeSeriesDataItem(new Day(date), effort.getUnplanned()));
-		}
+            if (effort.getBurned() != 0 || effort.getUnplanned() != 0 || first || !isLastEffortEntry) {
+                lastEffortIndex = days.indexOf(date);
+                chartData.getBurndown().add(new TimeSeriesDataItem(new Day(date), value));
+                first = false;
+            }
+            value -= effort.getBurned();
 
-		if (lastEffortIndex == days.size() - 2)
-		{
-			chartData.getBurndown().addOrUpdate(new TimeSeriesDataItem(new Day(lastDate), value));
-		}
+            chartData.getBurned().add(new TimeSeriesDataItem(new Day(date), effort.getBurned()));
+            chartData.getUnplanned().add(new TimeSeriesDataItem(new Day(date), effort.getUnplanned()));
+        }
 
-		chartData.getIdeal().addOrUpdate(new TimeSeriesDataItem(new Day(sprint.getStartDate()), sprint.getPlanned()));
-		chartData.getIdeal().addOrUpdate(new TimeSeriesDataItem(new Day(lastDate), 0));
+        if (lastEffortIndex == days.size() - 2) {
+            chartData.getBurndown().addOrUpdate(new TimeSeriesDataItem(new Day(lastDate), value));
+        }
 
-		chartData.getMainSeries().addSeries(chartData.getBurndown());
-		chartData.getMainSeries().addSeries(chartData.getIdeal());
+        chartData.getIdeal().addOrUpdate(new TimeSeriesDataItem(new Day(sprint.getStartDate()), sprint.getPlanned()));
+        chartData.getIdeal().addOrUpdate(new TimeSeriesDataItem(new Day(lastDate), 0));
 
-		chartData.getBaselineSeries().addSeries(chartData.getUnplanned());
-		chartData.getBaselineSeries().addSeries(chartData.getBurned());
-		chartData.setTeamsize(teamSize);
-	}
+        chartData.getMainSeries().addSeries(chartData.getBurndown());
+        chartData.getMainSeries().addSeries(chartData.getIdeal());
 
-	/**
-	 * @return the chartData
-	 */
-	public ChartData getChartData()
-	{
+        chartData.getBaselineSeries().addSeries(chartData.getUnplanned());
+        chartData.getBaselineSeries().addSeries(chartData.getBurned());
+        chartData.setTeamsize(teamSize);
 
-		return chartData;
-	}
+        chartData.setTitle(teamTitle + " - Sprint " + sprint.getId());
+    }
 
-	/**
-	 * @param sprint
-	 * @param days
-	 * @param date
-	 * @return
-	 */
-	private boolean isLastEffortEntry(Sprint sprint, List<Date> days, Date date)
-	{
+    /**
+     * @return the chartData
+     */
+    public ChartData getChartData() {
 
-		boolean isLastEffortEntry = true;
-		for (int i = days.indexOf(date) + 1; i < days.size(); i++)
-		{
-			SprintEffort otherEffort = ChartDataFactory.getEffortFor(days.get(i), sprint.getEffort());
-			if (otherEffort != null && (otherEffort.getBurned() != 0 || otherEffort.getUnplanned() != 0))
-			{
-				isLastEffortEntry = false;
-				break;
-			}
-		}
-		return isLastEffortEntry;
-	}
+        return chartData;
+    }
+
+    /**
+     * @param sprint
+     * @param days
+     * @param date
+     * @return
+     */
+    private boolean isLastEffortEntry(Sprint sprint, List<Date> days, Date date) {
+
+        boolean isLastEffortEntry = true;
+        for (int i = days.indexOf(date) + 1; i < days.size(); i++) {
+            SprintEffort otherEffort = ChartDataFactory.getEffortFor(days.get(i), sprint.getEffort());
+            if (otherEffort != null && (otherEffort.getBurned() != 0 || otherEffort.getUnplanned() != 0)) {
+                isLastEffortEntry = false;
+                break;
+            }
+        }
+        return isLastEffortEntry;
+    }
 
 }

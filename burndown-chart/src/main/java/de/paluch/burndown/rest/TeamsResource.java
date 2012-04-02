@@ -14,11 +14,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
+import org.jboss.resteasy.annotations.cache.Cache;
 import org.jfree.chart.JFreeChart;
 
 import de.paluch.burndown.DataAccess;
@@ -37,135 +39,114 @@ import de.paluch.burndown.model.Teams;
  * <li>/teams/{teamId}/sprints/{sprintId} (GET, PUT)</li>
  * <li>/teams/{teamId} (GET, PUT)</li>
  * </ul>
- *
- *<br>
- *<br>Project: burdnown-chart
- *<br>Autor: mark
- *<br>Created: 21.03.2012
- *<br>
- *<br>
+ * <br>
+ * <br>
+ * Project: burdnown-chart <br>
+ * Autor: mark <br>
+ * Created: 21.03.2012 <br>
+ * <br>
  */
 @Path("/teams")
-public class TeamsResource
-{
+public class TeamsResource {
 
-	@GET
-	@Path("/{teamId}/sprints/{sprintId}.png")
-	@Produces("image/png")
-	public Response createChart(@PathParam("teamId")
-	String teamId, @PathParam("sprintId")
-	String sprintId, @QueryParam("width")
-	@DefaultValue("1024")
-	int width, @QueryParam("height")
-	@DefaultValue("786")
-	int height, @QueryParam("multiplier")
-	@DefaultValue("10")
-	double multiplier) throws FontFormatException, IOException
-	{
+    @GET
+    @Path("/{teamId}/sprints/{sprintId}.png")
+    @Produces("image/png")
+    @Cache(maxAge = 1)
+    public Response createChart(@PathParam("teamId") String teamId, @PathParam("sprintId") String sprintId,
+            @QueryParam("width") @DefaultValue("1024") int width,
+            @QueryParam("height") @DefaultValue("786") int height,
+            @QueryParam("multiplier") @DefaultValue("10") double multiplier) throws FontFormatException, IOException {
 
-		double normalizedMultiplier = multiplier / 10;
-		byte[] result = new byte[0];
-		Sprint sprint = new DataAccess().getSprint(teamId, sprintId);
-		Team team = getTeam(teamId);
+        double normalizedMultiplier = multiplier / 10;
+        byte[] result = new byte[0];
+        Sprint sprint = new DataAccess().getSprint(teamId, sprintId);
+        Team team = getTeam(teamId);
 
-		if (sprint == null)
-		{
-			return Response.status(Status.NOT_FOUND).build();
-		}
+        if (sprint == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
 
-		SprintDaysGenerator gen = new SprintDaysGenerator();
-		ChartDataFactory dataFactory = new ChartDataFactory();
-		ChartFactory chartFactory = new ChartFactory();
+        SprintDaysGenerator gen = new SprintDaysGenerator();
+        ChartDataFactory dataFactory = new ChartDataFactory();
+        ChartFactory chartFactory = new ChartFactory();
 
-		dataFactory.createData(team.getTeamSize(), sprint,
-				gen.generateSprintDays(sprint.getDays() + 1, sprint.getStartDate()));
+        dataFactory.createData(team.getName(), team.getTeamSize(), sprint,
+                gen.generateSprintDays(sprint.getDays() + 1, sprint.getStartDate()));
 
-		JFreeChart chart = chartFactory.createChart(dataFactory.getChartData());
+        JFreeChart chart = chartFactory.createChart(dataFactory.getChartData());
 
-		BufferedImage image = chart.createBufferedImage(width, height, (width / normalizedMultiplier),
-				(height / normalizedMultiplier),
-				null);
+        BufferedImage image = chart.createBufferedImage(width, height, (width / normalizedMultiplier),
+                (height / normalizedMultiplier), null);
 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ImageIO.write(image, "png", baos);
-		baos.close();
-		result = baos.toByteArray();
-		return Response.ok(result).build();
-	}
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", baos);
+        baos.close();
+        result = baos.toByteArray();
+        CacheControl cacheControl = new CacheControl();
+        cacheControl.setMaxAge(600);
+        return Response.ok(result).cacheControl(cacheControl).build();
+    }
 
-	@GET
-	@Path("{teamId}/sprints/{sprintId}")
-	@Produces(MediaType.TEXT_XML)
-	public Response getSprint(@PathParam("teamId")
-	String teamId, @PathParam("sprintId")
-	String sprintId)
-	{
+    @GET
+    @Path("{teamId}/sprints/{sprintId}")
+    @Produces(MediaType.TEXT_XML)
+    public Response getSprint(@PathParam("teamId") String teamId, @PathParam("sprintId") String sprintId) {
 
-		Sprint sprint = new DataAccess().getSprint(teamId, sprintId);
-		if (sprint == null)
-		{
-			return Response.status(Status.NOT_FOUND).build();
-		}
-		return Response.ok(sprint).build();
-	}
+        Sprint sprint = new DataAccess().getSprint(teamId, sprintId);
+        if (sprint == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        return Response.ok(sprint).build();
+    }
 
-	@GET
-	@Produces(MediaType.TEXT_XML)
-	public Teams listTeams()
-	{
+    @GET
+    @Produces(MediaType.TEXT_XML)
+    public Teams listTeams() {
 
-		return new DataAccess().getTeams();
-	}
+        return new DataAccess().getTeams();
+    }
 
-	@PUT
-	@Path("{teamId}/sprints/{sprintId}")
-	@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
-	@Produces(MediaType.TEXT_XML)
-	public Response storeSprint(@PathParam("teamId")
-	String teamId, @PathParam("sprintId")
-	String sprintId, Sprint sprint)
-	{
+    @PUT
+    @Path("{teamId}/sprints/{sprintId}")
+    @Consumes({ MediaType.TEXT_XML, MediaType.APPLICATION_XML })
+    @Produces(MediaType.TEXT_XML)
+    public Response storeSprint(@PathParam("teamId") String teamId, @PathParam("sprintId") String sprintId,
+            Sprint sprint) {
 
-		sprint.setId(sprintId);
+        sprint.setId(sprintId);
 
-		new DataAccess().storeSprint(teamId, sprint);
-		return Response
-				.created(UriBuilder.fromResource(getClass()).path(teamId).path("sprints").path(sprintId).build())
-				.build();
-	}
+        new DataAccess().storeSprint(teamId, sprint);
+        return Response
+                .created(UriBuilder.fromResource(getClass()).path(teamId).path("sprints").path(sprintId).build())
+                .build();
+    }
 
-	@PUT
-	@Path("{teamId}")
-	@Produces(MediaType.TEXT_XML)
-	@Consumes({MediaType.TEXT_XML, MediaType.APPLICATION_XML})
-	@SuppressWarnings("unused")
-	public void storeTeam(@PathParam("teamId")
-	String teamId,
-			Teams teams)
-	{
+    @PUT
+    @Path("{teamId}")
+    @Produces(MediaType.TEXT_XML)
+    @Consumes({ MediaType.TEXT_XML, MediaType.APPLICATION_XML })
+    @SuppressWarnings("unused")
+    public void storeTeam(@PathParam("teamId") String teamId, Teams teams) {
 
-		for (Team team : teams.getTeams())
-		{
-			new DataAccess().saveOrUpdateTeam(team);
-		}
-	}
+        for (Team team : teams.getTeams()) {
+            new DataAccess().saveOrUpdateTeam(team);
+        }
+    }
 
-	/**
-	 * @param teamId
-	 * @return
-	 */
-	private Team getTeam(String teamId)
-	{
+    /**
+     * @param teamId
+     * @return
+     */
+    private Team getTeam(String teamId) {
 
-		Teams teams = listTeams();
-		for (Team team : teams.getTeams())
-		{
-			if (team.getId().equals(teamId))
-			{
-				return team;
-			}
-		}
-		return null;
-	}
+        Teams teams = listTeams();
+        for (Team team : teams.getTeams()) {
+            if (team.getId().equals(teamId)) {
+                return team;
+            }
+        }
+        return null;
+    }
 
 }

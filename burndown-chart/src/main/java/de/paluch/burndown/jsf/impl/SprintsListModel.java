@@ -11,84 +11,76 @@ import de.paluch.burndown.model.Sprint;
 import de.paluch.burndown.model.Team;
 
 /**
- *
- *<br>
- *<br>Project: burdnown-chart
- *<br>Autor: mark
- *<br>Created: 20.03.2012
- *<br>
- *<br>
+ * <br>
+ * <br>
+ * Project: burdnown-chart <br>
+ * Autor: mark <br>
+ * Created: 20.03.2012 <br>
+ * <br>
  */
 @ManagedBean
 @SessionScoped
-public class SprintsListModel extends AbstractJSFListModel<Sprint>
-{
+public class SprintsListModel extends AbstractJSFListModel<Sprint> {
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 5066713971117471465L;
-	private Team team;
+    private static final long serialVersionUID = 5066713971117471465L;
+    private Team team;
 
-	/**
-	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getList()
-	 */
-	@Override
-	public List<Sprint> getList()
-	{
+    /**
+     * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getList()
+     */
+    @Override
+    public List<Sprint> getList() {
 
-		if (team != null && super.getList().isEmpty())
-		{
-			refreshList();
-		}
+        if (team != null && super.getList().isEmpty()) {
+            refreshList();
+        }
 
-		return super.getList();
-	}
+        return super.getList();
+    }
 
-	/**
-	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getTableId()
-	 */
-	@Override
-	public String getTableId()
-	{
+    /**
+     * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getTableId()
+     */
+    @Override
+    public String getTableId() {
 
-		return "sprints";
-	}
+        return "sprints";
+    }
 
-	/**
-	 * @return the team
-	 */
-	public Team getTeam()
-	{
+    /**
+     * @return the team
+     */
+    public Team getTeam() {
 
-		return team;
-	}
+        return team;
+    }
 
-	/**
-	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#refreshList()
-	 */
-	@Override
-	public void refreshList()
-	{
+    /**
+     * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#refreshList()
+     */
+    @Override
+    public void refreshList() {
 
-		super.getList().clear();
+        super.getList().clear();
 
-		DataAccess access = new DataAccess();
-		List<String> sprintIds = access.listSprints(team.getId());
-		for (String id : sprintIds)
-		{
-			super.getList().add(access.getSprint(team.getId(), id));
-		}
+        DataAccess access = new DataAccess();
+        List<String> sprintIds = access.listSprints(team.getId());
+        for (String id : sprintIds) {
+            super.getList().add(access.getSprint(team.getId(), id));
+        }
 
-	}
+    }
 
-	/**
-	 * @param team the team to set
-	 */
-	public void setTeam(Team team)
-	{
+    /**
+     * @param team
+     *            the team to set
+     */
+    public void setTeam(Team team) {
 
-		this.team = team;
-	}
+        this.team = team;
+    }
 
 }

@@ -5,185 +5,173 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 /**
- * Sync config for a Team.
- *<br>
- *<br>Project: burdnown-chart
- *<br>Autor: mark
- *<br>Created: 25.03.2012
- *<br>
- *<br>
+ * Sync config for a Team. <br>
+ * <br>
+ * Project: burdnown-chart <br>
+ * Autor: mark <br>
+ * Created: 25.03.2012 <br>
+ * <br>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class JiraTeamSync
-{
+public class JiraTeamSync {
 
-	@XmlAttribute
-	private String teamId;
+    @XmlAttribute
+    private String teamId;
 
-	private String projectKey;
-	private boolean unplanned;
-	private String unplannedFlagFieldId;
-	private String unplannedFlagName;
-	private EffortMode effortMode;
-	private String storyPointsFieldId;
-	private String sprintVersionNameScheme;
+    private String projectKey;
+    private boolean unplanned;
+    private String unplannedFlagFieldId;
+    private String unplannedFlagName;
+    private EffortMode effortMode;
+    private String storyPointsFieldId;
+    private String sprintVersionNameScheme;
 
-	/**
-	 * @return the effortMode
-	 */
-	public EffortMode getEffortMode()
-	{
+    /**
+     * @return the effortMode
+     */
+    public EffortMode getEffortMode() {
 
-		return effortMode;
-	}
+        return effortMode;
+    }
 
-	/**
-	 * @return the projectKey
-	 */
-	public String getProjectKey()
-	{
+    /**
+     * @return the projectKey
+     */
+    public String getProjectKey() {
 
-		return projectKey;
-	}
+        return projectKey;
+    }
 
-	/**
-	 * @return the sprintVersionNameScheme
-	 */
-	public String getSprintVersionNameScheme()
-	{
+    /**
+     * @return the sprintVersionNameScheme
+     */
+    public String getSprintVersionNameScheme() {
 
-		return sprintVersionNameScheme;
-	}
+        return sprintVersionNameScheme;
+    }
 
-	/**
-	 * @return the storyPointsCustomField
-	 */
-	public String getStoryPointsFieldId()
-	{
+    /**
+     * @return the storyPointsCustomField
+     */
+    public String getStoryPointsFieldId() {
 
-		return storyPointsFieldId;
-	}
+        return storyPointsFieldId;
+    }
 
-	/**
-	 * @return the teamId
-	 */
-	public String getTeamId()
-	{
+    /**
+     * @return the teamId
+     */
+    public String getTeamId() {
 
-		return teamId;
-	}
+        return teamId;
+    }
 
-	/**
-	 * @return the unplannedFlagField
-	 */
-	public String getUnplannedFlagFieldId()
-	{
+    /**
+     * @return the unplannedFlagField
+     */
+    public String getUnplannedFlagFieldId() {
 
-		return unplannedFlagFieldId;
-	}
+        return unplannedFlagFieldId;
+    }
 
-	/**
-	 * @return the unplannedFlagName
-	 */
-	public String getUnplannedFlagName()
-	{
+    /**
+     * @return the unplannedFlagName
+     */
+    public String getUnplannedFlagName() {
 
-		return unplannedFlagName;
-	}
+        return unplannedFlagName;
+    }
 
-	/**
-	 * @return the unplanned
-	 */
-	public boolean isUnplanned()
-	{
+    /**
+     * @return the unplanned
+     */
+    public boolean isUnplanned() {
 
-		return unplanned;
-	}
+        return unplanned;
+    }
 
-	/**
-	 * @param effortMode the effortMode to set
-	 */
-	public void setEffortMode(EffortMode effortMode)
-	{
+    /**
+     * @param effortMode
+     *            the effortMode to set
+     */
+    public void setEffortMode(EffortMode effortMode) {
 
-		this.effortMode = effortMode;
-	}
+        this.effortMode = effortMode;
+    }
 
-	/**
-	 * @param projectKey the projectKey to set
-	 */
-	public void setProjectKey(String projectKey)
-	{
+    /**
+     * @param projectKey
+     *            the projectKey to set
+     */
+    public void setProjectKey(String projectKey) {
 
-		this.projectKey = projectKey;
-	}
+        this.projectKey = projectKey;
+    }
 
-	/**
-	 * @param sprintVersionNameScheme the sprintVersionNameScheme to set
-	 */
-	public void setSprintVersionNameScheme(String sprintVersionNameScheme)
-	{
+    /**
+     * @param sprintVersionNameScheme
+     *            the sprintVersionNameScheme to set
+     */
+    public void setSprintVersionNameScheme(String sprintVersionNameScheme) {
 
-		this.sprintVersionNameScheme = sprintVersionNameScheme;
-	}
+        this.sprintVersionNameScheme = sprintVersionNameScheme;
+    }
 
-	/**
-	 * @param storyPointsCustomField the storyPointsCustomField to set
-	 */
-	public void setStoryPointsFieldId(String storyPointsCustomField)
-	{
+    /**
+     * @param storyPointsCustomField
+     *            the storyPointsCustomField to set
+     */
+    public void setStoryPointsFieldId(String storyPointsCustomField) {
 
-		storyPointsFieldId = storyPointsCustomField;
-	}
+        storyPointsFieldId = storyPointsCustomField;
+    }
 
-	/**
-	 * @param teamId the teamId to set
-	 */
-	public void setTeamId(String teamId)
-	{
+    /**
+     * @param teamId
+     *            the teamId to set
+     */
+    public void setTeamId(String teamId) {
 
-		this.teamId = teamId;
-	}
+        this.teamId = teamId;
+    }
 
-	/**
-	 * @param unplanned the unplanned to set
-	 */
-	public void setUnplanned(boolean unplanned)
-	{
+    /**
+     * @param unplanned
+     *            the unplanned to set
+     */
+    public void setUnplanned(boolean unplanned) {
 
-		this.unplanned = unplanned;
-	}
+        this.unplanned = unplanned;
+    }
 
-	/**
-	 * @param unplannedFlagField the unplannedFlagField to set
-	 */
-	public void setUnplannedFlagFieldId(String unplannedFlagField)
-	{
+    /**
+     * @param unplannedFlagField
+     *            the unplannedFlagField to set
+     */
+    public void setUnplannedFlagFieldId(String unplannedFlagField) {
 
-		unplannedFlagFieldId = unplannedFlagField;
-	}
+        unplannedFlagFieldId = unplannedFlagField;
+    }
 
-	/**
-	 * @param unplannedFlagName the unplannedFlagName to set
-	 */
-	public void setUnplannedFlagName(String unplannedFlagName)
-	{
+    /**
+     * @param unplannedFlagName
+     *            the unplannedFlagName to set
+     */
+    public void setUnplannedFlagName(String unplannedFlagName) {
 
-		this.unplannedFlagName = unplannedFlagName;
-	}
+        this.unplannedFlagName = unplannedFlagName;
+    }
 
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString()
-	{
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
 
-		return getClass().getSimpleName() + " [teamId=" + teamId + ", projectKey=" + projectKey + ", unplanned="
-				+ unplanned
-				+ ", unplannedFlagFieldId=" + unplannedFlagFieldId + ", unplannedFlagName=" + unplannedFlagName
-				+ ", effortMode=" + effortMode + ", storyPointsFieldId=" + storyPointsFieldId
-				+ ", sprintVersionNameScheme=" + sprintVersionNameScheme + "]";
-	}
+        return getClass().getSimpleName() + " [teamId=" + teamId + ", projectKey=" + projectKey + ", unplanned="
+                + unplanned + ", unplannedFlagFieldId=" + unplannedFlagFieldId + ", unplannedFlagName="
+                + unplannedFlagName + ", effortMode=" + effortMode + ", storyPointsFieldId=" + storyPointsFieldId
+                + ", sprintVersionNameScheme=" + sprintVersionNameScheme + "]";
+    }
 
 }

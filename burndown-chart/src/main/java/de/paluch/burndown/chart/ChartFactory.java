@@ -22,6 +22,7 @@ import org.jfree.chart.block.BlockFrame;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYAreaRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.util.DefaultShadowGenerator;
 import org.jfree.ui.RectangleInsets;
 
@@ -72,7 +73,8 @@ public class ChartFactory {
 
         JFreeChart chart = new JFreeChart(plot);
 
-        chart.setTitle(data.getTitle());
+        chart.setTitle(new TextTitle(data.getTitle(), font.deriveFont(Font.BOLD).deriveFont(18f)));
+
         setStyle(xyLineRenderer);
         setStyle(xyAreaRenderer);
         setStyle(chart);
@@ -168,22 +170,23 @@ public class ChartFactory {
 
         DateAxis dates = new DateAxis("Sprint Days");
         dates.setTimeline(SegmentedTimeline.newMondayThroughFridayTimeline());
-        dates.setDateFormatOverride(new SimpleDateFormat("dd. MM"));
+        // dates.setDateFormatOverride(new SimpleDateFormat("dd. MM"));
 
         TickUnits tu = new TickUnits();
-        tu.add(new DateTickUnit(DateTickUnitType.DAY, 1));
-        tu.add(new DateTickUnit(DateTickUnitType.DAY, 4));
+        tu.add(new DateTickUnit(DateTickUnitType.DAY, 1, new SimpleDateFormat("dd. MM")));
+        tu.add(new DateTickUnit(DateTickUnitType.DAY, 2, new SimpleDateFormat("dd. MM")));
+        tu.add(new DateTickUnit(DateTickUnitType.DAY, 3, new SimpleDateFormat("dd. MM")));
+        tu.add(new DateTickUnit(DateTickUnitType.DAY, 4, new SimpleDateFormat("dd. MM")));
 
         dates.setTickLabelInsets(new RectangleInsets(10, 5, 0, 5));
-        //dates.setStandardTickUnits(tu);
-        //dates.setAutoTickUnitSelection(true);
+        dates.setStandardTickUnits(tu);
         dates.setLowerMargin(0.01d);
         dates.setUpperMargin(0.01d);
 
         NumberAxis hours = new NumberAxis("Burndown");
         NumberAxis burnedHours = new NumberAxis("Effort");
         burnedHours.setAutoRange(false);
-        burnedHours.setRange(0, chartData.getTeamsize() * 8);
+        burnedHours.setRange(0, chartData.getTeamsize() * 8 * 2);
 
         dates.setLabelFont(font);
         dates.setTickLabelFont(font);
@@ -194,7 +197,7 @@ public class ChartFactory {
 
         burnedHours.setLabelFont(font);
         burnedHours.setTickLabelFont(font);
-        burnedHours.setTickUnit(new NumberTickUnit(8));
+        burnedHours.setTickUnit(new NumberTickUnit(10));
 
         XYPlot plot = new XYPlot();
         plot.setDomainAxis(dates);

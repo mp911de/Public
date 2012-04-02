@@ -85,11 +85,11 @@ public class JiraClient {
      */
     public JiraRestIssue getIssue(String key) {
 
-        JiraRestIssue result = JiraCache.getInstance().getIssues().get(key);
+        JiraRestIssue result = JiraCache.getInstance().getIssue(key);
         try {
             if (result == null) {
                 result = restProxy.getIssue(key);
-                JiraCache.getInstance().getIssues().put(key, result);
+                JiraCache.getInstance().addIssue(result);
             }
 
             return result;

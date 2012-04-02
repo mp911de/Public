@@ -10,68 +10,64 @@ import de.paluch.burndown.jsf.base.AbstractJSFController;
 import de.paluch.burndown.model.Team;
 
 /**
- *
- *<br>
- *<br>Project: burdnown-chart
- *<br>Autor: mark
- *<br>Created: 20.03.2012
- *<br>
- *<br>
+ * <br>
+ * <br>
+ * Project: burdnown-chart <br>
+ * Autor: mark <br>
+ * Created: 20.03.2012 <br>
+ * <br>
  */
 @ManagedBean
 @RequestScoped
-public class TeamListController extends AbstractJSFController
-{
+public class TeamListController extends AbstractJSFController {
 
-	@ManagedProperty("sprintsListModel")
-	private SprintsListModel sprints;
-	@ManagedProperty("teamListModel")
-	private TeamListModel teams;
+    @ManagedProperty("sprintsListModel")
+    private SprintsListModel sprints;
+    @ManagedProperty("teamListModel")
+    private TeamListModel teams;
 
-	/**
-	 * @return the sprints
-	 */
-	public SprintsListModel getSprints()
-	{
+    /**
+     * @return the sprints
+     */
+    public SprintsListModel getSprints() {
 
-		return sprints;
-	}
+        return sprints;
+    }
 
-	/**
-	 * @return the teams
-	 */
-	public TeamListModel getTeams()
-	{
+    /**
+     * @return the teams
+     */
+    public TeamListModel getTeams() {
 
-		return teams;
-	}
+        return teams;
+    }
 
-	public String selectTeam()
-	{
+    public String selectTeam() {
 
-		UIDataTable table = (UIDataTable) AbstractJSFController.findComponentInRoot(teams.getTableId());
+        UIDataTable table = (UIDataTable) AbstractJSFController.findComponentInRoot(teams.getTableId());
 
-		sprints.setTeam((Team) table.getRowData());
+        sprints.setTeam((Team) table.getRowData());
+        sprints.getList().clear();
 
-		return Navigation.SPRINTS_OVERVIEW;
-	}
+        return Navigation.SPRINTS_OVERVIEW;
+    }
 
-	/**
-	 * @param sprints the sprints to set
-	 */
-	public void setSprints(SprintsListModel sprints)
-	{
+    /**
+     * @param sprints
+     *            the sprints to set
+     */
+    public void setSprints(SprintsListModel sprints) {
 
-		this.sprints = sprints;
-	}
+        this.sprints = sprints;
+    }
 
-	/**
-	 * @param teams the teams to set
-	 */
-	public void setTeams(TeamListModel teams)
-	{
+    /**
+     * @param teams
+     *            the teams to set
+     */
+    public void setTeams(TeamListModel teams) {
 
-		this.teams = teams;
-	}
+        this.teams = teams;
+    }
 
 }

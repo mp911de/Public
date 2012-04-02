@@ -11,91 +11,81 @@ import de.paluch.burndown.model.Team;
 import de.paluch.burndown.model.Teams;
 
 /**
- *
- *<br>
- *<br>Project: burdnown-chart
- *<br>Autor: mark
- *<br>Created: 20.03.2012
- *<br>
- *<br>
+ * <br>
+ * <br>
+ * Project: burdnown-chart <br>
+ * Autor: mark <br>
+ * Created: 20.03.2012 <br>
+ * <br>
  */
 @ManagedBean
 @SessionScoped
-public class TeamListModel extends AbstractJSFListModel<Team>
-{
+public class TeamListModel extends AbstractJSFListModel<Team> {
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = -8676697153331901104L;
-	private String selectedTeamId;
+    private static final long serialVersionUID = -8676697153331901104L;
+    private String selectedTeamId;
 
-	/**
-	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getList()
-	 */
-	@Override
-	public List<Team> getList()
-	{
+    /**
+     * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getList()
+     */
+    @Override
+    public List<Team> getList() {
 
-		if (super.getList().isEmpty())
-		{
-			refreshList();
-		}
-		return super.getList();
-	}
+        if (super.getList().isEmpty()) {
+            refreshList();
+        }
+        return super.getList();
+    }
 
-	/**
-	 * @return the selectedTeamId
-	 */
-	public String getSelectedTeamId()
-	{
+    /**
+     * @return the selectedTeamId
+     */
+    public String getSelectedTeamId() {
 
-		return selectedTeamId;
-	}
+        return selectedTeamId;
+    }
 
-	/**
-	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getTableId()
-	 */
-	@Override
-	public String getTableId()
-	{
+    /**
+     * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#getTableId()
+     */
+    @Override
+    public String getTableId() {
 
-		return "teams";
-	}
+        return "teams";
+    }
 
-	public Team getTeamById(String teamId)
-	{
+    public Team getTeamById(String teamId) {
 
-		for (Team team : getList())
-		{
-			if (team.getId().equals(selectedTeamId))
-			{
-				return team;
-			}
-		}
+        for (Team team : getList()) {
+            if (team.getId().equals(selectedTeamId)) {
+                return team;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#refreshList()
-	 */
-	@Override
-	public void refreshList()
-	{
+    /**
+     * @see de.paluch.burndown.jsf.base.AbstractJSFListModel#refreshList()
+     */
+    @Override
+    public void refreshList() {
 
-		Teams teams = new DataAccess().getTeams();
-		super.getList().clear();
-		super.getList().addAll(teams.getTeams());
-	}
+        Teams teams = new DataAccess().getTeams();
+        super.getList().clear();
+        super.getList().addAll(teams.getTeams());
+    }
 
-	/**
-	 * @param selectedTeamId the selectedTeamId to set
-	 */
-	public void setSelectedTeamId(String selectedTeamId)
-	{
+    /**
+     * @param selectedTeamId
+     *            the selectedTeamId to set
+     */
+    public void setSelectedTeamId(String selectedTeamId) {
 
-		this.selectedTeamId = selectedTeamId;
-	}
+        this.selectedTeamId = selectedTeamId;
+    }
 
 }

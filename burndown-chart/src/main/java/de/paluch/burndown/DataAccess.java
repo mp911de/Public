@@ -14,160 +14,135 @@ import de.paluch.burndown.model.Team;
 import de.paluch.burndown.model.Teams;
 
 /**
- * File-Based Sprint Data Accessor. You have to specify burndown.data.dir System-Property in order to use the Data Accessor.
- *<br>
- *<br>Project: burdnown-chart
- *<br>Autor: mark
- *<br>Created: 20.03.2012
- *<br>
- *<br>
+ * File-Based Sprint Data Accessor. You have to specify burndown.data.dir System-Property in order to use the Data
+ * Accessor. <br>
+ * <br>
+ * Project: burdnown-chart <br>
+ * Autor: mark <br>
+ * Created: 20.03.2012 <br>
+ * <br>
  */
-public class DataAccess
-{
+public class DataAccess {
 
-	public final static String DATA_LOCATION = "burndown.data.dir";
-	public final static String TEAMS_FILE = "teams.xml";
-	private static final String BD_XML_SUFFIX = ".xml";
+    public final static String DATA_LOCATION = "burndown.data.dir";
+    public final static String TEAMS_FILE = "teams.xml";
+    private static final String BD_XML_SUFFIX = ".xml";
 
-	public Sprint getSprint(String teamId, String sprintId)
-	{
+    public Sprint getSprint(String teamId, String sprintId) {
 
-		if (System.getProperty(DataAccess.DATA_LOCATION) == null)
-		{
-			throw new IllegalStateException("System property " + DataAccess.DATA_LOCATION + " not set.");
-		}
+        if (System.getProperty(DataAccess.DATA_LOCATION) == null) {
+            throw new IllegalStateException("System property " + DataAccess.DATA_LOCATION + " not set.");
+        }
 
-		String localSprintId = sprintId;
+        String localSprintId = sprintId;
 
-		if (sprintId.equals("latest"))
-		{
-			List<String> sprintIds = listSprints(teamId);
-			if (!sprintIds.isEmpty())
-			{
-				localSprintId = sprintIds.get(sprintIds.size() - 1);
-			}
-		}
+        if (sprintId.equals("latest")) {
+            List<String> sprintIds = listSprints(teamId);
+            if (!sprintIds.isEmpty()) {
+                localSprintId = sprintIds.get(0);
+            }
+        }
 
-		File sprintFile = new File(new File(System.getProperty(DataAccess.DATA_LOCATION)), teamId + "/" + localSprintId
-																							+ DataAccess.BD_XML_SUFFIX);
-		if (sprintFile.exists())
-		{
-			return JAXB.unmarshal(sprintFile, Sprint.class);
-		}
-		return null;
+        File sprintFile = new File(new File(System.getProperty(DataAccess.DATA_LOCATION)), teamId + "/" + localSprintId
+                + DataAccess.BD_XML_SUFFIX);
+        if (sprintFile.exists()) {
+            return JAXB.unmarshal(sprintFile, Sprint.class);
+        }
+        return null;
 
-	}
+    }
 
-	public Teams getTeams()
-	{
+    public Teams getTeams() {
 
-		File teamsFile = getTeamsFile();
-		return JAXB.unmarshal(teamsFile, Teams.class);
+        File teamsFile = getTeamsFile();
+        return JAXB.unmarshal(teamsFile, Teams.class);
 
-	}
+    }
 
-	public List<String> listSprints(String teamId)
-	{
+    public List<String> listSprints(String teamId) {
 
-		if (System.getProperty(DataAccess.DATA_LOCATION) == null)
-		{
-			throw new IllegalStateException("System property " + DataAccess.DATA_LOCATION + " not set.");
-		}
-		File sprintsDir = new File(new File(System.getProperty(DataAccess.DATA_LOCATION)), teamId);
-		List<String> result = new ArrayList<String>();
-		File[] files = sprintsDir.listFiles(new FilenameFilter()
-		{
+        if (System.getProperty(DataAccess.DATA_LOCATION) == null) {
+            throw new IllegalStateException("System property " + DataAccess.DATA_LOCATION + " not set.");
+        }
+        File sprintsDir = new File(new File(System.getProperty(DataAccess.DATA_LOCATION)), teamId);
+        List<String> result = new ArrayList<String>();
+        File[] files = sprintsDir.listFiles(new FilenameFilter() {
 
-			@Override
-			public boolean accept(File dir, String name)
-			{
+            @Override
+            public boolean accept(File dir, String name) {
 
-				return name.toLowerCase().endsWith(DataAccess.BD_XML_SUFFIX);
-			}
-		});
+                return name.toLowerCase().endsWith(DataAccess.BD_XML_SUFFIX);
+            }
+        });
 
-		if (files != null)
-		{
+        if (files != null) {
 
-			Arrays.sort(files, new Comparator<File>()
-			{
+            Arrays.sort(files, new Comparator<File>() {
 
-				/**
-				* @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-				*/
-				@Override
-				public int compare(File o1, File o2)
-				{
+                /**
+                 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+                 */
+                @Override
+                public int compare(File o1, File o2) {
 
-					return (int) (o2.lastModified() - o1.lastModified());
-				}
-			});
-			for (File file : files)
-			{
-				String id = file.getName();
-				int index = id.indexOf(DataAccess.BD_XML_SUFFIX);
-				id = id.substring(0, index);
-				result.add(id);
-			}
-		}
+                    return (int) (o2.lastModified() - o1.lastModified());
+                }
+            });
+            for (File file : files) {
+                String id = file.getName();
+                int index = id.indexOf(DataAccess.BD_XML_SUFFIX);
+                id = id.substring(0, index);
+                result.add(id);
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	public void saveOrUpdateTeam(Team team)
-	{
+    public void saveOrUpdateTeam(Team team) {
 
-		Teams teams = getTeams();
-		Team teamToRemove = null;
+        Teams teams = getTeams();
+        Team teamToRemove = null;
 
-		for (Team existing : teams.getTeams())
-		{
-			if (existing.getId() != null && team.getId() != null && existing.getId().equals(team.getId()))
-			{
-				teamToRemove = existing;
-				break;
-			}
-		}
+        for (Team existing : teams.getTeams()) {
+            if (existing.getId() != null && team.getId() != null && existing.getId().equals(team.getId())) {
+                teamToRemove = existing;
+                break;
+            }
+        }
 
-		if (teamToRemove != null)
-		{
-			teams.getTeams().remove(teamToRemove);
-		}
-		teams.getTeams().add(team);
+        if (teamToRemove != null) {
+            teams.getTeams().remove(teamToRemove);
+        }
+        teams.getTeams().add(team);
 
-		JAXB.marshal(teams, getTeamsFile());
+        JAXB.marshal(teams, getTeamsFile());
 
-	}
+    }
 
-	public void storeSprint(String teamId, Sprint sprint)
-	{
+    public void storeSprint(String teamId, Sprint sprint) {
 
-		if (System.getProperty(DataAccess.DATA_LOCATION) == null)
-		{
-			throw new IllegalStateException("System property " + DataAccess.DATA_LOCATION + " not set.");
-		}
-		File folder = new File(new File(System.getProperty(DataAccess.DATA_LOCATION)), teamId);
-		if (!folder.exists())
-		{
-			folder.mkdirs();
-		}
-		File sprintFile = new File(folder, sprint.getId()
-											+ DataAccess.BD_XML_SUFFIX);
-		JAXB.marshal(sprint, sprintFile);
+        if (System.getProperty(DataAccess.DATA_LOCATION) == null) {
+            throw new IllegalStateException("System property " + DataAccess.DATA_LOCATION + " not set.");
+        }
+        File folder = new File(new File(System.getProperty(DataAccess.DATA_LOCATION)), teamId);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        File sprintFile = new File(folder, sprint.getId() + DataAccess.BD_XML_SUFFIX);
+        JAXB.marshal(sprint, sprintFile);
 
-	}
+    }
 
-	/**
-	 * @return
-	 */
-	private File getTeamsFile()
-	{
+    /**
+     * @return
+     */
+    private File getTeamsFile() {
 
-		if (System.getProperty(DataAccess.DATA_LOCATION) == null)
-		{
-			throw new IllegalStateException("System property " + DataAccess.DATA_LOCATION + " not set.");
-		}
-		File teamsFile = new File(new File(System.getProperty(DataAccess.DATA_LOCATION)), DataAccess.TEAMS_FILE);
-		return teamsFile;
-	}
+        if (System.getProperty(DataAccess.DATA_LOCATION) == null) {
+            throw new IllegalStateException("System property " + DataAccess.DATA_LOCATION + " not set.");
+        }
+        File teamsFile = new File(new File(System.getProperty(DataAccess.DATA_LOCATION)), DataAccess.TEAMS_FILE);
+        return teamsFile;
+    }
 }

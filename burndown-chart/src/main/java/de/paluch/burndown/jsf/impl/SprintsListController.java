@@ -17,130 +17,127 @@ import de.paluch.burndown.model.Sprint;
 import de.paluch.burndown.model.SprintEffort;
 
 /**
- *
- *<br>
- *<br>Project: burdnown-chart
- *<br>Autor: mark
- *<br>Created: 20.03.2012
- *<br>
- *<br>
+ * <br>
+ * <br>
+ * Project: burdnown-chart <br>
+ * Autor: mark <br>
+ * Created: 20.03.2012 <br>
+ * <br>
  */
 @ManagedBean
 @RequestScoped
-public class SprintsListController extends AbstractJSFController
-{
+public class SprintsListController extends AbstractJSFController {
 
-	@ManagedProperty("sprintListModel")
-	private SprintListModel sprintListModel;
-	@ManagedProperty("sprintsListModel")
-	private SprintsListModel sprintsListModel;
+    @ManagedProperty("sprintListModel")
+    private SprintListModel sprintListModel;
+    @ManagedProperty("sprintsListModel")
+    private SprintsListModel sprintsListModel;
 
-	/**
-	 * @return the sprintListModel
-	 */
-	public SprintListModel getSprintListModel()
-	{
+    /**
+     * @return the sprintListModel
+     */
+    public SprintListModel getSprintListModel() {
 
-		return sprintListModel;
-	}
+        return sprintListModel;
+    }
 
-	/**
-	 * @return the sprintsListModel
-	 */
-	public SprintsListModel getSprintsListModel()
-	{
+    /**
+     * @return the sprintsListModel
+     */
+    public SprintsListModel getSprintsListModel() {
 
-		return sprintsListModel;
-	}
+        return sprintsListModel;
+    }
 
-	public String gotoSprint()
-	{
+    public String gotoSprint() {
 
-		UIDataTable table = (UIDataTable) AbstractJSFController.findComponentInRoot(sprintsListModel.getTableId());
+        UIDataTable table = (UIDataTable) AbstractJSFController.findComponentInRoot(sprintsListModel.getTableId());
 
-		Sprint selection = (Sprint) table.getRowData();
-		Sprint sprint = new DataAccess().getSprint(sprintsListModel.getTeam().getId(), selection.getId());
+        Sprint selection = (Sprint) table.getRowData();
+        sprintListModel.setTeam(sprintsListModel.getTeam());
 
-		sprintListModel.setTeam(sprintsListModel.getTeam());
-		sprintListModel.setOldStartDate(sprint.getStartDate());
-		sprintListModel.setSprint(sprint);
-		sprintListModel.refreshList();
+        Sprint sprint = new DataAccess().getSprint(sprintsListModel.getTeam().getId(), selection.getId());
+        sprintListModel.setOldStartDate(sprint.getStartDate());
+        sprintListModel.setNewSprint(false);
+        sprintListModel.setSprint(sprint);
+        sprintListModel.refreshList();
 
-		return Navigation.SPRINT;
-	}
+        return Navigation.SPRINT;
+    }
 
-	public String prepareCreateNewSprint()
-	{
+    public String prepareCreateNewSprint() {
 
-		Date maxDate = new Date(0);
-		int sprintNumber = 0;
-		for (Sprint sprint : sprintsListModel.getList())
-		{
-			if (sprint.getStartDate().after(maxDate))
-			{
-				maxDate = sprint.getStartDate();
-				try
-				{
-					sprintNumber = Integer.parseInt(sprint.getId().trim());
-				}
-				catch (NumberFormatException e)
-				{
-				}
-			}
-		}
+        sprintListModel.setTeam(sprintsListModel.getTeam());
 
-		if (sprintsListModel.getList().isEmpty())
-		{
-			maxDate = new Date(System.currentTimeMillis());
-		}
+        Date maxDate = new Date(0);
+        int sprintNumber = 0;
+        for (Sprint sprint : sprintsListModel.getList()) {
 
-		sprintNumber++;
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(maxDate);
-		while (cal.get(Calendar.DAY_OF_WEEK) != sprintsListModel.getTeam().getRegularSprintStart())
-		{
-			cal.add(Calendar.DATE, 1);
-		}
+            if (sprint.getStartDate().after(maxDate)) {
+                maxDate = sprint.getStartDate();
+                try {
+                    sprintNumber = Integer.parseInt(sprint.getId().trim());
+                } catch (NumberFormatException e) {
+                }
+            }
 
-		Sprint sprint = new Sprint();
-		sprint.setDays(sprintsListModel.getTeam().getRegularSprintLength());
-		sprint.setId("" + sprintNumber);
-		sprint.setStartDate(cal.getTime());
+            for (SprintEffort sprintEffort : sprint.getEffort()) {
+                if (sprintEffort.getDate().after(maxDate)) {
+                    maxDate = sprintEffort.getDate();
+                }
+            }
 
-		SprintDaysGenerator gen = new SprintDaysGenerator();
-		List<Date> days = gen.generateSprintDays(sprint.getDays(), cal.getTime());
-		for (Date date : days)
-		{
-			SprintEffort effort = new SprintEffort();
-			effort.setDate(date);
-			sprint.getEffort().add(effort);
-		}
+        }
 
-		sprintListModel.setTeam(sprintsListModel.getTeam());
-		sprintListModel.setNewSprint(true);
-		sprintListModel.setOldStartDate(sprint.getStartDate());
-		sprintListModel.setSprint(sprint);
-		sprintListModel.refreshList();
+        if (sprintsListModel.getList().isEmpty()) {
+            maxDate = new Date(System.currentTimeMillis());
+        }
 
-		return Navigation.SPRINT;
-	}
+        sprintNumber++;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(maxDate);
+        while (cal.get(Calendar.DAY_OF_WEEK) != sprintsListModel.getTeam().getRegularSprintStart()) {
+            cal.add(Calendar.DATE, 1);
+        }
 
-	/**
-	 * @param sprintListModel the sprintListModel to set
-	 */
-	public void setSprintListModel(SprintListModel sprintListModel)
-	{
+        Sprint sprint = new Sprint();
+        sprint.setDays(sprintsListModel.getTeam().getRegularSprintLength());
+        sprint.setId("" + sprintNumber);
+        sprint.setStartDate(cal.getTime());
 
-		this.sprintListModel = sprintListModel;
-	}
+        SprintDaysGenerator gen = new SprintDaysGenerator();
+        List<Date> days = gen.generateSprintDays(sprint.getDays(), cal.getTime());
+        for (Date date : days) {
+            SprintEffort effort = new SprintEffort();
+            effort.setDate(date);
+            sprint.getEffort().add(effort);
+        }
 
-	/**
-	 * @param sprintsListModel the sprintsListModel to set
-	 */
-	public void setSprintsListModel(SprintsListModel sprintsListModel)
-	{
+        sprintListModel.setTeam(sprintsListModel.getTeam());
+        sprintListModel.setNewSprint(true);
+        sprintListModel.setOldStartDate(sprint.getStartDate());
+        sprintListModel.setSprint(sprint);
+        sprintListModel.refreshList();
 
-		this.sprintsListModel = sprintsListModel;
-	}
+        return Navigation.SPRINT;
+    }
+
+    /**
+     * @param sprintListModel
+     *            the sprintListModel to set
+     */
+    public void setSprintListModel(SprintListModel sprintListModel) {
+
+        this.sprintListModel = sprintListModel;
+    }
+
+    /**
+     * @param sprintsListModel
+     *            the sprintsListModel to set
+     */
+    public void setSprintsListModel(SprintsListModel sprintsListModel) {
+
+        this.sprintsListModel = sprintsListModel;
+    }
 
 }
