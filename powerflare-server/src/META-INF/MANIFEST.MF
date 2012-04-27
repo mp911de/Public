@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Class-Path: RXTXcomm.jar activation-1.1.1.jar asm-3.3.1.jar FastInfose
+ t-1.2.12.jar grizzly-servlet-webserver-1.9.36.jar jackson-core-asl-1.
+ 8.3.jar jackson-jaxrs-1.8.3.jar jackson-mapper-asl-1.8.3.jar jaxb-api
+ -2.2.4.jar jaxb-impl-2.2.4-1.jar jdom-1.0.jar jersey-bundle-1.10.jar 
+ jersey-core-1.10.jar jersey-grizzly-1.10.jar jersey-multipart-1.10.ja
+ r jettison-1.1.jar localizer.jar mail-1.4.4.jar mimepull-1.3.jar pers
+ istence-api-1.0.2.jar rome-1.0.jar stax-api-1.0-2.jar wadl2java.jar w
+ adl-cmdline.jar wadl-core.jar
+Main-Class: de.paluch.powerflare.Server
+
