@@ -50,11 +50,6 @@ public abstract class AbstractCommunicationChannel implements ICommunicationChan
     }
 
     public boolean isLocked(int port) {
-        if (port != 0) {
-            if (locks.containsKey(0)) {
-                return true;
-            }
-        }
 
         if (locks.containsKey(port)) {
             return true;
