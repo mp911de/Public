@@ -4,8 +4,8 @@ import com.sun.jersey.api.container.httpserver.HttpServerFactory;
 import com.sun.jersey.api.core.ClassNamesResourceConfig;
 import com.sun.jersey.core.impl.provider.entity.StringProvider;
 import com.sun.net.httpserver.HttpServer;
+import de.paluch.powerflare.channel.DummyCommChannel;
 import de.paluch.powerflare.channel.ICommunicationChannel;
-import de.paluch.powerflare.channel.SerialPortCommunicationChannel;
 
 /**
  * Created with IntelliJ IDEA. User: mark Date: 25.04.12 Time: 08:31 To change this template use File | Settings | File
@@ -55,8 +55,8 @@ public class Server {
     }
 
     public Server(String port) throws Exception {
-        channel = new SerialPortCommunicationChannel(port, 19200);
-        //channel = new DummyCommChannel();
+        //channel = new SerialPortCommunicationChannel(port, 19200);
+        channel = new DummyCommChannel();
         Multiplexer.getInstance().setChannel(channel);
     }
 

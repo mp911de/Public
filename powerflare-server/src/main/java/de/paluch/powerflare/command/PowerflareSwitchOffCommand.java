@@ -9,25 +9,26 @@ import java.util.concurrent.TimeUnit;
  * Created with IntelliJ IDEA. User: mark Date: 25.04.12 Time: 08:14 To change this template use File | Settings | File
  * Templates.
  */
-public class SwitchOffCommand implements ICommand {
+public class PowerflareSwitchOffCommand extends AbstractChannelCommand implements ICommand {
 
     public final static int RELAY_CONNECT_DELAY = 0;
     public final static int RELAY_DISCONNECT_DELAY = 1800;
 
     private byte port = 0;
 
-    public SwitchOffCommand(byte port) {
-        this.port = port;
+    public PowerflareSwitchOffCommand(byte port) {
+        super(port);
     }
 
 
     @Override
-    public void execute(ScheduledExecutorService executorService, ICommunicationChannel channel) {
-        byte dataOn[] = new byte[] { (byte) (RelayCommands.BASE_COMMAND_CONNECT + port) };
-        byte dataOff[] = new byte[] { (byte) (RelayCommands.BASE_COMMAND_DISCONNECT + port) };
+    public void executeImpl(ScheduledExecutorService executorService, ICommunicationChannel channel) {
 
-        SendDataCallable connect = new SendDataCallable(channel, dataOn, port, true, false);
-        SendDataCallable disconnect = new SendDataCallable(channel, dataOff, port, false, true);
+        byte dataOn[] = new byte[] { (byte) (RelayCommands.BASE_COMMAND_CONNECT + getPort()) };
+        byte dataOff[] = new byte[] { (byte) (RelayCommands.BASE_COMMAND_DISCONNECT + getPort()) };
+
+        SendDataCallable connect = new SendDataCallable(channel, dataOn, getPort(), false, getLock());
+        SendDataCallable disconnect = new SendDataCallable(channel, dataOff, getPort(), true, getLock());
         executorService.schedule(connect, RELAY_CONNECT_DELAY, TimeUnit.MILLISECONDS);
         executorService.schedule(disconnect, RELAY_DISCONNECT_DELAY, TimeUnit.MILLISECONDS);
     }

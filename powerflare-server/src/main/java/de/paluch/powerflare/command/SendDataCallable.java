@@ -1,6 +1,7 @@
 package de.paluch.powerflare.command;
 
 import de.paluch.powerflare.channel.ICommunicationChannel;
+import de.paluch.powerflare.channel.Mutex;
 
 import java.util.concurrent.Callable;
 
@@ -12,30 +13,29 @@ public class SendDataCallable implements Callable<Void> {
     private ICommunicationChannel channel;
     private byte[] data;
     private int port;
-    private boolean lock;
-    private boolean unlock;
+    private boolean performUnlock;
+    private Mutex lock;
 
-    public SendDataCallable(ICommunicationChannel controller, byte[] data, int port, boolean lock, boolean unlock) {
+    public SendDataCallable(ICommunicationChannel controller, byte[] data, int port, boolean performUnlock,
+                            Mutex lock) {
         this.channel = controller;
         this.data = data;
         this.port = port;
+        this.performUnlock = performUnlock;
         this.lock = lock;
-        this.unlock = unlock;
     }
 
     @Override
     public Void call() throws Exception {
 
-        if (lock) {
-            channel.lock(port);
-        }
+        long now = System.currentTimeMillis();
+        channel.lock(lock, port);
 
         channel.sendData(data);
 
-        if (unlock) {
-            channel.unlock(port);
+        if (performUnlock) {
+            channel.unlock(lock, port);
         }
-
 
         return null;
     }

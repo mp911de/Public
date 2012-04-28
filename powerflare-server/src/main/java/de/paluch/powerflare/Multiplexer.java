@@ -14,7 +14,7 @@ public class Multiplexer {
 
     private static Multiplexer instance = new Multiplexer();
 
-    private ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledExecutorService exec = Executors.newScheduledThreadPool(10);
     private ICommunicationChannel channel;
 
 

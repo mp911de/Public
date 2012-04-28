@@ -2,47 +2,76 @@ package de.paluch.powerflare.channel;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created with IntelliJ IDEA. User: mark Date: 27.04.12 Time: 08:39 To change this template use File | Settings | File
  * Templates.
  */
 public abstract class AbstractCommunicationChannel implements ICommunicationChannel {
-    private Map<Integer, Lock> locks = new ConcurrentHashMap<Integer, Lock>();
+    private final Map<Integer, Mutex> locks = new ConcurrentHashMap<Integer, Mutex>();
 
-    @Override
-    public void lock(int port) {
+
+    public void lock(Mutex lock, int port) {
+        lockInternal(lock, port);
+    }
+
+    private void lockInternal(Mutex lock, int port) {
+        Mutex otherLock = null;
+
+
+        do {
+            synchronized (locks) {
+                otherLock = locks.get(port);
+            }
+            if (otherLock != null) {
+                otherLock.waitForUnlock(lock);
+            }
+        }
+        while (otherLock != null && otherLock != lock);
+
+        synchronized (locks) {
+            lock.lock(otherLock);
+            locks.put(port, lock);
+        }
+
+    }
+
+    public void unlock(Mutex lock, int port) {
+        synchronized (locks) {
+            unlockInternal(lock, port);
+        }
+
+    }
+
+    private void unlockInternal(Mutex lock, int port) {
+        Mutex otherLock = locks.get(port);
+        lock.unlock(otherLock);
+        locks.remove(port);
+    }
+
+    public boolean isLocked(int port) {
         if (port != 0) {
-            lockInternal(0);
-        }
-        lockInternal(port);
-    }
-
-    private void lockInternal(int port) {
-        if (!locks.containsKey(port)) {
-            locks.put(port, new ReentrantLock());
+            if (locks.containsKey(0)) {
+                return true;
+            }
         }
 
-        Lock lock = locks.get(port);
-        lock.lock();
-    }
-
-    @Override
-    public void unlock(int port) {
-        if (port != 0) {
-            unlockInternal(0);
+        if (locks.containsKey(port)) {
+            return true;
         }
-        unlockInternal(port);
+        return false;
     }
 
-    private void unlockInternal(int port) {
-        if (!locks.containsKey(port)) {
-            locks.put(port, new ReentrantLock());
+    public void waitForFreeChannel(int port) {
+
+        while (isLocked(port)) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                return;
+            }
         }
 
-        Lock lock = locks.get(port);
-        lock.unlock();
     }
+
 }
