@@ -10,9 +10,9 @@ public interface ICommunicationChannel {
 
     void close();
 
-    void lock(Mutex lock, int port);
+    void lock(int port, Object owner);
 
-    void unlock(Mutex lock, int port);
+    void unlock(int port, Object owner);
 
-    public void waitForFreeChannel(int port);
+    public void waitForFreeChannel(int port, Object owner);
 }

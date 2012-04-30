@@ -54,7 +54,7 @@ public class Server {
         channel.close();
     }
 
-    public Server(String port) throws Exception {
+    private Server(String port) throws Exception {
         //channel = new SerialPortCommunicationChannel(port, 19200);
         channel = new DummyCommChannel();
         Multiplexer.getInstance().setChannel(channel);

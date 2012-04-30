@@ -26,8 +26,7 @@ public class HttpControlInterface {
             throw new IllegalArgumentException("state is null");
         }
 
-        Server server = Server.getInstance();
-        ICommand command = null;
+        AbstractCommunicationCommand command = null;
         if (state.equalsIgnoreCase("ON")) {
             command = new PowerflareSwitchOnCommand(port);
         }
@@ -37,7 +36,7 @@ public class HttpControlInterface {
         }
 
         if (command != null) {
-            Multiplexer.getInstance().execute(command);
+            command.execute(Multiplexer.getInstance().getChannel(), Multiplexer.getInstance().getExec());
             return "OK";
         }
         return "FAIL";
@@ -50,9 +49,8 @@ public class HttpControlInterface {
         System.out.println("controlSwitch port|" + port);
 
 
-        Server server = Server.getInstance();
-        ICommand command = new ShortOnCommand(port);
-        Multiplexer.getInstance().execute(command);
+        AbstractCommunicationCommand command = new ConnectDisconnectCommand(port);
+        command.execute(Multiplexer.getInstance().getChannel(), Multiplexer.getInstance().getExec());
         return "OK";
     }
 
@@ -66,8 +64,7 @@ public class HttpControlInterface {
             throw new IllegalArgumentException("state is null");
         }
 
-        Server server = Server.getInstance();
-        ICommand command = null;
+        AbstractCommunicationCommand command = null;
         if (state.equalsIgnoreCase("CONNECT")) {
             command = new ConnectCommand(port);
         }
@@ -77,7 +74,7 @@ public class HttpControlInterface {
         }
 
         if (command != null) {
-            Multiplexer.getInstance().execute(command);
+            command.execute(Multiplexer.getInstance().getChannel(), Multiplexer.getInstance().getExec());
             return "OK";
         }
         return "FAIL";
