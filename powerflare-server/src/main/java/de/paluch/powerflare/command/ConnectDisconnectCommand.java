@@ -10,7 +10,7 @@ import java.util.List;
 public class ConnectDisconnectCommand extends AbstractCommunicationCommand {
 
     private final static int RELAY_CONNECT_DELAY = 0;
-    private final static int RELAY_DISCONNECT_DELAY = 200;
+    private final static int RELAY_DISCONNECT_DELAY = 100;
 
 
     public ConnectDisconnectCommand(byte port) {

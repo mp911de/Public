@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.lang.annotation.Documented;
 
 /**
  * Created with IntelliJ IDEA. User: mark Date: 25.04.12 Time: 08:02 To change this template use File | Settings | File
@@ -16,6 +17,15 @@ import javax.ws.rs.core.MediaType;
 @Path("/")
 public class HttpControlInterface {
 
+    public static final String RESULT_FAIL = "FAIL";
+    public static final String RESULT_OK = "OK";
+
+    /**
+     * Switch Power-Flares.
+     * @param port
+     * @param state
+     * @return OK/FAIL
+     */
     @Path("powerflare/{port:[0-8]}/{state:(ON|OFF)}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -37,11 +47,16 @@ public class HttpControlInterface {
 
         if (command != null) {
             command.execute(Multiplexer.getInstance().getChannel(), Multiplexer.getInstance().getExec());
-            return "OK";
+            return RESULT_OK;
         }
-        return "FAIL";
+        return RESULT_FAIL;
     }
 
+    /**
+     * Connect-Disconnect Port with 100ms Connect Delay.
+     * @param port
+     * @return OK
+     */
     @Path("switch/{port:[0-8]}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -51,9 +66,15 @@ public class HttpControlInterface {
 
         AbstractCommunicationCommand command = new ConnectDisconnectCommand(port);
         command.execute(Multiplexer.getInstance().getChannel(), Multiplexer.getInstance().getExec());
-        return "OK";
+        return RESULT_OK;
     }
 
+    /**
+     * Connect or Disconnect Port.
+     * @param port
+     * @param state
+     * @return OK/FAIL
+     */
     @Path("relay/{port:[0-8]}/{state:(CONNECT|DISCONNECT)}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -75,9 +96,9 @@ public class HttpControlInterface {
 
         if (command != null) {
             command.execute(Multiplexer.getInstance().getChannel(), Multiplexer.getInstance().getExec());
-            return "OK";
+            return RESULT_OK;
         }
-        return "FAIL";
+        return RESULT_FAIL;
     }
 
 }

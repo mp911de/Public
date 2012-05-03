@@ -50,7 +50,7 @@ public class LockManager<T> {
 
     public Lock lock(T resource, Lock.LockLevel level, Object owner) {
 
-        Lock lock = null;
+        Lock lock;
 
         while ((lock = tryLock(resource, level, owner)) == null) {
             try {

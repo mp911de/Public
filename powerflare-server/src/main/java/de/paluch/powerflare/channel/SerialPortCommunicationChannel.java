@@ -47,6 +47,7 @@ public class SerialPortCommunicationChannel extends AbstractCommunicationChannel
             try {
                 in.close();
             } catch (IOException e) {
+                // nothing to do.
             }
         }
 
@@ -54,6 +55,7 @@ public class SerialPortCommunicationChannel extends AbstractCommunicationChannel
             try {
                 out.close();
             } catch (IOException e) {
+                // nothing to do.
             }
         }
 

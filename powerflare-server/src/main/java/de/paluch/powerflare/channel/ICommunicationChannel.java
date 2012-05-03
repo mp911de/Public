@@ -6,13 +6,36 @@ package de.paluch.powerflare.channel;
  */
 public interface ICommunicationChannel {
 
+    /**
+     * Send Data to Channel.
+     * @param data
+     */
     void sendData(byte[] data);
 
+    /**
+     * Close Channel.
+     */
     void close();
 
+    /**
+     * Lock port of Channel.
+     * @param port
+     * @param owner Lock-Owner
+     */
     void lock(int port, Object owner);
 
+
+    /**
+     * Unlock port of Channel.
+     * @param port
+     * @param owner Lock-Owner
+     */
     void unlock(int port, Object owner);
 
+    /**
+     * Wait until channel is free to send.
+     * @param port
+     * @param owner Lock-Owner
+     */
     public void waitForFreeChannel(int port, Object owner);
 }
