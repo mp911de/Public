@@ -6,6 +6,7 @@ import com.sun.jersey.core.impl.provider.entity.StringProvider;
 import com.sun.net.httpserver.HttpServer;
 import de.paluch.powerflare.channel.DummyCommChannel;
 import de.paluch.powerflare.channel.ICommunicationChannel;
+import de.paluch.powerflare.channel.SerialPortCommunicationChannel;
 
 /**
  * Created with IntelliJ IDEA. User: mark Date: 25.04.12 Time: 08:31 To change this template use File | Settings | File
@@ -24,7 +25,7 @@ public class Server {
             System.out.println("Usage: Server port (device path/name)");
             return;
         }
-        System.out.println("using port " + args[0]+" "+System.currentTimeMillis());
+        System.out.println("using port " + args[0]);
 
         instance = new Server(args[0]);
         instance.run();
@@ -55,8 +56,7 @@ public class Server {
     }
 
     private Server(String port) throws Exception {
-        //channel = new SerialPortCommunicationChannel(port, 19200);
-        channel = new DummyCommChannel();
+        channel = new SerialPortCommunicationChannel(port, 19200);
         Multiplexer.getInstance().setChannel(channel);
     }
 
