@@ -24,7 +24,7 @@ public class Server {
             System.out.println("Usage: Server port (device path/name)");
             return;
         }
-        System.out.println("using port " + args[0]);
+        System.out.println("using port " + args[0]+" "+System.currentTimeMillis());
 
         instance = new Server(args[0]);
         instance.run();
