@@ -3,3 +3,6 @@
 .project
 .settings
 target
+powerflare-server/out/*
+powerflare-server/out/
+.idea
