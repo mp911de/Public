@@ -7,6 +7,7 @@ import com.sun.net.httpserver.HttpServer;
 import de.paluch.powerflare.channel.DummyCommChannel;
 import de.paluch.powerflare.channel.ICommunicationChannel;
 import de.paluch.powerflare.channel.SerialPortCommunicationChannel;
+import de.paluch.powerflare.state.StateStore;
 
 /**
  * Created with IntelliJ IDEA. User: mark Date: 25.04.12 Time: 08:31 To change this template use File | Settings | File
@@ -58,6 +59,7 @@ public class Server {
     private Server(String port) throws Exception {
         channel = new SerialPortCommunicationChannel(port, 19200);
         Multiplexer.getInstance().setChannel(channel);
+        StateStore.getInstance().initialize(8);
     }
 
     public static Server getInstance() {

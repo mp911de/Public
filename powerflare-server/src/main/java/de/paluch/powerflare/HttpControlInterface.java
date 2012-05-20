@@ -2,13 +2,13 @@ package de.paluch.powerflare;
 
 
 import de.paluch.powerflare.command.*;
+import de.paluch.powerflare.state.StateStore;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.lang.annotation.Documented;
 
 /**
  * Created with IntelliJ IDEA. User: mark Date: 25.04.12 Time: 08:02 To change this template use File | Settings | File
@@ -22,6 +22,7 @@ public class HttpControlInterface {
 
     /**
      * Switch Power-Flares.
+     *
      * @param port
      * @param state
      * @return OK/FAIL
@@ -53,7 +54,21 @@ public class HttpControlInterface {
     }
 
     /**
+     * Get Powerflare State.
+     *
+     * @param port
+     * @return ON/OFF
+     */
+    @Path("powerflare/{port:[0-8]}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String controlPowerflare(@PathParam("port") byte port) {
+           return StateStore.getInstance().getState(port).name();
+    }
+
+    /**
      * Connect-Disconnect Port with 100ms Connect Delay.
+     *
      * @param port
      * @return OK
      */
@@ -71,6 +86,7 @@ public class HttpControlInterface {
 
     /**
      * Connect or Disconnect Port.
+     *
      * @param port
      * @param state
      * @return OK/FAIL

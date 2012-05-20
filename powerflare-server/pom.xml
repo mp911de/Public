@@ -12,7 +12,8 @@
         Relay
         (http://www.robot-electronics.co.uk/htm/usb_rly08tech.htm). Useful
         for displaying a Build-Status or just for fun. Starts usually a tiny HTTP Server on port 9998
-        and allows control via HTTP GET.</description>
+        and allows control via HTTP GET.
+    </description>
 
     <dependencies>
         <dependency>
@@ -64,7 +65,9 @@
         <plugins>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.4</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
@@ -74,6 +77,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -87,27 +91,16 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>de.paluch.powerflare.Server</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <configuration>
+                    <descriptor>src/main/assembly/assembly.xml</descriptor>
                     <outputDirectory>target</outputDirectory>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>copy-dependencies</id>
+                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>copy-dependencies</goal>
+                            <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>

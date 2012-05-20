@@ -77,7 +77,6 @@ public class LockManager<T> {
 
             resourceLocks.removeAll(toRemove);
 
-            System.out.println("Unlock " + resource+", locks: " + resourceLocks);
         }
 
     }
@@ -94,7 +93,6 @@ public class LockManager<T> {
         Lock lock = new Lock(level, owner);
         resourceLocks.add(lock);
 
-        System.out.println("Lock " + resource+", locks: " + resourceLocks);
         return lock;
     }
 
