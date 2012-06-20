@@ -20,6 +20,7 @@ public class ChartData {
     private TimeSeriesCollection mainSeries;
     private int teamsize;
     private String title;
+    private String subtitle;
     private TimeSeries unplanned;
 
     public ChartData() {
@@ -166,6 +167,21 @@ public class ChartData {
     public void setUnplanned(TimeSeries unplanned) {
 
         this.unplanned = unplanned;
+    }
+
+    /**
+     * @return the subtitle
+     */
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    /**
+     * @param subtitle
+     *            the subtitle to set
+     */
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
     }
 
 }

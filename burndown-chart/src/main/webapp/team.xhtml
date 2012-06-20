@@ -22,7 +22,7 @@
 					<h:commandLink action="#{sprintsListController.gotoSprint}">
 						<h:outputText value="Sprint #{item.id} (" />
 						<h:outputText value="#{item.startDate}">
-							<f:convertDateTime pattern="EEE dd.MM.yyyy" />
+							<f:convertDateTime pattern="EEE dd.MM.yyyy" timeZone="Europe/Berlin" />
 						</h:outputText>
 						<h:outputText value=")" />
 					</h:commandLink>

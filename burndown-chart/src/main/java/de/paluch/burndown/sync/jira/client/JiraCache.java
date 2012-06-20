@@ -11,7 +11,7 @@ public class JiraCache {
     private static JiraCache instance = new JiraCache();
 
     private final Map<String, JiraRestIssue> issues = new ConcurrentHashMap<String, JiraRestIssue>();
-    private final boolean useCache = false;
+    private final boolean useCache = true;
 
     /**
      * @return the instance

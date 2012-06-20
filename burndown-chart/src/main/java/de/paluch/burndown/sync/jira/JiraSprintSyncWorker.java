@@ -130,11 +130,7 @@ public class JiraSprintSyncWorker {
         if (teamSync.isUnplanned()
                 && JiraIssueHelper.isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(),
                         issue)) {
-            Map<Date, Integer> unplannedEffort = getWorklog(issue);
-            Set<Entry<Date, Integer>> set = unplannedEffort.entrySet();
-            for (Entry<Date, Integer> entry : set) {
-                updateSprintEffort(effort, entry.getKey(), 0, entry.getValue(), sprintId, issue.getKey());
-            }
+            addWorklogToSprint(sprintId, effort, issue, true);
         } else {
 
             double planned = JiraIssueHelper.getOriginalEstimate(teamSync, issue);
@@ -146,8 +142,9 @@ public class JiraSprintSyncWorker {
             Date resolutionDate = issue.getFields().getResolutiondate().getValue();
             if (resolutionDate == null) {
                 logger.info("Issue " + issue.getKey() + " unresolved (Value: " + planned + ")");
+                addWorklogToSprint(sprintId, effort, issue, false);
                 return;
-            }
+            } else
 
             if (JiraIssueHelper.isInSprint(resolutionDate, effort)) {
 
@@ -156,6 +153,21 @@ public class JiraSprintSyncWorker {
                 logger.info("Issue " + issue.getKey() + " resolved out of sprint (" + resolutionDate + ", Value: "
                         + planned + ")");
             }
+        }
+    }
+
+    private void addWorklogToSprint(String sprintId, List<SprintEffort> effort, JiraRestIssue issue,
+            boolean addToUnplanned) {
+        Map<Date, Integer> unplannedEffort = getWorklog(issue);
+        Set<Entry<Date, Integer>> set = unplannedEffort.entrySet();
+        for (Entry<Date, Integer> entry : set) {
+
+            if (addToUnplanned) {
+                updateSprintEffort(effort, entry.getKey(), 0, entry.getValue(), sprintId, issue.getKey());
+            } else {
+                updateSprintEffort(effort, entry.getKey(), entry.getValue(), 0, sprintId, issue.getKey());
+            }
+
         }
     }
 
@@ -175,6 +187,7 @@ public class JiraSprintSyncWorker {
             if (teamSync.isUnplanned()
                     && JiraIssueHelper.isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(),
                             issue)) {
+                logger.info("Unplaned " + issue.getKey());
                 continue;
             }
 
@@ -182,13 +195,14 @@ public class JiraSprintSyncWorker {
                 Date resolutionDate = issue.getFields().getResolutiondate().getValue();
                 if (resolutionDate != null) {
                     if (!JiraIssueHelper.isInSprint(resolutionDate, sprint.getEffort())) {
+                        logger.info("Resolved, but not in that Sprint " + issue.getKey());
                         continue;
                     }
                 }
             }
 
             double itemValue = JiraIssueHelper.getOriginalEstimate(teamSync, issue);
-
+            logger.info("Value for " + issue.getKey() + " is: " + itemValue);
             if (teamSync.getEffortMode() == EffortMode.STORY_POINTS) {
                 itemValue = JiraIssueHelper.getStoryPoints(teamSync.getStoryPointsFieldId(), issue);
             }
@@ -214,6 +228,8 @@ public class JiraSprintSyncWorker {
             JiraRestIssue issue = client.getIssue(issueKey);
             if (issue != null) {
                 result.add(issue);
+            } else {
+                logger.info("Cannot retrieve issue " + issueKey);
             }
         }
         return result;

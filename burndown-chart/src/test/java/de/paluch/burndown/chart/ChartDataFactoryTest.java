@@ -44,7 +44,7 @@ public class ChartDataFactoryTest {
 
         TimeSeries series1 = (TimeSeries) result.getBaselineSeries().getSeries().get(0);
         assertEquals(10, sprint.getDays());
-        assertEquals(8, series1.getItemCount());
+        assertEquals(9, series1.getItemCount());
     }
 
     /**

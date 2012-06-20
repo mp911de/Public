@@ -100,16 +100,17 @@ public class AbstractJiraSyncJob {
      * 
      * @param teamSync
      * @param team
-     * @param latestSprint
+     * @param sprint
      */
-    protected void syncSprint(JiraTeamSync teamSync, Team team, Sprint latestSprint) {
+    protected void syncSprint(JiraTeamSync teamSync, Team team, Sprint sprint) {
 
         try {
-            logger.info("Sync Sprint " + latestSprint.getId() + "/" + team.getId());
-            sprintSync.syncSprint(teamSync, latestSprint);
-            logger.info("Sync Sprint " + latestSprint.getId() + "/" + team.getId() + " done");
+            logger.info("Sync Sprint " + sprint.getId() + "/" + team.getId());
+            sprintSync.syncSprint(teamSync, sprint);
+            new DataAccess().storeSprint(team.getId(), sprint);
+            logger.info("Sync Sprint " + sprint.getId() + "/" + team.getId() + " done");
         } catch (Exception e) {
-            logger.warn("Sync Sprint " + latestSprint.getId() + "/" + team.getId() + ": " + e.getMessage(), e);
+            logger.warn("Sync Sprint " + sprint.getId() + "/" + team.getId() + ": " + e.getMessage(), e);
         }
     }
 }

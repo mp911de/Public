@@ -29,6 +29,7 @@ public class Sprint {
     private double planned = 0;
 
     private Date startDate;
+    private Date lastChanged;
 
     /**
      * @see java.lang.Object#equals(java.lang.Object)
@@ -180,13 +181,27 @@ public class Sprint {
     }
 
     /**
-     * @see java.lang.Object#toString()
+     * {@inheritDoc}
      */
     @Override
     public String toString() {
+        return "Sprint [days=" + days + ", effort=" + effort + ", id=" + id + ", planned=" + planned + ", startDate="
+                + startDate + ", lastChanged=" + lastChanged + "]";
+    }
 
-        return getClass().getSimpleName() + " [id=" + id + ", days=" + days + ", startDate=" + startDate + ", planned="
-                + planned + ", effort=" + effort + "]";
+    /**
+     * @return the lastChanged
+     */
+    public Date getLastChanged() {
+        return lastChanged;
+    }
+
+    /**
+     * @param lastChanged
+     *            the lastChanged to set
+     */
+    public void setLastChanged(Date lastChanged) {
+        this.lastChanged = lastChanged;
     }
 
 }

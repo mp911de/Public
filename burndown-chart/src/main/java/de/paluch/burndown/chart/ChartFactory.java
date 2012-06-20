@@ -80,6 +80,10 @@ public class ChartFactory {
         setStyle(chart);
         setStyle(plot);
 
+        if (data.getSubtitle() != null) {
+            chart.addSubtitle(new TextTitle(data.getSubtitle(), font.deriveFont(10f)));
+        }
+
         return chart;
 
     }

@@ -67,20 +67,20 @@ public class JiraSyncJobListener implements ServletContextListener {
         JobDetail job = newJob(JiraSyncJob.class).withIdentity("JiraSyncJob", "none").build();
 
         // Trigger the job to run now, and then repeat every 40 seconds
-        TriggerBuilder<Trigger> triggerBuilder = newTrigger().withIdentity("JiraSyncTrigger", "none").startNow();
+        TriggerBuilder<Trigger> triggerBuilder = newTrigger().withIdentity("JiraSyncTrigger", "none");
 
         switch (syncSettings.getUpdateMode()) {
             case DAILY:
-                triggerBuilder.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInHours(24));
+                triggerBuilder.withSchedule(SimpleScheduleBuilder.repeatHourlyForever(24));
                 break;
             case HOURLY:
-                triggerBuilder.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInHours(1));
+                triggerBuilder.withSchedule(SimpleScheduleBuilder.repeatHourlyForever(1));
                 break;
             case FOUR_HOURLY:
-                triggerBuilder.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInHours(4));
+                triggerBuilder.withSchedule(SimpleScheduleBuilder.repeatHourlyForever(4));
                 break;
             case TWELVE_HOURLY:
-                triggerBuilder.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInHours(12));
+                triggerBuilder.withSchedule(SimpleScheduleBuilder.repeatHourlyForever(12));
                 break;
 
             case OFF:

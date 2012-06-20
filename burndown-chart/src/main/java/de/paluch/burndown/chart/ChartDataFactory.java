@@ -1,5 +1,8 @@
 package de.paluch.burndown.chart;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -75,13 +78,22 @@ public class ChartDataFactory {
                 first = false;
             }
             value -= effort.getBurned();
-
             chartData.getBurned().add(new TimeSeriesDataItem(new Day(date), effort.getBurned()));
             chartData.getUnplanned().add(new TimeSeriesDataItem(new Day(date), effort.getUnplanned()));
         }
 
         if (lastEffortIndex == days.size() - 2) {
             chartData.getBurndown().addOrUpdate(new TimeSeriesDataItem(new Day(lastDate), value));
+        }
+
+        // Add Zero-Value if last-Date is met.
+        if (days.indexOf(lastDate) == days.size() - 1) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(lastDate);
+            //cal.add(Calendar.DATE, 1);
+
+            chartData.getBurned().add(new TimeSeriesDataItem(new Day(cal.getTime()), 0));
+            chartData.getUnplanned().add(new TimeSeriesDataItem(new Day(cal.getTime()), 0));
         }
 
         chartData.getIdeal().addOrUpdate(new TimeSeriesDataItem(new Day(sprint.getStartDate()), sprint.getPlanned()));
@@ -95,6 +107,11 @@ public class ChartDataFactory {
         chartData.setTeamsize(teamSize);
 
         chartData.setTitle(teamTitle + " - Sprint " + sprint.getId());
+
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        if (sprint.getLastChanged() != null) {
+            chartData.setSubtitle(dateFormat.format(sprint.getLastChanged()));
+        }
     }
 
     /**

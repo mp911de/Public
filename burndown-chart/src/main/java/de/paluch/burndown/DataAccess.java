@@ -5,6 +5,7 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.JAXB;
@@ -85,7 +86,16 @@ public class DataAccess {
                 @Override
                 public int compare(File o1, File o2) {
 
-                    return (int) (o2.lastModified() - o1.lastModified());
+                    String name1 = o1.getName();
+                    String name2 = o2.getName();
+
+                    name1 = name1.substring(0, name1.indexOf('.'));
+                    name2 = name2.substring(0, name2.indexOf('.'));
+
+                    int sprint1 = Integer.parseInt(name1);
+                    int sprint2 = Integer.parseInt(name2);
+
+                    return (sprint2 - sprint1);
                 }
             });
             for (File file : files) {
@@ -121,6 +131,8 @@ public class DataAccess {
     }
 
     public void storeSprint(String teamId, Sprint sprint) {
+
+        sprint.setLastChanged(new Date());
 
         if (System.getProperty(DataAccess.DATA_LOCATION) == null) {
             throw new IllegalStateException("System property " + DataAccess.DATA_LOCATION + " not set.");
