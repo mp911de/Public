@@ -1,4 +1,4 @@
-package de.paluch.test;
+package de.paluch.test.soap;
 
 import javax.jws.WebParam;
 import javax.jws.WebService;

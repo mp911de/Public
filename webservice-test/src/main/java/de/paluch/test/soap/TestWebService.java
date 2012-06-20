@@ -1,6 +1,8 @@
-package de.paluch.test;
+package de.paluch.test.soap;
 
 import javax.jws.WebService;
+
+import de.paluch.test.ICalculator;
 
 @WebService(endpointInterface = "de.paluch.test.ITestWebService")
 public class TestWebService implements ITestWebService {

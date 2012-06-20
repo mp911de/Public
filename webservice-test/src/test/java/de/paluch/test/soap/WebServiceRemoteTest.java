@@ -1,4 +1,4 @@
-package de.paluch.test;
+package de.paluch.test.soap;
 
 import java.net.URL;
 
@@ -14,20 +14,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import de.paluch.test.ICalculator;
+import de.paluch.test.RemoteUtil;
+
 import static org.junit.Assert.assertEquals;
 
 import static org.mockito.Mockito.when;
 
-/**
- * <br>
- * <br>
- * Project: webservice-test <br>
- * Autor: mark <br>
- * Created: 21.05.2012 <br>
- * <br>
- */
 @RunWith(MockitoJUnitRunner.class)
-public class TestWebServiceRemoteTest {
+public class WebServiceRemoteTest {
 
     private static Endpoint endpoint;
     private static int port;

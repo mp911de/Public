@@ -1,4 +1,4 @@
-package de.paluch.test;
+package de.paluch.test.soap;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -6,23 +6,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import de.paluch.test.ICalculator;
+
 import static org.junit.Assert.assertEquals;
 
 import static org.mockito.Mockito.when;
 
-/**
- * <br>
- * <br>
- * Project: webservice-test <br>
- * Autor: mark <br>
- * Created: 21.05.2012 <br>
- * <br>
- */
 @RunWith(MockitoJUnitRunner.class)
-public class TestWebServiceTest {
+public class WebServiceTest {
 
     @InjectMocks
-    private TestWebService sut = new TestWebService();
+    private final TestWebService sut = new TestWebService();
 
     @Mock
     private ICalculator calc;
