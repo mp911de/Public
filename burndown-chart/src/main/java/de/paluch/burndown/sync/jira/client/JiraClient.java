@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -18,7 +19,6 @@ import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.jboss.resteasy.client.ClientExecutor;
-import org.jboss.resteasy.client.ClientResponseFailure;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
@@ -85,21 +85,23 @@ public class JiraClient {
      */
     public JiraRestIssue getIssue(String key) {
 
-        JiraRestIssue result = JiraCache.getInstance().getIssue(key);
-        try {
-            if (result == null) {
-                result = restProxy.getIssue(key);
-                JiraCache.getInstance().addIssue(result);
+        JiraRestIssue result = JiraCache.getInstance().getIssue(key, getLoader(key));
+        return result;
+
+    }
+
+    private Callable<JiraRestIssue> getLoader(final String key) {
+        return new Callable<JiraRestIssue>() {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public JiraRestIssue call() throws Exception {
+                return restProxy.getIssue(key);
             }
 
-            return result;
-        } catch (ClientResponseFailure e) {
-            if (e.getResponse().getStatus() == 500) {
-                return null;
-            }
-            throw e;
-        }
-
+        };
     }
 
     /**

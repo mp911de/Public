@@ -1,7 +1,11 @@
 package de.paluch.burndown.sync.jira.client;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 
 /**
  * @author <a href="mailto:mark.paluch@1und1.de">Mark Paluch</a>
@@ -10,8 +14,17 @@ public class JiraCache {
 
     private static JiraCache instance = new JiraCache();
 
-    private final Map<String, JiraRestIssue> issues = new ConcurrentHashMap<String, JiraRestIssue>();
-    private final boolean useCache = true;
+    private final Cache<String, JiraRestIssue> cache;
+
+    /**
+     * 
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public JiraCache() {
+
+        cache = (Cache) CacheBuilder.newBuilder().maximumSize(100).expireAfterAccess(20, TimeUnit.MINUTES)
+                .concurrencyLevel(2).build();
+    }
 
     /**
      * @return the instance
@@ -21,22 +34,16 @@ public class JiraCache {
     }
 
     /**
-     * Add Issue to cache if cache is used.
-     * 
-     * @param issue
-     */
-    public void addIssue(JiraRestIssue issue) {
-        if (useCache) {
-            issues.put(issue.getKey(), issue);
-        }
-    }
-
-    /**
      * @param issueKey
+     * @param loader
      * @return JiraRestIssue
      */
-    public JiraRestIssue getIssue(String issueKey) {
-        return issues.get(issueKey);
+    public JiraRestIssue getIssue(String issueKey, Callable<JiraRestIssue> loader) {
+        try {
+            return cache.get(issueKey, loader);
+        } catch (ExecutionException e) {
+            return null;
+        }
     }
 
 }
