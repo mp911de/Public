@@ -1,7 +1,6 @@
 package de.paluch.powerflare;
 
 import de.paluch.powerflare.channel.ICommunicationChannel;
-import de.paluch.powerflare.command.ICommand;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -14,12 +13,11 @@ public class Multiplexer {
 
     private static Multiplexer instance = new Multiplexer();
 
-    private ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledExecutorService exec = Executors.newScheduledThreadPool(10);
     private ICommunicationChannel channel;
 
-
-    public void execute(ICommand command) {
-        command.execute(exec, channel);
+    public ScheduledExecutorService getExec() {
+        return exec;
     }
 
     public ICommunicationChannel getChannel() {

@@ -6,6 +6,14 @@
     <groupId>de.paluch</groupId>
     <artifactId>powerflare-server</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>Powerflare Control-Server</name>
+    <description>Relay-Control-Server to control PowerFlares (http://www.powerflare.com/) together with USBRLY08 USB
+        Relay
+        (http://www.robot-electronics.co.uk/htm/usb_rly08tech.htm). Useful
+        for displaying a Build-Status or just for fun. Starts usually a tiny HTTP Server on port 9998
+        and allows control via HTTP GET.
+    </description>
+
     <dependencies>
         <dependency>
             <groupId>com.sun.jersey</groupId>
@@ -54,16 +62,46 @@
 
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>1.6</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>de.paluch.powerflare.Server</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptor>src/main/assembly/assembly.xml</descriptor>
+                    <outputDirectory>target</outputDirectory>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
                 <executions>
                     <execution>
+                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>shade</goal>
+                            <goal>single</goal>
                         </goals>
+<<<<<<< HEAD
                         <configuration>
 
                             <artifactSet>
@@ -77,9 +115,12 @@
                                 </transformer>
                             </transformers>
                         </configuration>
+=======
+>>>>>>> c212593d264438bd917dccd61b62279fb5e4664b
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 

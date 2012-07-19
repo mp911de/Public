@@ -3,3 +3,12 @@
 .project
 .settings
 target
+powerflare-server/out/*
+powerflare-server/out/
+.idea
+
+burndown-chart/burndown-chart.iml
+
+richfaces-long-running-task/richfaces-long-running-task (1).iml
+
+safety-facade/safety-facade (1).iml

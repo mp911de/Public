@@ -1,48 +1,56 @@
 package de.paluch.powerflare.channel;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import de.paluch.powerflare.locking.Lock;
+import de.paluch.powerflare.locking.LockManager;
 
 /**
  * Created with IntelliJ IDEA. User: mark Date: 27.04.12 Time: 08:39 To change this template use File | Settings | File
  * Templates.
  */
 public abstract class AbstractCommunicationChannel implements ICommunicationChannel {
-    private Map<Integer, Lock> locks = new ConcurrentHashMap<Integer, Lock>();
+
+    private LockManager<Integer> lockManager = new LockManager<Integer>();
 
     @Override
-    public void lock(int port) {
+    public void lock(int port, Object owner) {
+
         if (port != 0) {
-            lockInternal(0);
-        }
-        lockInternal(port);
-    }
-
-    private void lockInternal(int port) {
-        if (!locks.containsKey(port)) {
-            locks.put(port, new ReentrantLock());
+            lockManager.lock(0, Lock.LockLevel.shared, owner);
         }
 
-        Lock lock = locks.get(port);
-        lock.lock();
+        lockManager.lock(port, Lock.LockLevel.exclusive, owner);
+
     }
 
     @Override
-    public void unlock(int port) {
+    public void unlock(int port, Object owner) {
         if (port != 0) {
-            unlockInternal(0);
+            lockManager.unlock(0, owner);
         }
-        unlockInternal(port);
+
+        lockManager.unlock(port, owner);
     }
 
-    private void unlockInternal(int port) {
-        if (!locks.containsKey(port)) {
-            locks.put(port, new ReentrantLock());
-        }
+    @Override
+    public void waitForFreeChannel(int port, Object owner) {
+        boolean locked;
+        do {
+            locked = false;
+            if (port != 0) {
+                if (!lockManager.canLock(0, Lock.LockLevel.shared, owner)) {
+                    locked = true;
+                }
+            }
 
-        Lock lock = locks.get(port);
-        lock.unlock();
+            if (!lockManager.canLock(port, Lock.LockLevel.exclusive, owner)) {
+                locked = true;
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                return;
+            }
+
+        } while (locked);
     }
 }
