@@ -127,6 +127,10 @@ public class JiraSprintSyncWorker {
      */
     private void calculateEffort(JiraTeamSync teamSync, String sprintId, List<SprintEffort> effort, JiraRestIssue issue) {
 
+        if (issue.getKey().equals("DHDIYMW-1423")) {
+            System.out.println();
+        }
+
         if (teamSync.isUnplanned()
                 && JiraIssueHelper.isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(),
                         issue)) {
@@ -139,7 +143,7 @@ public class JiraSprintSyncWorker {
                 planned = JiraIssueHelper.getStoryPoints(teamSync.getStoryPointsFieldId(), issue);
             }
 
-            Date resolutionDate = issue.getFields().getResolutiondate().getValue();
+            Date resolutionDate = issue.getFields().getResolutiondate();
             if (resolutionDate == null) {
                 logger.info("Issue " + issue.getKey() + " unresolved (Value: " + planned + ")");
                 addWorklogToSprint(sprintId, effort, issue, false);
@@ -158,9 +162,9 @@ public class JiraSprintSyncWorker {
 
     private void addWorklogToSprint(String sprintId, List<SprintEffort> effort, JiraRestIssue issue,
             boolean addToUnplanned) {
-        Map<Date, Integer> unplannedEffort = getWorklog(issue);
-        Set<Entry<Date, Integer>> set = unplannedEffort.entrySet();
-        for (Entry<Date, Integer> entry : set) {
+        Map<Date, Double> unplannedEffort = getWorklog(issue);
+        Set<Entry<Date, Double>> set = unplannedEffort.entrySet();
+        for (Entry<Date, Double> entry : set) {
 
             if (addToUnplanned) {
                 updateSprintEffort(effort, entry.getKey(), 0, entry.getValue(), sprintId, issue.getKey());
@@ -192,7 +196,8 @@ public class JiraSprintSyncWorker {
             }
 
             if (issue.getFields().getResolutiondate() != null) {
-                Date resolutionDate = issue.getFields().getResolutiondate().getValue();
+                Date resolutionDate = issue.getFields().getResolutiondate();
+
                 if (resolutionDate != null) {
                     if (!JiraIssueHelper.isInSprint(resolutionDate, sprint.getEffort())) {
                         logger.info("Resolved, but not in that Sprint " + issue.getKey());
@@ -241,16 +246,16 @@ public class JiraSprintSyncWorker {
      * @param issue
      * @return
      */
-    private Map<Date, Integer> getWorklog(JiraRestIssue issue) {
+    private Map<Date, Double> getWorklog(JiraRestIssue issue) {
 
-        Map<Date, Integer> result = new HashMap<Date, Integer>();
+        Map<Date, Double> result = new HashMap<Date, Double>();
 
         if (issue.getFields().getWorklog() == null) {
             return result;
         }
 
-        for (JiraRestWorklogValue worklog : issue.getFields().getWorklog().getValue()) {
-            Integer time = Math.round(worklog.getMinutesSpent() / 60f);
+        for (JiraRestWorklogValue worklog : issue.getFields().getWorklog().getWorklogs()) {
+            Double time = Math.round(worklog.getTimeSpentSeconds() / 360d) / 10d;
             if (result.containsKey(worklog.getStarted())) {
                 time += result.get(worklog.getStarted());
             }

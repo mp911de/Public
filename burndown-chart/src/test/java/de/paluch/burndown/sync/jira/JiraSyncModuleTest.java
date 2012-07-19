@@ -24,72 +24,68 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 /**
- *
- *<br>
- *<br>Project: burdnown-chart
- *<br>Autor: mark
- *<br>Created: 26.03.2012
- *<br>
- *<br>
+ * <br>
+ * <br>
+ * Project: burdnown-chart <br>
+ * Autor: mark <br>
+ * Created: 26.03.2012 <br>
+ * <br>
  */
 @RunWith(MockitoJUnitRunner.class)
-public class JiraSyncModuleTest
-{
+public class JiraSyncModuleTest {
 
-	@Mock
-	private JiraClient client;
+    @Mock
+    private JiraClient client;
 
-	private JiraSprintSyncWorker sut = null;
+    private JiraSprintSyncWorker sut = null;
 
-	private JiraSync sync;
+    private JiraSync sync;
 
-	private JiraTeamSync teamSync;
+    private JiraTeamSync teamSync;
 
-	private Sprint sprint;
+    private Sprint sprint;
 
-	@Before
-	public void before() throws Exception
-	{
+    @Before
+    public void before() throws Exception {
 
-		sync = JAXB.unmarshal(getClass().getResourceAsStream("/jira-sync.xml"), JiraSync.class);
-		teamSync = sync.getTeamSync().get(0);
-		sprint = JAXB.unmarshal(getClass().getResourceAsStream("/middleware/22.xml"), Sprint.class);
+        sync = JAXB.unmarshal(getClass().getResourceAsStream("/jira-sync.xml"), JiraSync.class);
+        teamSync = sync.getTeamSync().get(0);
+        sprint = JAXB.unmarshal(getClass().getResourceAsStream("/middleware/22.xml"), Sprint.class);
 
-		sut = new JiraSprintSyncWorker("", "", "");
-		sut.setClient(client);
+        sut = new JiraSprintSyncWorker("", "", "");
+        sut.setClient(client);
 
-	}
+    }
 
-	@Test
-	public void test() throws Exception
-	{
+    @Test
+    public void test() throws Exception {
 
-		ObjectMapper mapper = new ObjectMapper();
-		JsonParser jp = mapper.getJsonFactory().createJsonParser(getClass().getResourceAsStream("/DHDIYMW-824.json"));
-		JiraRestIssue issue824 = mapper.readValue(jp, mapper.constructType(JiraRestIssue.class));
+        ObjectMapper mapper = new ObjectMapper();
+        JsonParser jp = mapper.getJsonFactory().createJsonParser(getClass().getResourceAsStream("/DHDIYMW-824.json"));
+        JiraRestIssue issue824 = mapper.readValue(jp, mapper.constructType(JiraRestIssue.class));
 
-		jp = mapper.getJsonFactory().createJsonParser(getClass().getResourceAsStream("/DHDIYMW-902.json"));
-		JiraRestIssue issue902 = mapper.readValue(jp, mapper.constructType(JiraRestIssue.class));
+        jp = mapper.getJsonFactory().createJsonParser(getClass().getResourceAsStream("/DHDIYMW-902.json"));
+        JiraRestIssue issue902 = mapper.readValue(jp, mapper.constructType(JiraRestIssue.class));
 
-		when(client.findSprintIssues("DHDIYMW", "Sprint 22")).thenReturn(Arrays.asList("DHDIYMW-824", "DHDIYMW-902"));
-		when(client.getIssue("DHDIYMW-824")).thenReturn(issue824);
-		when(client.getIssue("DHDIYMW-902")).thenReturn(issue902);
+        when(client.findSprintIssues("DHDIYMW", "Sprint 22")).thenReturn(Arrays.asList("DHDIYMW-824", "DHDIYMW-902"));
+        when(client.getIssue("DHDIYMW-824")).thenReturn(issue824);
+        when(client.getIssue("DHDIYMW-902")).thenReturn(issue902);
 
-		sprint.setPlanned(0);
-		sut.syncSprint(teamSync, sprint);
+        sprint.setPlanned(0);
+        sut.syncSprint(teamSync, sprint);
 
-		assertEquals(4, sprint.getPlanned(), 0.1);
+        assertEquals(4, sprint.getPlanned(), 0.1);
 
-		SprintEffort effort20 = sprint.getEffort().get(1);
-		assertEquals(0, effort20.getBurned().doubleValue(), 0.1);
-		assertEquals(1, effort20.getUnplanned().doubleValue(), 0.1);
+        SprintEffort effort20 = sprint.getEffort().get(1);
+        assertEquals(0, effort20.getBurned().doubleValue(), 0.1);
+        assertEquals(1, effort20.getUnplanned().doubleValue(), 0.1);
 
-		SprintEffort effort23 = sprint.getEffort().get(4);
-		assertEquals(0, effort23.getBurned().doubleValue(), 0.1);
-		assertEquals(1, effort23.getUnplanned().doubleValue(), 0.1);
+        SprintEffort effort23 = sprint.getEffort().get(4);
+        assertEquals(0, effort23.getBurned().doubleValue(), 0.1);
+        assertEquals(1, effort23.getUnplanned().doubleValue(), 0.1);
 
-		SprintEffort effort26 = sprint.getEffort().get(6);
-		assertEquals(4, effort26.getBurned().doubleValue(), 0.1);
-		assertEquals(0, effort26.getUnplanned().doubleValue(), 0.1);
-	}
+        SprintEffort effort22 = sprint.getEffort().get(3);
+        assertEquals(4, effort22.getBurned().doubleValue(), 0.1);
+        assertEquals(0, effort22.getUnplanned().doubleValue(), 0.1);
+    }
 }

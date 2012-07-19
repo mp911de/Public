@@ -7,7 +7,6 @@ import java.util.Map;
 
 import de.paluch.burndown.model.SprintEffort;
 import de.paluch.burndown.sync.jira.client.JiraRestIssue;
-import de.paluch.burndown.sync.jira.client.JiraRestTimetracking;
 import de.paluch.burndown.sync.jira.model.EffortMode;
 import de.paluch.burndown.sync.jira.model.JiraTeamSync;
 
@@ -28,9 +27,8 @@ public class JiraIssueHelper {
      */
     public static double getOriginalEstimate(JiraTeamSync teamSync, JiraRestIssue issue) {
 
-        JiraRestTimetracking timetracking = issue.getFields().getTimetracking();
-        if (teamSync.getEffortMode() == EffortMode.HOURS && timetracking != null && timetracking.getValue() != null) {
-            return timetracking.getValue().getOriginalEstimate() / 60d;
+        if (teamSync.getEffortMode() == EffortMode.HOURS) {
+            return issue.getFields().getTimeoriginalestimate() / 3600d;
         }
         return 0;
     }
@@ -119,25 +117,21 @@ public class JiraIssueHelper {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static boolean isUnplanned(String unplannedFlagFieldId, String unplannedFlagValue, JiraRestIssue issue) {
 
-        Map<String, Object> flagField = (Map<String, Object>) issue.getFields().properties().get(unplannedFlagFieldId);
+        List<Map<String, Object>> values = (List) issue.getFields().properties().get(unplannedFlagFieldId);
 
-        if (flagField == null) {
+        if (values == null || values.isEmpty()) {
             return false;
         }
 
-        List<String> value = (List) flagField.get("value");
+        Map<String, Object> field = values.get(0);
+
+        String value = (String) field.get("value");
 
         if (value == null) {
             return false;
         }
 
-        for (String fieldValueName : value) {
-            if (fieldValueName != null && fieldValueName.equalsIgnoreCase(unplannedFlagValue)) {
-                return true;
-            }
-        }
-
-        return false;
+        return value.contains(unplannedFlagValue);
     }
 
 }

@@ -6,6 +6,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -16,17 +17,18 @@ import javax.ws.rs.core.MediaType;
  * Created: 25.03.2012 <br>
  * <br>
  */
-@Path("rest/api/2.0.alpha1")
+@Path("rest/api/2")
 public interface JiraRestClientProxy {
 
     /**
      * @param issueKey
+     * @param fields
      * @return JiraRestIssue
      */
     @Path("issue/{issueKey}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public JiraRestIssue getIssue(@PathParam("issueKey") String issueKey);
+    public JiraRestIssue getIssue(@PathParam("issueKey") String issueKey, @QueryParam("fields") String fields);
 
     /**
      * @param jiraRestSearchRequest

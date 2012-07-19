@@ -16,14 +16,54 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 public class JiraRestWorklogValue {
 
     private Date started;
-    private int minutesSpent;
+    private int timeSpentSeconds;
 
     /**
      * @return the minutesSpent
      */
-    public int getMinutesSpent() {
+    public int getTimeSpentSeconds() {
 
-        return minutesSpent;
+        return timeSpentSeconds;
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + timeSpentSeconds;
+        result = prime * result + ((started == null) ? 0 : started.hashCode());
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        JiraRestWorklogValue other = (JiraRestWorklogValue) obj;
+        if (timeSpentSeconds != other.timeSpentSeconds) {
+            return false;
+        }
+        if (started == null) {
+            if (other.started != null) {
+                return false;
+            }
+        } else if (!started.equals(other.started)) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -38,9 +78,9 @@ public class JiraRestWorklogValue {
      * @param minutesSpent
      *            the minutesSpent to set
      */
-    public void setMinutesSpent(int minutesSpent) {
+    public void setTimeSpentSeconds(int minutesSpent) {
 
-        this.minutesSpent = minutesSpent;
+        this.timeSpentSeconds = minutesSpent;
     }
 
     /**
@@ -58,7 +98,7 @@ public class JiraRestWorklogValue {
     @Override
     public String toString() {
 
-        return getClass().getSimpleName() + " [started=" + started + ", minutesSpent=" + minutesSpent + "]";
+        return getClass().getSimpleName() + " [started=" + started + ", minutesSpent=" + timeSpentSeconds + "]";
     }
 
 }

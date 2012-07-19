@@ -90,6 +90,54 @@ public class JiraRestSearchResult {
     }
 
     /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((issues == null) ? 0 : issues.hashCode());
+        result = prime * result + maxResults;
+        result = prime * result + startAt;
+        result = prime * result + total;
+        return result;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        JiraRestSearchResult other = (JiraRestSearchResult) obj;
+        if (issues == null) {
+            if (other.issues != null) {
+                return false;
+            }
+        } else if (!issues.equals(other.issues)) {
+            return false;
+        }
+        if (maxResults != other.maxResults) {
+            return false;
+        }
+        if (startAt != other.startAt) {
+            return false;
+        }
+        if (total != other.total) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * @see java.lang.Object#toString()
      */
     @Override

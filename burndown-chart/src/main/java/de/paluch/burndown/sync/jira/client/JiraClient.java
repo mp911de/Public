@@ -98,7 +98,7 @@ public class JiraClient {
              */
             @Override
             public JiraRestIssue call() throws Exception {
-                return restProxy.getIssue(key);
+                return restProxy.getIssue(key, "-comment");
             }
 
         };
