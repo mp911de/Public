@@ -1,10 +1,14 @@
 package de.paluch.powerflare;
 
-
-import de.paluch.powerflare.command.*;
-
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+
+import de.paluch.powerflare.command.ConnectCommand;
+import de.paluch.powerflare.command.DisconnectCommand;
+import de.paluch.powerflare.command.ICommand;
+import de.paluch.powerflare.command.SwitchOffCommand;
+import de.paluch.powerflare.command.SwitchOnCommand;
 
 /**
  * Created with IntelliJ IDEA. User: mark Date: 25.04.12 Time: 08:02 To change this template use File | Settings | File
@@ -14,7 +18,8 @@ import javax.ws.rs.PathParam;
 public class HttpControlInterface {
 
     @Path("powerflare/{port:[0-8]}/{state:(ON|OFF)}")
-    public void controlPowerflare(@PathParam("port") byte port, @PathParam("state") String state) {
+    @GET
+    public String controlPowerflare(@PathParam("port") byte port, @PathParam("state") String state) {
         System.out.println("switchPort port|" + port + "|state|" + state);
 
         if (state == null) {
@@ -34,11 +39,12 @@ public class HttpControlInterface {
         if (command != null) {
             Multiplexer.getInstance().execute(command);
         }
-
+        return "OK";
     }
 
     @Path("relay/{port:[0-8]}/{state:(CONNECT|DISCONNECT)}")
-    public void controlPort(@PathParam("port") byte port, @PathParam("state") String state) {
+    @GET
+    public String controlPort(@PathParam("port") byte port, @PathParam("state") String state) {
         System.out.println("controlPort port|" + port + "|state|" + state);
 
         if (state == null) {
@@ -58,6 +64,8 @@ public class HttpControlInterface {
         if (command != null) {
             Multiplexer.getInstance().execute(command);
         }
+
+        return "OK";
 
     }
 
