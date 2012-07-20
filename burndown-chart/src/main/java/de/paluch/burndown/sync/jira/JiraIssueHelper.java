@@ -123,15 +123,19 @@ public class JiraIssueHelper {
             return false;
         }
 
-        Map<String, Object> field = values.get(0);
+        for (Map<String, Object> field : values) {
 
-        String value = (String) field.get("value");
+            String value = (String) field.get("value");
 
-        if (value == null) {
-            return false;
+            if (value == null) {
+                return false;
+            }
+
+            if (value.contains(unplannedFlagValue)) {
+                return true;
+            }
         }
-
-        return value.contains(unplannedFlagValue);
+        return false;
     }
 
 }

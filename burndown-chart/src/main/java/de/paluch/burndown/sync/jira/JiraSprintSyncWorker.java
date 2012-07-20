@@ -107,10 +107,6 @@ public class JiraSprintSyncWorker {
 
         for (JiraRestIssue issue : issues) {
 
-            if (issue.getFields().getResolution() == null) {
-                continue;
-            }
-
             calculateEffort(teamSync, sprintId, effort, issue);
 
         }
@@ -126,10 +122,6 @@ public class JiraSprintSyncWorker {
      * @param issue
      */
     private void calculateEffort(JiraTeamSync teamSync, String sprintId, List<SprintEffort> effort, JiraRestIssue issue) {
-
-        if (issue.getKey().equals("DHDIYMW-1423")) {
-            System.out.println();
-        }
 
         if (teamSync.isUnplanned()
                 && JiraIssueHelper.isUnplanned(teamSync.getUnplannedFlagFieldId(), teamSync.getUnplannedFlagName(),
