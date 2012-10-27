@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.paluch</groupId>
@@ -28,13 +28,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.rxtx</groupId>
-            <artifactId>rxtx</artifactId>
-            <version>2.1.7</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>1.9.0</version>
@@ -49,18 +42,18 @@
         </dependency>
 
         <dependency>
-            <groupId>rxtx</groupId>
             <artifactId>rxtx</artifactId>
-            <version>2.2pre2</version>
+            <groupId>rxtx</groupId>
+            <version>2.1-7</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/RXTXcomm.jar</systemPath>
         </dependency>
-
 
     </dependencies>
 
 
     <build>
+        <finalName>${artifactId}</finalName>
         <plugins>
 
             <plugin>
@@ -88,35 +81,14 @@
             </plugin>
 
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptor>src/main/assembly/assembly.xml</descriptor>
-                    <outputDirectory>target</outputDirectory>
-                    <appendAssemblyId>false</appendAssemblyId>
-                </configuration>
+                <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>copy-dependencies</goal>
                         </goals>
-<<<<<<< HEAD
-                        <configuration>
-
-                            <artifactSet>
-                                <includes>
-                                    <include>*:*</include>
-                                </includes>
-                            </artifactSet>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>de.paluch.powerflare.Server</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-=======
->>>>>>> c212593d264438bd917dccd61b62279fb5e4664b
                     </execution>
                 </executions>
             </plugin>
