@@ -12,3 +12,5 @@ burndown-chart/burndown-chart.iml
 richfaces-long-running-task/richfaces-long-running-task (1).iml
 
 safety-facade/safety-facade (1).iml
+atlassian-ide-plugin.xml
+*.iml
